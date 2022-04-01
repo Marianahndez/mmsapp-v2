@@ -1,0 +1,31 @@
+@import '/src/globalStyles';
+
+.personName {
+  margin: 1rem 0 0.3rem 0;
+  font-weight: 600;
+  font-size: 1.7rem;
+  color: #fff;
+}
+
+.personRole {
+  color: #fff;
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+.listStyle {
+  & span {
+    color: #fff;
+    font-family: 'Montserrat', sans-serif !important;
+  }
+}
+
+.redNotification {
+  width: 11px;
+  height: 11px;
+  background: #d50000;
+  position: absolute;
+  right: 7px;
+  top: 17px;
+  border-radius: 50%;
+  z-index: 99;
+}

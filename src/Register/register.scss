@@ -1,0 +1,34 @@
+@import '/src/globalStyles';
+
+.btnBlueRounded {
+  background: $blue-dark !important;
+  margin: 2.5rem 0 0.5rem 0 !important;
+  width: 100%;
+  border-radius: 20px !important;
+  text-transform: inherit !important;
+  padding: 0.8rem !important;
+  &.sm {
+    width: 80%;
+  }
+  &.form {
+    width: 80%;
+  }
+}
+
+.btnRed {
+  font-family: 'Montserrat', sans-serif !important;
+  text-transform: inherit !important;
+  padding: 0.8rem !important;
+  width: 97%;
+  border-radius: 20px !important;
+  background: #fff !important;
+  color: $blue-dark;
+  margin: 2.5rem 0 1rem 0 !important;
+  &:hover {
+    background: $red-light !important;
+  }
+}
+
+a {
+  text-decoration: none !important;
+}

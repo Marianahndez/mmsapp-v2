@@ -1,0 +1,70 @@
+@import '/src/globalStyles';
+
+// Components classes
+.welcome {
+  text-align: center;
+  height: 105vh;
+  &.wpage {
+    background: $red-strong !important;
+  }
+  &.lpage {
+    background: #f5f5f5 !important;
+  }
+  .title {
+    color: #fff;
+    font-size: 2rem;
+    margin: 5rem 0 0.2rem 0;
+  }
+  .description {
+    color: #fff;
+    margin: 1rem 0 4rem 0;
+    padding: 0 2rem;
+  }
+  .btnLogin {
+    font-family: 'Montserrat', sans-serif;
+    text-transform: inherit;
+    padding: 0.8rem;
+    width: 80%;
+    border-radius: 20px;
+    margin: 2.5rem 0 1.5rem 0 !important;
+    &.wpage {
+      background: #bdbdbd;
+      color: $black;
+    }
+    &.lpage {
+      background: $red-custom;
+      color: #fff;
+    }
+    &.fullw {
+      width: 100%;
+    }
+    &:hover {
+      background: $red-custom;
+    }
+  }
+  .btnRegister {
+    font-family: 'Montserrat', sans-serif;
+    text-transform: inherit;
+    padding: 0.8rem;
+    width: 80%;
+    border-radius: 20px;
+    background: $red-custom;
+    &:hover {
+      background: $red-light;
+    }
+  }
+}
+
+.formLogin {
+  text-align: left;
+  padding: 5rem 3rem !important;
+  .btnBlueRounded {
+    background: $blue-dark;
+    margin: 3rem 0 1.5rem 0;
+    width: 100%;
+    border-radius: 20px;
+  }
+  a {
+    color: $red-custom;
+  }
+}

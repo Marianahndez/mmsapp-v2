@@ -1,0 +1,26 @@
+$red-strong: #4c0210;
+$red-light: #8f0f1e;
+$red-custom: #a54131;
+$black: #090d0f;
+$gray: #565656;
+$blue-dark: #141825;
+$green-dark: #004d40;
+$yellow: #ffc107;
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: rgb(224, 224, 224) !important;
+  height: 100vh !important;
+}
+
+// Global classes
+.pt15 {
+  padding-top: 8vh !important;
+}
+
+p {
+  font-family: 'Montserrat', sans-serif;
+}

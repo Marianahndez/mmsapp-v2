@@ -1,0 +1,64 @@
+@import '/src/globalStyles';
+
+.customCard {
+  border-radius: 20px !important;
+  background: #fff !important;
+  color: $blue-dark !important;
+  margin: 1.5rem 0;
+  .container {
+    width: 100%;
+  }
+  .details {
+    border-left: 3px solid $blue-dark;
+    padding: 0.2rem 0;
+    p {
+      padding: 0 0 0 0.5rem;
+      margin: 0;
+      &:nth-child(2) {
+        margin: 0.3rem 0 0 0;
+      }
+    }
+
+    .subtitle {
+      font-size: 1rem;
+    }
+  }
+  .titleCard {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0.5rem 0 0.5rem 0;
+  }
+}
+
+.btnAddService {
+  border-radius: 50% !important;
+  height: 5rem !important;
+  width: 5rem !important;
+  position: fixed !important;
+  bottom: 20px;
+  left: 40%;
+  z-index: 999 !important;
+  a {
+    color: #fff !important;
+    font-weight: bold !important;
+  }
+}
+
+.labelNotification {
+  width: 70%;
+  color: #fff;
+  margin: 1.5rem 0 0 5.5rem;
+  text-align: center;
+  padding: 0.5rem 0;
+  border-top-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  &.n-red {
+    background: $red-custom;
+  }
+  &.n-yellow {
+    background: $yellow;
+  }
+  &.n-blue {
+    background: $blue-dark;
+  }
+}
