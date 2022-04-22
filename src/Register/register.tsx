@@ -8,7 +8,7 @@ import {
   StepLabel,
   StepContent,
   Button,
-  Paper,
+  FormLabel,
   Typography,
   TextField,
   Grid,
@@ -52,23 +52,29 @@ function GetStepContent(step: number) {
 
   const onSubmitEmail = async (event: any) => {
     localStorage.setItem('email', JSON.stringify(event));
+    console.log('email: ', event);
     await addDoc(collection(db, 'emailLeads'), {
-      event,
+      ...event,
     });
   };
 
   const onSubmitPersonalData = async (data: any) => {
     const newData = JSON.parse(formEmail);
-    const event = {
+    const data2 = {
       ...data,
       email: newData.email,
       password: newData.password,
-      role: 'cliente',
+      role: 'Cliente',
     };
     await addDoc(collection(db, 'users'), {
-      event,
+      ...data,
+      email: newData.email,
+      password: newData.password,
+      sucursales: [],
+      role: 'Cliente',
     });
-    console.log('new user: ', event);
+    console.log('Data register: ', data2);
+    console.log('JSON data: ', newData);
 
     try {
       const userC = await createUserWithEmailAndPassword(
@@ -80,13 +86,14 @@ function GetStepContent(step: number) {
       const authEmail = getAuth();
       const actionCodeSettings = {
         handleCodeInApp: true,
-        url: 'http://localhost:3000/',
+        url: 'https://mmservicesapp.netlify.app/',
       };
       await sendSignInLinkToEmail(authEmail, newData.email, actionCodeSettings)
         .then(() => {
           // The link was successfully sent. Inform the user.
           // Save the email locally so you don't need to ask the user for it again
           // if they open the link on the same device.
+          console.log('send link...', newData.email);
           window.localStorage.setItem('emailForSignIn', newData.email);
         })
         .catch((error) => {
@@ -108,12 +115,15 @@ function GetStepContent(step: number) {
           id="hook-form-1"
           style={{ width: '100%', marginTop: '1rem' }}
         >
+          <FormLabel>* Campos requeridos</FormLabel>
+
           <TextField
             {...register('email', { required: true })}
             label="Email"
             type="text"
             variant="standard"
-            style={{ width: '80%' }}
+            style={{ width: '80%', marginTop: '1rem' }}
+            required
           />
           <TextField
             {...register('password', { required: true })}
@@ -121,6 +131,7 @@ function GetStepContent(step: number) {
             type="password"
             variant="standard"
             style={{ width: '80%', margin: '1rem 0 1.5rem 0' }}
+            required
           />
         </form>
       );
@@ -132,12 +143,15 @@ function GetStepContent(step: number) {
           id="hook-form-2"
           style={{ width: '100%' }}
         >
+          <FormLabel>* Campos requeridos</FormLabel>
+
           <TextField
             {...register2('name', { required: true })}
             label="Nombre"
             type="text"
             variant="standard"
-            style={{ width: '80%' }}
+            style={{ width: '80%', marginTop: '1rem' }}
+            required
           />
           <TextField
             {...register2('mortuary_name', { required: true })}
@@ -145,30 +159,31 @@ function GetStepContent(step: number) {
             type="text"
             variant="standard"
             style={{ width: '80%', margin: '1rem 0 1.5rem 0' }}
+            required
           />
           <TextField
-            {...register2('address', { required: true })}
+            {...register2('address')}
             label="Colonia"
             type="text"
             variant="standard"
             style={{ width: '80%', margin: '1rem 0 1.5rem 0' }}
           />
           <TextField
-            {...register2('address2', { required: true })}
+            {...register2('address2')}
             label="Calle y número"
             type="text"
             variant="standard"
             style={{ width: '80%', margin: '1rem 0 1.5rem 0' }}
           />
           <TextField
-            {...register2('rfc', { required: true })}
+            {...register2('rfc')}
             label="RFC"
             type="text"
             variant="standard"
             style={{ width: '80%', margin: '1rem 0 1.5rem 0' }}
           />
           <TextField
-            {...register2('postal_code', { required: true })}
+            {...register2('postal_code')}
             label="Código Postal"
             type="text"
             variant="standard"
@@ -212,7 +227,10 @@ function RegisterPage() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
   return (
-    <Box sx={{ padding: '2rem', bgcolor: '#f5f5f5' }}>
+    <Box
+      sx={{ padding: '2rem', bgcolor: '#f5f5f5' }}
+      className="registerContainer"
+    >
       <h2
         style={{
           margin: '2rem 0 0.5rem 0',

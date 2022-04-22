@@ -1,0 +1,29 @@
+.mainContainer {
+  padding: 2rem;
+}
+
+.formTransport {
+  width: 100%;
+}
+
+.btnSendTransport {
+  margin: 3rem auto !important;
+  border-radius: 20px !important;
+  padding: 1rem !important;
+  width: 80% !important;
+  background: #a54131 !important;
+  font-size: 1rem !important;
+}
+
+@media only screen and (max-width: 1536px) and (min-width: 767px) {
+  .mainContainer {
+    padding: 2rem 15rem;
+  }
+  .formTransport {
+    width: 70%;
+  }
+  .btnSendTransport {
+    width: 50% !important;
+    margin: 3rem 0 !important;
+  }
+}

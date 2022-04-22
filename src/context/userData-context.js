@@ -17,7 +17,11 @@ export const userDataContext = createContext({
     rfc: '',
     role: '',
   },
+  services: [],
+  translate: '',
   addUserData: (e) => {},
+  changeL: (e) => {},
+  addServicesArray: (e) => {},
 });
 
 export const UserDataContextProvider = ({ children }) => {

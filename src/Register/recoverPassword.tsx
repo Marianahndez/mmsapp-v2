@@ -38,12 +38,7 @@ function RecoverPassword() {
   };
 
   return (
-    <Grid
-      item
-      xs={12}
-      md={12}
-      style={{ padding: '5rem 3rem', background: '#f5f5f5', height: '100vh' }}
-    >
+    <Grid item xs={12} md={12} className="recoverContainer">
       <h2
         style={{
           color: '#455a64',

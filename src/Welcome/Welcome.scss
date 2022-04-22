@@ -3,7 +3,7 @@
 // Components classes
 .welcome {
   text-align: center;
-  height: 105vh;
+  height: 115vh;
   &.wpage {
     background: $red-strong !important;
   }
@@ -66,5 +66,25 @@
   }
   a {
     color: $red-custom;
+  }
+}
+
+@media only screen and (max-width: 1536px) and (min-width: 767px) {
+  .welcome {
+    height: auto !important;
+    padding: 1rem;
+  }
+  .pt15 {
+    padding: 2rem 3rem;
+  }
+  .formLogin {
+    padding: 2rem 20rem !important;
+    form {
+      padding: 4rem 5rem !important;
+      width: 80% !important;
+      .btnLogin.lpage {
+        width: 50%;
+      }
+    }
   }
 }

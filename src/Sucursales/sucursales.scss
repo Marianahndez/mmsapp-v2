@@ -1,5 +1,9 @@
 @import '/src/globalStyles';
 
+.sucursalesContainer {
+  padding: 2rem;
+}
+
 .customCard {
   border-radius: 20px !important;
   background: #fff !important;
@@ -33,7 +37,7 @@
 .labelNotification {
   width: 70%;
   color: #fff;
-  margin: 1.5rem 0 0 5.5rem;
+  margin: 1.5rem 0 0 0rem;
   text-align: center;
   padding: 0.5rem 0;
   border-top-left-radius: 5px;
@@ -43,5 +47,11 @@
   }
   &.n-green {
     background: $green-dark;
+  }
+}
+
+@media only screen and (max-width: 1536px) and (min-width: 767px) {
+  .sucursalesContainer {
+    padding: 2rem 15rem;
   }
 }

@@ -12,9 +12,11 @@ import Notifications from './Notifications/notifications';
 import Profile from './Profile/profile';
 import Sucursales from './Sucursales/sucursales';
 import ServiceDetails from './ServiceDetails/serviceDetails';
+import UserDetails from './ServiceDetails/userDetails';
 import Transport from './Transport/transport';
 import reportWebVitals from './reportWebVitals';
 import { UserDataContextProvider } from './context/userData-context.js';
+import './i18n.js';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -29,9 +31,10 @@ ReactDOM.render(
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/history" element={<History />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/details" element={<ServiceDetails />} />
+          <Route path="/details/:id" element={<ServiceDetails />} />
+          <Route path="/userDetails/:item" element={<UserDetails />} />
           <Route path="/sucursales" element={<Sucursales />} />
-          <Route path="/transport" element={<Transport />} />
+          <Route path="/transport/:id" element={<Transport />} />
         </Routes>
       </BrowserRouter>
     </UserDataContextProvider>

@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useContext } from 'react';
@@ -15,11 +16,24 @@ import { Link } from 'react-router-dom';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import { useTranslation } from 'react-i18next';
+import {
+  updateDoc,
+  doc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from 'firebase/firestore';
 import { useForm, Controller } from 'react-hook-form';
+import { db } from '../firebase.js';
 import { userDataContext } from '../context/userData-context.js';
 import SidebarMenu from '../Menu/menu';
+import './profile.scss';
 
 function Profile() {
+  const { t } = useTranslation();
+
   const {
     register,
     handleSubmit,
@@ -27,18 +41,14 @@ function Profile() {
     formState: { isDirty, isValid },
   } = useForm({
     mode: 'onChange',
-    defaultValues: {
-      origen: '',
-      destino: '',
-      fecha: '',
-      cotizacion: '',
-    },
   });
 
   const userLocalS = localStorage.getItem('userData')!;
   const userIDLocal = JSON.parse(userLocalS);
+  const citiesRef = collection(db, 'users');
 
   const { user } = useContext(userDataContext);
+
   const [edit1, setEdit1] = useState(false);
   const [edit3, setEdit3] = useState(false);
   const [image, setImage] = useState('' || null);
@@ -50,14 +60,30 @@ function Profile() {
     //   .on('state_changed', alert('success'), alert);
   };
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const onSubmit = async (data: any) => {
+    updateDoc(doc(db, 'users', userIDLocal.id), {
+      sucursales: [...userIDLocal.sucursales, { ...data }],
+    });
+    setEdit3(false);
+    const q = query(citiesRef, where('email', '==', userIDLocal.email));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.forEach((docx: any) => {
+      const userData = {
+        id: docx.id,
+        ...docx.data(),
+      };
+      localStorage.setItem('userData', JSON.stringify(userData));
+    });
   };
+
+  // const userDataSubmit = (data: any) => {
+  //   console.log('useredit? ', data);
+  // };
 
   return (
     <div style={{ background: grey[300] }}>
       <SidebarMenu />
-      <div style={{ padding: '2rem' }}>
+      <div className="profileContainer">
         <h1
           style={{
             margin: '1rem 0 0 0',
@@ -66,12 +92,9 @@ function Profile() {
             fontSize: '1.7rem',
           }}
         >
-          Mi perfil
+          {t('Perfil')}
         </h1>
-        <p style={{ margin: '0.3rem 0 0 0' }}>
-          En esta sección podrá editar algunos datos, asi como agregar sus
-          sucursales.
-        </p>
+        <p style={{ margin: '0.3rem 0 0 0' }}>{t('LBLPerfil')}</p>
         <Grid container spacing={2}>
           <Grid item xs={12} style={{ margin: '3rem 0' }}>
             <div style={{ textAlign: 'center' }}>
@@ -94,58 +117,61 @@ function Profile() {
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <h3 style={{ textTransform: 'uppercase', color: '#141825' }}>
-                Datos personales
+                {t('DatosPersonales')}
               </h3>
-              <IconButton
+              {/* <IconButton
                 aria-label="edit"
                 size="small"
                 onClick={() => setEdit1(true)}
               >
                 <EditRoundedIcon />
-              </IconButton>
+              </IconButton> */}
             </div>
             <div>
-              <FormControl
-                fullWidth
-                onSubmit={handleSubmit(onSubmit)}
-                id="hook-form"
-                style={{ width: '100%' }}
+              <form
+                // onSubmit={handleSubmit(userDataSubmit)}
+                id="hook-2-form"
+                className="profileForm"
               >
                 {!edit1 ? (
                   <>
                     <TextField
-                      label="Nombre"
+                      label={t('Nombre')}
                       type="text"
                       variant="outlined"
                       defaultValue={userIDLocal.name}
-                      style={{ marginTop: '0.5rem' }}
+                      style={{ marginTop: '0.5rem', width: '100%' }}
                       InputProps={{ readOnly: true }}
                     />
                     <TextField
-                      label="Correo"
+                      label={t('Correo')}
                       type="text"
                       variant="outlined"
                       defaultValue={userIDLocal.email}
-                      style={{ marginTop: '2rem' }}
+                      style={{ marginTop: '2rem', width: '100%' }}
                       InputProps={{ readOnly: true }}
                     />
-                    <TextField
-                      label="Teléfono"
-                      type="number"
-                      variant="outlined"
-                      defaultValue="8801222938"
-                      style={{ marginTop: '2rem' }}
-                      InputProps={{ readOnly: true }}
-                    />
-                    {userIDLocal.role !== 'admin' ? (
+                    {userIDLocal.phone ? (
+                      <TextField
+                        label={t('Telefono')}
+                        type="number"
+                        variant="outlined"
+                        defaultValue={userIDLocal.phone}
+                        style={{ marginTop: '2rem', width: '100%' }}
+                        InputProps={{ readOnly: true }}
+                      />
+                    ) : (
+                      ''
+                    )}
+                    {userIDLocal.role !== 'Admin' ? (
                       ''
                     ) : (
                       <TextField
-                        label="Puesto"
+                        label={t('Puesto')}
                         type="texto"
                         variant="outlined"
                         defaultValue={userIDLocal.role}
-                        style={{ marginTop: '2rem' }}
+                        style={{ marginTop: '2rem', width: '100%' }}
                         InputProps={{ readOnly: true }}
                       />
                     )}
@@ -154,43 +180,39 @@ function Profile() {
                   <>
                     {/* Agregar defaultValues */}
                     <TextField
-                      {...register('origen', { required: true })}
-                      label="Nombre"
+                      {...register('name', { required: true })}
+                      label={t('Nombre')}
                       type="text"
                       variant="outlined"
                       placeholder="Escriba su nombre"
                       style={{ marginTop: '0.5rem' }}
-                      InputProps={{ readOnly: false }}
                     />
                     <TextField
-                      {...register('origen', { required: true })}
-                      label="Correo"
+                      {...register('email', { required: true })}
+                      label={t('Correo')}
                       type="text"
                       variant="outlined"
                       placeholder="Escriba su correo"
                       style={{ marginTop: '2rem' }}
-                      InputProps={{ readOnly: false }}
                     />
                     <TextField
-                      {...register('origen', { required: true })}
-                      label="Teléfono"
+                      {...register('phone', { required: true })}
+                      label={t('Telefono')}
                       type="number"
                       variant="outlined"
                       placeholder="Escriba su teléfono"
                       style={{ marginTop: '2rem' }}
-                      InputProps={{ readOnly: false }}
                     />
                     <TextField
-                      {...register('origen', { required: true })}
-                      label="Puesto"
+                      {...register('company_role', { required: true })}
+                      label={t('Puesto')}
                       type="text"
                       variant="outlined"
-                      placeholder="Escriba su teléfono"
                       style={{ marginTop: '2rem' }}
-                      InputProps={{ readOnly: false }}
                     />
                     <Button
                       variant="contained"
+                      type="submit"
                       onClick={() => setEdit1(false)}
                       style={{
                         width: '80%',
@@ -200,13 +222,13 @@ function Profile() {
                         background: '#a54131',
                       }}
                     >
-                      Actualizar
+                      {t('Actualizar')} 2
                     </Button>
                   </>
                 )}
-              </FormControl>
+              </form>
             </div>
-            {userIDLocal.role !== 'admin' ? (
+            {userIDLocal.role !== 'Admin' ? (
               <>
                 <div
                   style={{
@@ -216,7 +238,7 @@ function Profile() {
                   }}
                 >
                   <h3 style={{ textTransform: 'uppercase', color: '#141825' }}>
-                    Agregar mis sucursales
+                    {t('AgregarSucursales')}
                   </h3>
                   <IconButton
                     aria-label="edit"
@@ -227,8 +249,7 @@ function Profile() {
                   </IconButton>
                 </div>
                 <div>
-                  <FormControl
-                    fullWidth
+                  <form
                     onSubmit={handleSubmit(onSubmit)}
                     id="hook-form"
                     style={{ width: '100%' }}
@@ -236,8 +257,7 @@ function Profile() {
                     {!edit3 ? (
                       <>
                         <p style={{ marginTop: 0 }}>
-                          En la sección de <i>Sucursales</i> podrá editar los
-                          datos necesarios.
+                          {t('LBLAgregarSucursales')}
                         </p>
                         <Button
                           variant="contained"
@@ -252,55 +272,60 @@ function Profile() {
                           component={Link}
                           to="/sucursales"
                         >
-                          Revisar mis sucursales
+                          {t('RevisarSucursales')}
                         </Button>
                       </>
                     ) : (
                       <>
                         {/* Agregar defaultValues */}
                         <TextField
-                          {...register('origen', { required: true })}
-                          label="Nombre"
+                          {...register('nombre_sucursal', { required: true })}
+                          label={t('NombreSucursal')}
                           type="text"
                           variant="outlined"
                           placeholder="Escriba su nombre"
-                          style={{ marginTop: '0.5rem' }}
+                          style={{ marginTop: '0.5rem', width: '100%' }}
                           InputProps={{ readOnly: false }}
                         />
                         <TextField
-                          {...register('origen', { required: true })}
-                          label="Correo"
+                          {...register('direccion_sucursal', {
+                            required: true,
+                          })}
+                          label={t('Direccion')}
                           type="text"
                           variant="outlined"
                           placeholder="Escriba su correo"
-                          style={{ marginTop: '2rem' }}
+                          style={{ marginTop: '2rem', width: '100%' }}
                           InputProps={{ readOnly: false }}
                         />
                         <TextField
-                          {...register('origen', { required: true })}
-                          label="Teléfono"
+                          {...register('fax_sucursal', { required: true })}
+                          label="Fax"
                           type="number"
                           variant="outlined"
                           placeholder="Escriba su teléfono"
-                          style={{ marginTop: '2rem' }}
+                          style={{ marginTop: '2rem', width: '100%' }}
+                          InputProps={{ readOnly: false }}
+                        />
+                        <TextField
+                          {...register('telefono_sucursal', { required: true })}
+                          label={t('Telefono')}
+                          type="number"
+                          variant="outlined"
+                          placeholder="Escriba su teléfono"
+                          style={{ marginTop: '2rem', width: '100%' }}
                           InputProps={{ readOnly: false }}
                         />
                         <Button
+                          type="submit"
                           variant="contained"
-                          onClick={() => setEdit3(false)}
-                          style={{
-                            width: '80%',
-                            margin: '1.5rem auto',
-                            borderRadius: '20px',
-                            padding: '0.8rem',
-                            background: '#a54131',
-                          }}
+                          className="btnUpdate"
                         >
-                          Actualizar
+                          {t('Actualizar')}
                         </Button>
                       </>
                     )}
-                  </FormControl>
+                  </form>
                 </div>
               </>
             ) : (

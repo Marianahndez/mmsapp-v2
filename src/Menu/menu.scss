@@ -29,3 +29,9 @@
   border-radius: 50%;
   z-index: 99;
 }
+
+@media only screen and (max-width: 1536px) and (min-width: 767px) {
+  .menuDesktop .MuiDrawer-paper {
+    width: 25% !important;
+  }
+}

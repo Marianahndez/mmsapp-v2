@@ -24,29 +24,33 @@ import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBulletedRounded';
+import MapRoundedIcon from '@mui/icons-material/MapRounded';
 import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
 import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 import PhoneInTalkRoundedIcon from '@mui/icons-material/PhoneInTalkRounded';
 import AssessmentRoundedIcon from '@mui/icons-material/AssessmentRounded';
 import LanguageIcon from '@mui/icons-material/Language';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { userDataContext } from '../context/userData-context.js';
 import './menu.scss';
 
 function SidebarMenu() {
-  const { user } = useContext(userDataContext);
+  const { t, i18n } = useTranslation();
+
+  const { user, changeL } = useContext(userDataContext);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [translateEs, setTranslateEs] = useState(false);
 
   const userLocalS = localStorage.getItem('userData')!;
   const userIDLocal = JSON.parse(userLocalS);
 
-  // const [userData, setUserData] = useState();
-  console.log('userm; ', userIDLocal);
-
-  // useEffect(() => {
-  //   setUserData(user);
-  // });
+  const changeLanguage = (lng: any) => {
+    setTranslateEs(!translateEs);
+    changeL(lng);
+    i18n.changeLanguage(lng);
+  };
 
   return (
     <AppBar
@@ -70,16 +74,17 @@ function SidebarMenu() {
           >
             <MenuRoundedIcon sx={{ color: grey[900] }} />
           </IconButton>
-          <div style={{ position: 'relative', padding: '0.5rem 0' }}>
+          {/* <div style={{ position: 'relative', padding: '0.5rem 0' }}>
             <span className="redNotification" />
             <IconButton component={Link} to="/notifications">
               <NotificationsRoundedIcon sx={{ color: grey[900] }} />
             </IconButton>
-          </div>
+          </div> */}
         </div>
         <Drawer
           open={isDrawerOpen}
           onClose={() => setIsDrawerOpen(false)}
+          className="menuDesktop"
           PaperProps={{
             sx: { width: '75%', padding: ' 1rem', background: '#141825' },
           }}
@@ -107,17 +112,17 @@ function SidebarMenu() {
               <DashboardRoundedIcon style={{ color: '#fff' }} />
               <ListItemText
                 style={{ margin: '1rem 0 1rem 1rem' }}
-                primary="Inicio"
+                primary={t('Inicio')}
                 className="listStyle"
               />
             </ListItem>
-            {userIDLocal.role !== 'admin' ? (
+            {userIDLocal.role !== 'Admin' ? (
               <>
                 <ListItem button component={Link} to="/history">
                   <FormatListBulletedRoundedIcon style={{ color: '#fff' }} />
                   <ListItemText
                     style={{ margin: '1rem 0 1rem 1rem' }}
-                    primary="Historial"
+                    primary={t('Historial')}
                     className="listStyle"
                   />
                 </ListItem>
@@ -126,16 +131,16 @@ function SidebarMenu() {
                   <ApartmentRoundedIcon style={{ color: '#fff' }} />
                   <ListItemText
                     style={{ margin: '1rem 0 1rem 1rem' }}
-                    primary="Sucursales"
+                    primary={t('Sucursales')}
                     className="listStyle"
                   />
                 </ListItem>
 
-                <ListItem button component={Link} to="/notifications">
+                <ListItem button component={Link} to="/notifications" disabled>
                   <NotificationsRoundedIcon style={{ color: '#fff' }} />
                   <ListItemText
                     style={{ margin: '1rem 0 1rem 1rem' }}
-                    primary="Notificaciones"
+                    primary={t('Notificaciones')}
                     className="listStyle"
                   />
                 </ListItem>
@@ -144,26 +149,26 @@ function SidebarMenu() {
                   <PhoneInTalkRoundedIcon style={{ color: '#fff' }} />
                   <ListItemText
                     style={{ margin: '1rem 0 1rem 1rem' }}
-                    primary="Llamar al coordinador"
+                    primary={t('LlamarACoordinador')}
                     className="listStyle"
                   />
                 </ListItem>
               </>
             ) : (
               <>
-                <ListItem button component={Link} to="/notifications">
+                <ListItem button component={Link} to="/notifications" disabled>
                   <NotificationsRoundedIcon style={{ color: '#fff' }} />
                   <ListItemText
                     style={{ margin: '1rem 0 1rem 1rem' }}
-                    primary="Notificaciones"
+                    primary={t('Notificaciones')}
                     className="listStyle"
                   />
                 </ListItem>
-                <ListItem button>
-                  <AssessmentRoundedIcon style={{ color: '#fff' }} />
+                <ListItem button disabled>
+                  <MapRoundedIcon style={{ color: '#fff' }} />
                   <ListItemText
                     style={{ margin: '1rem 0 1rem 1rem' }}
-                    primary="Reportes"
+                    primary={t('Rastreo')}
                     className="listStyle"
                   />
                 </ListItem>
@@ -189,18 +194,29 @@ function SidebarMenu() {
                   fontWeight: 'bold',
                 }}
               >
-                Traductor
+                {t('Traductor')}
               </ListSubheader>
             }
           >
-            <ListItem button>
-              <LanguageIcon style={{ color: '#fff' }} />
-              <ListItemText
-                style={{ margin: '1rem 0 1rem 1rem' }}
-                primary="Inglés / Español"
-                className="listStyle"
-              />
-            </ListItem>
+            {translateEs ? (
+              <ListItem button onClick={() => changeLanguage('en')}>
+                <LanguageIcon style={{ color: '#fff' }} />
+                <ListItemText
+                  style={{ margin: '1rem 0 1rem 1rem' }}
+                  primary="Inglés"
+                  className="listStyle"
+                />
+              </ListItem>
+            ) : (
+              <ListItem button onClick={() => changeLanguage('es')}>
+                <LanguageIcon style={{ color: '#fff' }} />
+                <ListItemText
+                  style={{ margin: '1rem 0 1rem 1rem' }}
+                  primary="Español"
+                  className="listStyle"
+                />
+              </ListItem>
+            )}
           </List>
         </Drawer>
       </Toolbar>

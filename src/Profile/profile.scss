@@ -1,0 +1,29 @@
+.profileContainer {
+  padding: 2rem;
+}
+
+.profileForm {
+  width: 100% !important;
+}
+
+.btnUpdate {
+  width: 80% !important;
+  margin: 1.5rem 2rem !important;
+  border-radius: 20px !important;
+  padding: 0.8rem !important;
+  background: #a54131 !important;
+}
+
+@media only screen and (max-width: 1536px) and (min-width: 767px) {
+  .profileContainer {
+    padding: 2rem 15rem;
+  }
+  .profileForm {
+    width: 70%;
+  }
+
+  .btnUpdate {
+    width: 50% !important;
+    margin: 1.5rem 0 !important;
+  }
+}

@@ -13,10 +13,28 @@ export const UserData = () => {
     rfc: '',
     role: '',
   });
+  const [services, setServices] = useState([]);
+  const [translate, setTranslate] = useState();
+
+  const addServicesArray = (data) => {
+    setServices(data);
+  };
+
+  const changeL = (data) => {
+    setTranslate(data);
+  };
 
   const addUserData = (data) => {
     setUser(data);
   };
 
-  return { user, addUserData };
+  // eslint-disable-next-line object-curly-newline
+  return {
+    user,
+    services,
+    addUserData,
+    addServicesArray,
+    changeL,
+    translate,
+  };
 };

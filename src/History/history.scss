@@ -1,7 +1,11 @@
 @import '/src/globalStyles';
 
+.recordContainer {
+  padding: 2rem;
+}
+
 .customCard {
-  border-radius: 20px !important;
+  border-radius: 7px !important;
   background: #fff !important;
   color: $blue-dark !important;
   margin: 1.5rem 0;
@@ -33,7 +37,7 @@
 .labelNotification {
   width: 70%;
   color: #fff;
-  margin: 1.5rem 0 0 5.5rem;
+  margin: 1.5rem 0 0 0rem;
   text-align: center;
   padding: 0.5rem 0;
   border-top-left-radius: 5px;
@@ -43,5 +47,14 @@
   }
   &.n-green {
     background: $green-dark;
+  }
+}
+
+@media only screen and (max-width: 1536px) and (min-width: 767px) {
+  .recordContainer {
+    padding: 2rem 15rem;
+  }
+  .customCard {
+    width: 70% !important;
   }
 }

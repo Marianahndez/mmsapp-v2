@@ -1,0 +1,83 @@
+@import '/src/globalStyles';
+
+.editDate {
+  display: block;
+  button {
+    margin-left: 0.5rem;
+  }
+}
+.btnUpdateDate {
+  border: 1px solid $red-strong !important;
+  color: $red-strong !important;
+  margin: 1rem 0 !important;
+  border-radius: 20px !important;
+  padding: 1rem !important;
+  width: 100% !important;
+}
+.sdMainContainer {
+  padding: 2rem;
+}
+
+.btnSendCotizacion {
+  margin: 3rem auto !important;
+  border-radius: 20px !important;
+  padding: 1rem !important;
+  width: 85% !important;
+  background: #a54131 !important;
+  font-size: 1rem !important;
+}
+
+.desktopCotizaion {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+}
+
+.btnHalfConfirm {
+  margin-top: 2rem !important;
+  margin-bottom: 2rem !important;
+  margin-right: 1.5rem !important;
+  border-radius: 20px !important;
+  padding: 1rem !important;
+  width: 45% !important;
+  background: $green-dark !important;
+  font-size: 1rem !important;
+}
+
+.btnHalfCall {
+  margin-top: 2rem !important;
+  margin-bottom: 2rem !important;
+  border-radius: 20px !important;
+  padding: 1rem !important;
+  width: 45% !important;
+  background: $blue-dark !important;
+  font-size: 1rem !important;
+  a {
+    color: white !important;
+  }
+}
+
+@media only screen and (max-width: 1536px) and (min-width: 767px) {
+  .sdMainContainer {
+    padding: 2rem 15rem;
+  }
+  .desktopCotizaion {
+    display: flex;
+    .inputCotizacion {
+      width: 30%;
+      margin-right: 1rem;
+    }
+    .gropBtns {
+      height: 3rem;
+      margin-top: 2.5rem;
+    }
+  }
+  .btnSendCotizacion {
+    margin: 3rem 0 !important;
+    width: 50% !important;
+    border-radius: 20px;
+    padding: 1rem;
+    background: #a54131;
+    font-size: 1rem;
+  }
+}

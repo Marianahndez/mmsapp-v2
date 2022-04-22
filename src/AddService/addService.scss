@@ -1,0 +1,17 @@
+.mainContainer {
+  padding: 2rem;
+}
+
+.hideInputs {
+  display: none !important;
+}
+
+.gropBtns {
+  height: 3rem;
+}
+
+@media only screen and (max-width: 1536px) and (min-width: 767px) {
+  .mainContainer {
+    padding: 2rem 15rem;
+  }
+}

@@ -1,7 +1,11 @@
 @import '/src/globalStyles';
 
-.customCard {
-  border-radius: 20px !important;
+.mainContainer {
+  padding: 1rem 1.7rem;
+}
+
+.customCardHome {
+  border-radius: 7px !important;
   background: #fff !important;
   color: $blue-dark !important;
   margin: 1.5rem 0;
@@ -36,29 +40,86 @@
   width: 5rem !important;
   position: fixed !important;
   bottom: 20px;
-  left: 40%;
+  left: 75%;
   z-index: 999 !important;
+  background-color: $red-strong !important;
   a {
     color: #fff !important;
     font-weight: bold !important;
   }
 }
 
+.btn-transport {
+  font-size: 1.2rem !important;
+  float: right;
+  margin-top: 1rem !important;
+  width: 85%;
+  color: $orange;
+}
+
 .labelNotification {
   width: 70%;
-  color: #fff;
-  margin: 1.5rem 0 0 5.5rem;
+  color: #fff !important;
+  margin: 1.5rem 0 0 0rem !important;
   text-align: center;
   padding: 0.5rem 0;
   border-top-left-radius: 5px;
   border-bottom-right-radius: 5px;
+  a {
+    color: #fff !important;
+  }
   &.n-red {
+    background: $red-strong;
+  }
+  &.n-red-custom {
     background: $red-custom;
   }
   &.n-yellow {
     background: $yellow;
   }
   &.n-blue {
-    background: $blue-dark;
+    background: $blue;
+  }
+  &.n-orange {
+    background: $orange;
+  }
+  &.n-green {
+    background: $green-dark;
+  }
+  &.n-purple {
+    background: $purple;
+  }
+}
+
+.listCardsDesktop {
+  margin-top: -4rem !important;
+}
+
+.transitionIcon {
+  transform: rotate(90deg) !important;
+  margin-right: 0.5rem;
+}
+
+@media only screen and (max-width: 1536px) and (min-width: 767px) {
+  .listCardsDesktop {
+    & .customCardHome {
+      width: 40%;
+      margin-right: 5rem;
+    }
+  }
+  .btnAddService {
+    top: 15%;
+    right: 45px;
+    left: 90%;
+    bottom: 0;
+  }
+  .mainContainer {
+    padding: 1rem 5rem;
+  }
+  .btn-transport {
+    width: 65%;
+    float: right;
+    border-radius: 20px !important;
+    font-size: 1rem !important;
   }
 }

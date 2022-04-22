@@ -10,7 +10,7 @@ export const AuthService = {
       console.log('create user: ', email);
       console.log('user: ', userCred.user);
       await userCred.user.sendEmailVerification({
-        url: 'http://localhost:3000/userHome',
+        url: 'www.mmortuaryservices.netlify.app',
       });
       return {
         user: userCred.user,

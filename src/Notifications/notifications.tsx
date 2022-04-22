@@ -1,10 +1,13 @@
 import React from 'react';
 import { grey, blueGrey } from '@mui/material/colors';
 import { Grid } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import SidebarMenu from '../Menu/menu';
 import './notifications.scss';
 
 function Notifications() {
+  const { t } = useTranslation();
+
   return (
     <div style={{ background: grey[300], height: '100vh' }}>
       <SidebarMenu />
@@ -17,11 +20,9 @@ function Notifications() {
             fontSize: '1.7rem',
           }}
         >
-          Notificaciones
+          {t('Notificaciones')}
         </h1>
-        <p style={{ margin: '0.3rem 0 0 0' }}>
-          En esta sección podrá revisar el listado de sus notificaciones.
-        </p>
+        <p style={{ margin: '0.3rem 0 0 0' }}>{t('LBLNotificaciones')}</p>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <div
