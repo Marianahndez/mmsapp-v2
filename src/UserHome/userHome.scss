@@ -7,17 +7,22 @@
 .customCardHome {
   border-radius: 7px !important;
   background: #fff !important;
-  color: $blue-dark !important;
+  color: $blue-dark  !important;
   margin: 1.5rem 0;
+
   .container {
     width: 100%;
+    // z-index: 99999 !important;
   }
+
   .details {
     border-left: 3px solid $blue-dark;
     padding: 0.2rem 0;
+
     p {
       padding: 0 0 0 0.5rem;
       margin: 0;
+
       &:nth-child(2) {
         margin: 0.3rem 0 0 0;
       }
@@ -27,6 +32,7 @@
       font-size: 1rem;
     }
   }
+
   .titleCard {
     font-size: 1.5rem;
     font-weight: 600;
@@ -42,7 +48,8 @@
   bottom: 20px;
   left: 75%;
   z-index: 999 !important;
-  background-color: $red-strong !important;
+  background-color: $red-strong  !important;
+
   a {
     color: #fff !important;
     font-weight: bold !important;
@@ -65,27 +72,48 @@
   padding: 0.5rem 0;
   border-top-left-radius: 5px;
   border-bottom-right-radius: 5px;
+
   a {
     color: #fff !important;
   }
+
   &.n-red {
     background: $red-strong;
   }
+
+  &.n-red-confirmed {
+    background: $red-confirmed;
+  }
+
   &.n-red-custom {
     background: $red-custom;
   }
+
   &.n-yellow {
     background: $yellow;
+    color: #000 !important;
   }
+
   &.n-blue {
     background: $blue;
   }
+
+  &.n-blue-cotizado {
+    background: $blue-cotizado;
+  }
+
   &.n-orange {
     background: $orange;
   }
+
   &.n-green {
     background: $green-dark;
   }
+
+  &.n-green-light {
+    background: $green-light;
+  }
+
   &.n-purple {
     background: $purple;
   }
@@ -96,8 +124,15 @@
 }
 
 .transitionIcon {
-  transform: rotate(90deg) !important;
+  // transform: rotate(180deg) !important;
   margin-right: 0.5rem;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  height: 50vh;
+  align-items: center;
 }
 
 @media only screen and (max-width: 1536px) and (min-width: 767px) {
@@ -107,15 +142,18 @@
       margin-right: 5rem;
     }
   }
+
   .btnAddService {
     top: 15%;
     right: 45px;
     left: 90%;
     bottom: 0;
   }
+
   .mainContainer {
     padding: 1rem 5rem;
   }
+
   .btn-transport {
     width: 65%;
     float: right;

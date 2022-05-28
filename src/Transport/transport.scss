@@ -10,9 +10,14 @@
   margin: 3rem auto !important;
   border-radius: 20px !important;
   padding: 1rem !important;
-  width: 80% !important;
+  width: 100% !important;
   background: #a54131 !important;
   font-size: 1rem !important;
+  color: #fff !important;
+  &.half2 {
+    width: 45% !important;
+    margin-right: 1rem !important;
+  }
 }
 
 @media only screen and (max-width: 1536px) and (min-width: 767px) {

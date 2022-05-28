@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect } from 'react';
@@ -20,23 +21,27 @@ import {
   sendSignInLinkToEmail,
   getAuth,
 } from 'firebase/auth';
+import { useTranslation } from 'react-i18next';
 import { collection, addDoc } from 'firebase/firestore';
 import { db, auth } from '../firebase.js';
 import './register.scss';
 
-function GetStepContent(step: number) {
+function GetStepContent(step) {
+  const { t } = useTranslation();
+  const [currentUser, setCurrentUser] = useState(null);
+  const [errorM, setErrorM] = useState('');
+
   const [formEmail, setFormEmail] = useState(() => {
     const saved = localStorage.getItem('email');
     const initialValue = saved;
     return initialValue || '';
   });
-  const [currentUser, setCurrentUser] = useState<any>(null);
 
   const {
     register,
     handleSubmit,
     setValue,
-    formState: { isDirty, isValid },
+    formState: { isDirty, isValid, errors },
   } = useForm({
     mode: 'onBlur',
   });
@@ -50,7 +55,12 @@ function GetStepContent(step: number) {
     mode: 'onBlur',
   });
 
-  const onSubmitEmail = async (event: any) => {
+  useEffect(() => {
+    localStorage.setItem('email', '');
+    console.log('initEmail: ', localStorage.getItem('email'));
+  }, []);
+
+  const onSubmitEmail = async (event) => {
     localStorage.setItem('email', JSON.stringify(event));
     console.log('email: ', event);
     await addDoc(collection(db, 'emailLeads'), {
@@ -58,8 +68,11 @@ function GetStepContent(step: number) {
     });
   };
 
-  const onSubmitPersonalData = async (data: any) => {
-    const newData = JSON.parse(formEmail);
+  const onSubmitPersonalData = async (data) => {
+    const emailRegistered = localStorage.getItem('email');
+    const newData = JSON.parse(emailRegistered);
+    console.log('email to register1: ', newData);
+    console.log('email to register: ', emailRegistered);
     const data2 = {
       ...data,
       email: newData.email,
@@ -99,6 +112,7 @@ function GetStepContent(step: number) {
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
+          // setErrorM(errorMessage);
           // ...
         });
     } catch (error) {
@@ -115,24 +129,33 @@ function GetStepContent(step: number) {
           id="hook-form-1"
           style={{ width: '100%', marginTop: '1rem' }}
         >
-          <FormLabel>* Campos requeridos</FormLabel>
+          <FormLabel>{t('RequiredFilds')}</FormLabel>
 
           <TextField
             {...register('email', { required: true })}
-            label="Email"
+            label={t('Email')}
             type="text"
             variant="standard"
             style={{ width: '80%', marginTop: '1rem' }}
             required
           />
           <TextField
-            {...register('password', { required: true })}
-            label="Contraseña"
+            {...register('password', {
+              required: true,
+              minLength: {
+                value: 7,
+                message: 'ErrorPass',
+              },
+            })}
+            label={t('Contrasena')}
             type="password"
             variant="standard"
-            style={{ width: '80%', margin: '1rem 0 1.5rem 0' }}
+            style={{ width: '80%', margin: '1rem 0 0rem 0' }}
             required
           />
+          <span style={{ color: '#a54131' }}>
+            {errors.password && <p>{t(`${errors.password.message}`)}</p>}
+          </span>
         </form>
       );
     case 1:
@@ -143,11 +166,11 @@ function GetStepContent(step: number) {
           id="hook-form-2"
           style={{ width: '100%' }}
         >
-          <FormLabel>* Campos requeridos</FormLabel>
+          <FormLabel>{t('RequiredFilds')}</FormLabel>
 
           <TextField
             {...register2('name', { required: true })}
-            label="Nombre"
+            label={t('Nombre')}
             type="text"
             variant="standard"
             style={{ width: '80%', marginTop: '1rem' }}
@@ -155,7 +178,7 @@ function GetStepContent(step: number) {
           />
           <TextField
             {...register2('mortuary_name', { required: true })}
-            label="Nombre de la funeraria"
+            label={t('NombreFuneraria')}
             type="text"
             variant="standard"
             style={{ width: '80%', margin: '1rem 0 1.5rem 0' }}
@@ -163,32 +186,26 @@ function GetStepContent(step: number) {
           />
           <TextField
             {...register2('address')}
-            label="Colonia"
+            label={t('Colonia')}
             type="text"
             variant="standard"
             style={{ width: '80%', margin: '1rem 0 1.5rem 0' }}
           />
           <TextField
             {...register2('address2')}
-            label="Calle y número"
-            type="text"
-            variant="standard"
-            style={{ width: '80%', margin: '1rem 0 1.5rem 0' }}
-          />
-          <TextField
-            {...register2('rfc')}
-            label="RFC"
+            label={t('Address2')}
             type="text"
             variant="standard"
             style={{ width: '80%', margin: '1rem 0 1.5rem 0' }}
           />
           <TextField
             {...register2('postal_code')}
-            label="Código Postal"
+            label={t('CP')}
             type="text"
             variant="standard"
             style={{ width: '80%', margin: '1rem 0 1.5rem 0' }}
           />
+          {/* {errorM} */}
         </form>
       );
     default:
@@ -197,22 +214,21 @@ function GetStepContent(step: number) {
 }
 
 function RegisterPage() {
+  const { t } = useTranslation();
   const [activeStep, setActiveStep] = useState(0);
   const navigate = useNavigate();
   const steps = [
     {
-      label: 'Email & Contraseña',
-      description:
-        'Ingrese un correo y contraseña para poder acceder a los servicios que MMS le ofrecerá en esta nueva plataforma.',
+      label: 'RegStep1',
+      description: 'RegStepDesc1',
     },
     {
-      label: 'Datos de la funeraria',
-      description: 'Ingrese los datos necesarios sobre la funeraria.',
+      label: 'RegStep2',
+      description: 'RegStepDesc2',
     },
     {
-      label: 'Valida tu email',
-      description:
-        'Ingresa a tu cuenta de email y da clic en el link e inicia sesión en tu nueva cuenta de Mexico Mortuary Services APP.',
+      label: 'RegStep3',
+      description: 'RegStepDesc3',
     },
   ];
 
@@ -239,19 +255,19 @@ function RegisterPage() {
           fontSize: '1.7rem',
         }}
       >
-        Registro
+        {t('Registro')}
       </h2>
-      <p style={{ marginTop: '0' }}>Complete los datos de su registro.</p>
+      <p style={{ marginTop: '0' }}>{t('RegistroDesc')}</p>
       <Grid container style={{ margin: '1rem 0 15rem 0' }}>
         <Stepper activeStep={activeStep} orientation="vertical">
           {steps.map((step, index) => (
             <Step key={step.label}>
               <StepLabel>
-                <p style={{ fontWeight: '600' }}>{step.label}</p>
+                <p style={{ fontWeight: '600' }}>{t(`${step.label}`)}</p>
               </StepLabel>
               <StepContent>
                 <Typography style={{ fontSize: '1.2rem' }}>
-                  {step.description}
+                  {t(`${step.description}`)}
                 </Typography>
                 <Typography>{GetStepContent(index)}</Typography>
                 <Box sx={{ mb: 2 }}>
@@ -269,7 +285,7 @@ function RegisterPage() {
                             : 'btnBlueRounded sm'
                         }
                       >
-                        Continuar
+                        {t('Continuar')}
                       </Button>
                     ) : (
                       <Button
@@ -284,7 +300,9 @@ function RegisterPage() {
                             : 'btnBlueRounded sm'
                         }
                       >
-                        {index === steps.length - 1 ? 'Finalizar' : 'Continuar'}
+                        {index === steps.length - 1
+                          ? `${t('GoHome')}`
+                          : `${t('Continuar')}`}
                       </Button>
                     )}
                   </div>

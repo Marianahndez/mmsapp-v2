@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+/* eslint-disable max-len */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/jsx-props-no-spreading */
@@ -23,21 +25,24 @@ import SendIcon from '@mui/icons-material/Send';
 import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateAdapter from '@mui/lab/AdapterDateFns';
-import FlightTakeoffRoundedIcon from '@mui/icons-material/FlightTakeoffRounded';
-import FlightLandRoundedIcon from '@mui/icons-material/FlightLandRounded';
+import AirportShuttleRoundedIcon from '@mui/icons-material/AirportShuttleRounded';
 import AttachMoneyRoundedIcon from '@mui/icons-material/AttachMoneyRounded';
 import { useForm, Controller } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
-import { collection, addDoc } from 'firebase/firestore';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
-import { userDataContext } from '../context/userData-context.js';
+// import { userDataContext } from '../context/userData-context.js';
 import { db } from '../firebase.js';
-import SidebarMenu from '../Menu/menu';
+import { servicesData } from '../service/servicesData.js';
+import { userDataService } from '../service/userData.js';
+import SidebarMenu from '../Menu/menu.jsx';
 import './addService.scss';
 
 function AddService() {
   const { t } = useTranslation();
-  const { user } = useContext(userDataContext);
+  const { userDataServObj, getUser } = userDataService();
+  const { addServiceHandler, statusCall } = servicesData();
+  const params = useParams();
 
   const {
     register,
@@ -53,84 +58,124 @@ function AddService() {
   const [services, setServices] = useState('');
   const [originSelect, setOriginSelect] = useState('');
   const [oficinaSelect, setOficinaSelected] = useState('');
-  const [date, setDate] = useState<Date | null>();
-  const userLocalS = localStorage.getItem('userData')!;
-  const userIDLocal = JSON.parse(userLocalS);
-  const [origin, setOrigin] = React.useState<string | null>('Mexico');
+  const [date, setDate] = useState();
+  const [nip, setNIP] = useState('');
+  const [servID, setServID] = useState(0);
+  // const userLocalS = localStorage.getItem('userData')!;
+  // const userIDLocal = JSON.parse(userLocalS);
+  const [origin, setOrigin] = useState('Mexico');
 
-  const handleOrigin = (
-    event: React.MouseEvent<HTMLElement>,
-    newOrigin: string | null,
-  ) => {
+  const handleOrigin = (event, newOrigin) => {
     setOrigin(newOrigin);
   };
 
-  const handleChange = (newValue: Date | null) => {
+  const handleChange = (newValue) => {
     setDate(newValue);
   };
 
-  const handleChangeServices = (event: SelectChangeEvent) => {
+  const handleChangeServices = (event) => {
     setServices(event.target.value);
   };
 
-  const handleOriginSelected = (event: SelectChangeEvent) => {
+  const handleOriginSelected = (event) => {
     setOriginSelect(event.target.value);
   };
 
-  const handleOficinaSelected = (event: SelectChangeEvent) => {
+  const handleOficinaSelected = (event) => {
     setOficinaSelected(event.target.value);
   };
 
-  const onSubmit = async (data: any) => {
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  useEffect(() => {
+    switch (services) {
+      case 't-translado':
+        return setServID(1);
+      case 't-tramites':
+        return setServID(2);
+      case 'e-punta':
+        return setServID(3);
+      case 'e-ruta':
+        return setServID(4);
+
+      default:
+        break;
+    }
+  }, [services]);
+
+  const onSubmit = async (data) => {
+    // Generating NIP
+    const d1 = Date.now();
+    const d2 = new Date(d1);
+    const year = String(d2.getFullYear()).substring(2);
+    const month = String(d2.getMonth() + 1).padStart(2, '0');
+    const day = String(d2.getDate()).padStart(2, '0');
+
+    const NIPCreated = [year, month, day, params.size, servID].join('');
+
     if (services === 'e-ruta') {
       if (origin === 'Mexico') {
-        await addDoc(collection(db, 'services'), {
-          user_id: userIDLocal.id,
-          user_name: userIDLocal.name,
-          mortuary_name: userIDLocal.mortuary_name,
+        const addObject = {
+          user_id: userDataServObj.id,
+          user_name: userDataServObj.name,
+          mortuary_name: userDataServObj.mortuary_name,
           service: services,
           status: 'cotizado',
           ...data,
           origen: originSelect,
-        });
-        try {
-          navigate('/userHome', { replace: true });
-        } catch (error) {
-          console.log(error);
-        }
+          timestamp: new Date().setMilliseconds(100),
+          sucursal: {},
+          rastreo: [''],
+          auth_list_email: [],
+          auth_list_phone: [],
+          nip_rastreo: NIPCreated,
+        };
+        await addServiceHandler(addObject);
       } else {
-        await addDoc(collection(db, 'services'), {
-          user_id: userIDLocal.id,
-          user_name: userIDLocal.name,
-          mortuary_name: userIDLocal.mortuary_name,
+        const elseObject = {
+          user_id: userDataServObj.id,
+          user_name: userDataServObj.name,
+          mortuary_name: userDataServObj.mortuary_name,
           service: services,
           status: 'cotizado',
           ...data,
           origen: oficinaSelect,
           destino: originSelect,
-        });
-        try {
-          navigate('/userHome', { replace: true });
-        } catch (error) {
-          console.log(error);
-        }
+          timestamp: new Date().setMilliseconds(100),
+          sucursal: {},
+          rastreo: [''],
+          auth_list_email: [],
+          auth_list_phone: [],
+          nip_rastreo: NIPCreated,
+        };
+        await addServiceHandler(elseObject);
       }
     } else {
-      await addDoc(collection(db, 'services'), {
-        user_id: userIDLocal.id,
-        user_name: userIDLocal.name,
-        mortuary_name: userIDLocal.mortuary_name,
+      const newObject = {
+        timestamp: new Date().setMilliseconds(100),
+        user_id: userDataServObj.id,
+        user_name: userDataServObj.name,
+        mortuary_name: userDataServObj.mortuary_name,
         service: services,
         status: 'pendiente_cotizar',
+        sucursal: {},
+        rastreo: [''],
+        auth_list_email: [],
+        auth_list_phone: [],
+        nip_rastreo: NIPCreated,
         ...data,
-      });
-      try {
-        navigate('/userHome', { replace: true });
-      } catch (error) {
-        console.log(error);
-      }
+      };
+      await addServiceHandler(newObject);
     }
   };
+
+  useEffect(() => {
+    if (statusCall) {
+      navigate('/userHome', { replace: true });
+    }
+  }, [statusCall]);
 
   return (
     <div style={{ background: grey[300] }}>
@@ -190,7 +235,9 @@ function AddService() {
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
-                        <FlightTakeoffRoundedIcon />
+                        <AirportShuttleRoundedIcon
+                          style={{ transform: 'scaleX(-1)' }}
+                        />
                       </InputAdornment>
                     ),
                   }}
@@ -205,7 +252,7 @@ function AddService() {
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
-                        <FlightLandRoundedIcon />
+                        <AirportShuttleRoundedIcon />
                       </InputAdornment>
                     ),
                   }}
@@ -215,10 +262,10 @@ function AddService() {
                   inputFormat="MM/dd/yyyy"
                   value={date}
                   onChange={handleChange}
-                  renderInput={(params) => (
+                  renderInput={(paramsx) => (
                     <TextField
                       style={{ marginTop: '2rem' }}
-                      {...params}
+                      {...paramsx}
                       {...register('fecha', { required: true })}
                     />
                   )}
@@ -308,7 +355,7 @@ function AddService() {
                           InputProps={{
                             endAdornment: (
                               <InputAdornment position="end">
-                                <FlightLandRoundedIcon />
+                                <AirportShuttleRoundedIcon />
                               </InputAdornment>
                             ),
                           }}

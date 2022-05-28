@@ -20,7 +20,7 @@ function RecoverPassword() {
   });
   const navigate = useNavigate();
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data) => {
     console.log(data);
 
     const auth = getAuth();

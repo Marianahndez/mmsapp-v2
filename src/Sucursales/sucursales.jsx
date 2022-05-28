@@ -18,12 +18,11 @@ import LocalPrintshopRoundedIcon from '@mui/icons-material/LocalPrintshopRounded
 import PinDropRoundedIcon from '@mui/icons-material/PinDropRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
-import SidebarMenu from '../Menu/menu';
-
+import { Link, useLocation } from 'react-router-dom';
+import SidebarMenu from '../Menu/menu.jsx';
 import './sucursales.scss';
 
-const ShowBranches = ({ branches, edit }: any) => {
+const ShowBranches = ({ branches, edit }) => {
   const { t } = useTranslation();
 
   const {
@@ -40,10 +39,10 @@ const ShowBranches = ({ branches, edit }: any) => {
       cotizacion: '',
     },
   });
-  const onSubmit = (data: any) => {
+  const onSubmit = (data) => {
     console.log(data);
   };
-  return branches.map((element: any) => (
+  return branches.map((element) => (
     <>
       {!edit ? (
         <>
@@ -157,19 +156,22 @@ const ShowBranches = ({ branches, edit }: any) => {
 
 function Sucursales() {
   const { t } = useTranslation();
+  const location = useLocation();
 
   const [edit, setEdit] = useState(false);
   const [size, setSize] = useState(0);
 
-  const userLocalS = localStorage.getItem('userData')!;
-  const userIDLocal = JSON.parse(userLocalS);
-  console.log('suc: ', userIDLocal.sucursales);
+  const [userIDLocal, setUserIDLocal] = useState(location.state.data);
 
   useEffect(() => {
-    if (userLocalS) {
+    setUserIDLocal(location.state.data);
+  }, []);
+
+  useEffect(() => {
+    if (userIDLocal !== {}) {
       setSize(userIDLocal.sucursales.length);
     }
-  }, []);
+  }, [location.state.data]);
 
   return (
     <div style={{ background: grey[300] }}>
@@ -183,7 +185,7 @@ function Sucursales() {
             fontSize: '1.7rem',
           }}
         >
-          {t('Sucursales')} ({userIDLocal.sucursales.length})
+          {t('Sucursales')} ({size})
         </h1>
         <p style={{ margin: '0.3rem 0 2rem 0' }}>{t('LBLSucursales')}</p>
         <Grid container spacing={2}>

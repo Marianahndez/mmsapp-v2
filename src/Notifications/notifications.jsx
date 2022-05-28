@@ -2,7 +2,7 @@ import React from 'react';
 import { grey, blueGrey } from '@mui/material/colors';
 import { Grid } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import SidebarMenu from '../Menu/menu';
+import SidebarMenu from '../Menu/menu.jsx';
 import './notifications.scss';
 
 function Notifications() {

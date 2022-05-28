@@ -1,39 +1,28 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { grey, blueGrey } from '@mui/material/colors';
 // eslint-disable-next-line object-curly-newline
 import {
   Grid,
   IconButton,
-  FormControl,
   TextField,
   Button,
   Avatar,
 } from '@mui/material';
-import { Link } from 'react-router-dom';
-import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import { useTranslation } from 'react-i18next';
-import {
-  updateDoc,
-  doc,
-  collection,
-  query,
-  where,
-  getDocs,
-} from 'firebase/firestore';
-import { useForm, Controller } from 'react-hook-form';
-import { db } from '../firebase.js';
-import { userDataContext } from '../context/userData-context.js';
-import SidebarMenu from '../Menu/menu';
+import { useForm } from 'react-hook-form';
+import SidebarMenu from '../Menu/menu.jsx';
 import './profile.scss';
 
 function Profile() {
   const { t } = useTranslation();
-
+  const location = useLocation();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -41,17 +30,32 @@ function Profile() {
     formState: { isDirty, isValid },
   } = useForm({
     mode: 'onChange',
+    // defaultValues: {
+
+    // }
   });
 
-  const userLocalS = localStorage.getItem('userData')!;
-  const userIDLocal = JSON.parse(userLocalS);
-  const citiesRef = collection(db, 'users');
+  const userLog = Boolean(localStorage.getItem('userLoged'));
+  console.log('user loged? ', userLog);
+  const [userIDLocal, setUserIDLocal] = useState(userLog ? location.state.data : {});
 
-  const { user } = useContext(userDataContext);
+  useEffect(() => {
+    if (!userLog) {
+      navigate('/', { replace: true });
+    } else {
+      setUserIDLocal(location.state.data);
+    }
+  }, []);
+  console.log('def: ', userIDLocal);
+  // const userLocalS = localStorage.getItem('userData');
+  // const userIDLocal = JSON.parse(userLocalS);
+  // const citiesRef = collection(db, 'users');
+
+  // const { user } = useContext(userDataContext);
 
   const [edit1, setEdit1] = useState(false);
   const [edit3, setEdit3] = useState(false);
-  const [image, setImage] = useState('' || null);
+  const [image, setImage] = useState();
   const upload = () => {
     // if (image == null) return;
     // storage
@@ -60,20 +64,20 @@ function Profile() {
     //   .on('state_changed', alert('success'), alert);
   };
 
-  const onSubmit = async (data: any) => {
-    updateDoc(doc(db, 'users', userIDLocal.id), {
-      sucursales: [...userIDLocal.sucursales, { ...data }],
-    });
+  const onSubmit = async (data) => {
+    // updateDoc(doc(db, 'users', userIDLocal.id), {
+    //   sucursales: [...userIDLocal.sucursales, { ...data }],
+    // });
     setEdit3(false);
-    const q = query(citiesRef, where('email', '==', userIDLocal.email));
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.forEach((docx: any) => {
-      const userData = {
-        id: docx.id,
-        ...docx.data(),
-      };
-      localStorage.setItem('userData', JSON.stringify(userData));
-    });
+    // const q = query(citiesRef, where('email', '==', userIDLocal.email));
+    // const querySnapshot = await getDocs(q);
+    // return querySnapshot.forEach((docx) => {
+    //   const userData = {
+    //     id: docx.id,
+    //     ...docx.data(),
+    //   };
+    //   localStorage.setItem('userData', JSON.stringify(userData));
+    // });
   };
 
   // const userDataSubmit = (data: any) => {
@@ -133,7 +137,7 @@ function Profile() {
                 id="hook-2-form"
                 className="profileForm"
               >
-                {!edit1 ? (
+                {(!edit1 && userIDLocal !== {}) ? (
                   <>
                     <TextField
                       label={t('Nombre')}
@@ -271,6 +275,7 @@ function Profile() {
                           }}
                           component={Link}
                           to="/sucursales"
+                          state={{ data: userIDLocal }}
                         >
                           {t('RevisarSucursales')}
                         </Button>

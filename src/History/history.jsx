@@ -1,17 +1,31 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable arrow-body-style */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { grey, blueGrey } from '@mui/material/colors';
 import { Grid, Card, CardContent } from '@mui/material';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import SidebarMenu from '../Menu/menu';
+import SidebarMenu from '../Menu/menu.jsx';
 import './history.scss';
 
 function History() {
   const { t } = useTranslation();
-  const auxArray = localStorage.getItem('arrServices')!;
-  const newArr = JSON.parse(auxArray);
-  const editPost = newArr.filter((i: any) => i.status === 'entregado');
+  // const location = useLocation();
+  const navigate = useNavigate();
+  const list = localStorage.getItem('servList');
+  const servicesList = JSON.parse(list);
+
+  const userLog = Boolean(localStorage.getItem('userLoged'));
+
+  console.log('user loged? ', servicesList);
+  useEffect(() => {
+    if (userLog) {
+      console.log('user loged? ', userLog);
+    } else {
+      navigate('/', { replace: true });
+    }
+  }, []);
 
   return (
     <div style={{ background: grey[300] }}>
@@ -30,9 +44,9 @@ function History() {
         <p style={{ margin: '0.3rem 0 0 0' }}>{t('LBLHistorial')}</p>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            {editPost.map((element: any) => {
+            {servicesList.map((element, i) => {
               return (
-                <Card style={{ display: 'flex' }} className="customCard">
+                <Card style={{ display: 'flex' }} className="customCard" key={i}>
                   <CardContent className="container">
                     <p className="titleCard">
                       {element.origen} - {element.destino}

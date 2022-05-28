@@ -1,6 +1,20 @@
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true
+  "editor.defaultFormatter": null,
+  "editor.formatOnSave": true,
+  "editor.hover.enabled": true,
+  "editor.hover.sticky": true,
+  "editor.acceptSuggestionOnCommitCharacter": true,
+  "editor.acceptSuggestionOnEnter": "on",
+  "editor.suggestOnTriggerCharacters": true,
+  "editor.suggest.localityBonus": true,
+  "editor.wordBasedSuggestions": true,
+  "editor.parameterHints.enabled": true,
+  "[javascriptreact]": {
+    "editor.defaultFormatter": null
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  }
   //   "eslint.alwaysShowStatus": true,
   //   "editor.codeActionsOnSave": {
   //     "source.fixAll.eslint": true

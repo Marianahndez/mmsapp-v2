@@ -2,6 +2,7 @@
   "name": "mms-mvp-app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "./",
   "dependencies": {
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
@@ -9,6 +10,7 @@
     "@mui/icons-material": "^5.5.1",
     "@mui/lab": "^5.0.0-alpha.74",
     "@mui/material": "^5.5.1",
+    "@mui/x-date-pickers": "^5.0.0-alpha.2",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
@@ -20,13 +22,15 @@
     "firebase": "^9.6.10",
     "i18next": "^21.6.16",
     "i18next-browser-languagedetector": "^6.1.4",
+    "js-cookie": "^3.0.1",
+    "moment": "^2.29.3",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.28.0",
     "react-i18next": "^11.16.6",
+    "react-loader-spinner": "^6.0.0-0",
     "react-router-dom": "^6.2.2",
     "react-scripts": "5.0.0",
     "sass": "^1.49.9",
-    "typescript": "^4.6.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -52,6 +56,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.15.0",
     "@typescript-eslint/parser": "^5.15.0",
+    "brunch": "^4.0.0",
     "eslint": "^8.11.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-import-resolver-typescript": "^2.5.0",
@@ -59,6 +64,7 @@
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.3.0",
-    "prettier": "2.6.0"
+    "prettier": "2.6.0",
+    "terser-brunch": "^4.1.0"
   }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable react/jsx-wrap-multilines */
 import React, { useState, useContext, useEffect } from 'react';
 import {
@@ -20,6 +21,7 @@ import {
 import { grey, indigo } from '@mui/material/colors';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import EmojiEmotionsRoundedIcon from '@mui/icons-material/EmojiEmotionsRounded';
+import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
@@ -32,21 +34,58 @@ import AssessmentRoundedIcon from '@mui/icons-material/AssessmentRounded';
 import LanguageIcon from '@mui/icons-material/Language';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase.js';
+import { userDataService } from '../service/userData.js';
 import { userDataContext } from '../context/userData-context.js';
 import './menu.scss';
 
 function SidebarMenu() {
+  const {
+    userDataServObj,
+    getUser,
+    // getAllServicesAdmin,
+    // servicesArr,
+  } = userDataService();
+
+  const [userIDLocal, setUserIDLocal] = useState(userDataServObj);
+  const [servicesList, setServicesList] = useState([]);
   const { t, i18n } = useTranslation();
 
   const { user, changeL } = useContext(userDataContext);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [translateEs, setTranslateEs] = useState(false);
+  const navigate = useNavigate();
 
-  const userLocalS = localStorage.getItem('userData')!;
-  const userIDLocal = JSON.parse(userLocalS);
+  useEffect(() => {
+    getUser();
+  }, []);
 
-  const changeLanguage = (lng: any) => {
+  useEffect(() => {
+    if (userDataServObj !== {}) {
+      // getAllServicesAdmin(userIDLocal);
+      setUserIDLocal(userDataServObj);
+    }
+  }, [getUser]);
+
+  // useEffect(() => {
+  //   setServicesList(servicesArr);
+  // }, [getAllServicesAdmin]);
+
+  const handleLogOut = () => {
+    signOut(auth)
+      .then(() => {
+        localStorage.setItem('userLoged', false);
+        navigate('/', { replace: true });
+        setUserIDLocal({});
+      })
+      .catch((err) => {
+        console.log('err logout', err);
+      });
+  };
+
+  const changeLanguage = (lng) => {
     setTranslateEs(!translateEs);
     changeL(lng);
     i18n.changeLanguage(lng);
@@ -94,6 +133,7 @@ function SidebarMenu() {
               style={{ marginLeft: '1rem', marginTop: '2.7rem' }}
               component={Link}
               to="/profile"
+              state={{ data: userDataServObj }}
             >
               <Avatar sx={{ width: 60, height: 60 }}>
                 <PersonRoundedIcon />
@@ -118,6 +158,7 @@ function SidebarMenu() {
             </ListItem>
             {userIDLocal.role !== 'Admin' ? (
               <>
+                {/* <ListItem button component={Link} to="/history" state={{ data: servicesList }}> */}
                 <ListItem button component={Link} to="/history">
                   <FormatListBulletedRoundedIcon style={{ color: '#fff' }} />
                   <ListItemText
@@ -127,7 +168,7 @@ function SidebarMenu() {
                   />
                 </ListItem>
 
-                <ListItem button component={Link} to="/sucursales">
+                <ListItem button component={Link} to="/sucursales" state={{ data: userIDLocal }}>
                   <ApartmentRoundedIcon style={{ color: '#fff' }} />
                   <ListItemText
                     style={{ margin: '1rem 0 1rem 1rem' }}
@@ -141,6 +182,15 @@ function SidebarMenu() {
                   <ListItemText
                     style={{ margin: '1rem 0 1rem 1rem' }}
                     primary={t('Notificaciones')}
+                    className="listStyle"
+                  />
+                </ListItem>
+
+                <ListItem button component={Link} to="/search-tracking">
+                  <MapRoundedIcon style={{ color: '#fff' }} />
+                  <ListItemText
+                    style={{ margin: '1rem 0 1rem 1rem' }}
+                    primary={t('Rastreo')}
                     className="listStyle"
                   />
                 </ListItem>
@@ -164,7 +214,7 @@ function SidebarMenu() {
                     className="listStyle"
                   />
                 </ListItem>
-                <ListItem button disabled>
+                <ListItem button component={Link} to="/search-tracking">
                   <MapRoundedIcon style={{ color: '#fff' }} />
                   <ListItemText
                     style={{ margin: '1rem 0 1rem 1rem' }}
@@ -180,23 +230,10 @@ function SidebarMenu() {
               width: '100%',
               maxWidth: 360,
               bgcolor: '#141825',
-              marginTop: '4rem',
+              marginTop: '1rem',
             }}
             component="nav"
             aria-labelledby="nested-list-subheader"
-            subheader={
-              <ListSubheader
-                component="div"
-                id="nested-list-subheader"
-                style={{
-                  background: '#141825',
-                  color: '#fff',
-                  fontWeight: 'bold',
-                }}
-              >
-                {t('Traductor')}
-              </ListSubheader>
-            }
           >
             {translateEs ? (
               <ListItem button onClick={() => changeLanguage('en')}>
@@ -217,6 +254,14 @@ function SidebarMenu() {
                 />
               </ListItem>
             )}
+            <ListItem button onClick={handleLogOut}>
+              <ExitToAppRoundedIcon style={{ color: '#fff' }} />
+              <ListItemText
+                style={{ margin: '1rem 0 1rem 1rem' }}
+                primary={t('Logout')}
+                className="listStyle"
+              />
+            </ListItem>
           </List>
         </Drawer>
       </Toolbar>

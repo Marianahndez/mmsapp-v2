@@ -69,10 +69,25 @@
   }
 }
 
+.errorM {
+  color: $red-custom;
+}
+
+.flags {
+  width: 30%;
+  display: flex;
+  float: right;
+  position: relative;
+  bottom: 20px;
+}
+
 @media only screen and (max-width: 1536px) and (min-width: 767px) {
   .welcome {
     height: auto !important;
     padding: 1rem;
+    &.wpage {
+      padding: 4rem 0;
+    }
   }
   .pt15 {
     padding: 2rem 3rem;
@@ -86,5 +101,9 @@
         width: 50%;
       }
     }
+  }
+  .flags {
+    bottom: -10px !important;
+    left: 90px !important;
   }
 }
