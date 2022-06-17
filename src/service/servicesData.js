@@ -37,6 +37,7 @@ export const servicesData = () => {
       updateDoc(doc(db, 'services', id), data);
       setStatusCall(true);
       console.log('data= ', statusCall);
+      console.log('data= ', data);
     } catch (error) {
       setStatusCall(false);
       console.log('err post: ', error);

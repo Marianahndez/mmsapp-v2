@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable max-len */
 /* eslint-disable arrow-body-style */
 /* eslint-disable react/jsx-one-expression-per-line */
@@ -29,6 +30,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import moment from 'moment';
 import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 import { storage } from '../firebase.js';
 import { userDataService } from '../service/userData.js';
@@ -54,15 +56,18 @@ function Transport() {
   });
 
   const [branches, setBranches] = useState([]);
+  const [adminsPhonesList, setIDs] = useState([]);
   const [sucursal, setSucursal] = useState('');
+  const [msg, setMsg] = useState('');
   const inputFile = useRef('' || null);
-  const { getServiceDetail, service, getUser, userDataServObj } = userDataService();
+  const { getServiceDetail, service, getUser, userDataServObj, sendNotification, adminsPhones, getAdminsPhones } = userDataService();
   const { updateServicePropHandler, statusCall } = servicesData();
 
   const [userIDLocal, setUserIDLocal] = useState({});
 
   useEffect(() => {
     getUser();
+    getAdminsPhones();
   }, []);
 
   useEffect(() => {
@@ -264,6 +269,42 @@ function Transport() {
     handleUploadImg4();
   }, [image4]);
 
+  const send = async () => {
+    // await e.preventDefault();
+    console.log('admin phones: ', adminsPhones);
+    const phoneList = [];
+    if (adminsPhones !== []) {
+      adminsPhones.map((phone) => {
+        if (phone !== undefined) {
+          phoneList.push(`+${phone}`);
+          setIDs(phoneList);
+        }
+      });
+    }
+
+    const res = await fetch('/api/sendMultipleMessage', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ numbersToMessage: phoneList, body: msg }),
+    });
+
+    const data = await res.json();
+    if (data.success === true) {
+      console.log('sending, ', data);
+      navigate('/userHome', { replace: true });
+    }
+  };
+
+  useEffect(() => {
+    if (msg !== '') {
+      console.log('msg: ', msg);
+      console.log('admin phones: ', adminsPhones);
+      send();
+    }
+  }, [msg]);
+
   const onSubmit = async (data) => {
     if (params.id) {
       if (parentesco === '') {
@@ -297,13 +338,27 @@ function Transport() {
         await updateServicePropHandler(newObj2, params.id);
       }
     }
-  };
+    setMsg(`Confirma el transporte solicitado\n
 
-  useEffect(() => {
-    if (statusCall) {
-      navigate('/userHome', { replace: true });
-    }
-  }, [statusCall]);
+    - Funeraria: ${service.mortuary_name}\n
+    - Servicio: ${service.service}\n
+    - Origen: ${service.origen}\n
+    - Destino: ${service.destino}\n
+    - NIP: ${service.nip_rastreo}\n
+    
+    Confirmar en la App ahora`);
+    const notificationObj = {
+      title: 'Transporte solicitado',
+      body: `Confirma el transporte solicitado NIP: ${service.nip_rastreo}`,
+      for: 'Admin',
+      service_id: params.id,
+      track_id: service.nip_rastreo,
+      createdAt: moment().format('LT'),
+      dateCreated: moment().format('L'),
+      timestamp: new Date().setMilliseconds(100),
+    };
+    sendNotification(notificationObj);
+  };
 
   return (
     <div style={{ background: grey[300] }}>

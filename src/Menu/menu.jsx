@@ -113,12 +113,12 @@ function SidebarMenu() {
           >
             <MenuRoundedIcon sx={{ color: grey[900] }} />
           </IconButton>
-          {/* <div style={{ position: 'relative', padding: '0.5rem 0' }}>
+          <div style={{ position: 'relative', padding: '0.5rem 0' }}>
             <span className="redNotification" />
             <IconButton component={Link} to="/notifications">
               <NotificationsRoundedIcon sx={{ color: grey[900] }} />
             </IconButton>
-          </div> */}
+          </div>
         </div>
         <Drawer
           open={isDrawerOpen}
@@ -177,7 +177,7 @@ function SidebarMenu() {
                   />
                 </ListItem>
 
-                <ListItem button component={Link} to="/notifications" disabled>
+                <ListItem button component={Link} to="/notifications">
                   <NotificationsRoundedIcon style={{ color: '#fff' }} />
                   <ListItemText
                     style={{ margin: '1rem 0 1rem 1rem' }}
@@ -206,7 +206,7 @@ function SidebarMenu() {
               </>
             ) : (
               <>
-                <ListItem button component={Link} to="/notifications" disabled>
+                <ListItem button component={Link} to="/notifications">
                   <NotificationsRoundedIcon style={{ color: '#fff' }} />
                   <ListItemText
                     style={{ margin: '1rem 0 1rem 1rem' }}

@@ -1,3 +1,7 @@
+/* eslint-disable prefer-arrow-callback */
+/* eslint-disable prefer-template */
+/* eslint-disable quote-props */
+/* eslint-disable no-undef */
 /* eslint-disable react/button-has-type */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-lone-blocks */
@@ -26,6 +30,8 @@ import {
   FormControl,
   MenuItem,
   Button,
+  Alert,
+  AlertTitle,
 } from '@mui/material';
 import Select from '@mui/material/Select';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
@@ -37,8 +43,13 @@ import { blueGrey, grey } from '@mui/material/colors';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { TailSpin } from 'react-loader-spinner';
+import { getMessaging } from 'firebase/messaging';
+import { ToastContainer, toast } from 'react-toastify';
 import { userDataService } from '../service/userData.js';
 import { servicesData } from '../service/servicesData.js';
+import 'react-toastify/dist/ReactToastify.css';
+import { getTokenFn, onMessageListener } from '../firebase.js';
+import ToasterNotification from '../Notifications/toasterNotification.jsx';
 import SidebarMenu from '../Menu/menu.jsx';
 import './userHome.scss';
 
@@ -58,11 +69,12 @@ const LoaderComponent = () => {
 function UserHome() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { userDataServObj, getUser, servicesArr, getAllServicesAdmin, loading } =
+  const { userDataServObj, getUser, servicesArr, getAllServicesAdmin, loading, getMyNotifications, userNotifList } =
     userDataService();
   const [userIDLocal, setUserIDLocal] = useState({});
 
   const [options, setOptions] = useState(false);
+  const [openToast, setOpenToast] = useState(false);
   const [value, setValue] = useState('');
   const [servicesRegistered, setServicesRegistered] = useState([]);
   const [optionShow, setOptionShow] = useState('todos');
@@ -72,6 +84,8 @@ function UserHome() {
 
   useEffect(() => {
     getUser();
+    getMyNotifications();
+    setOpenToast(true);
   }, []);
 
   useEffect(() => {
@@ -81,7 +95,7 @@ function UserHome() {
     } else {
       navigate('/', { replace: true });
     }
-  }, [!userLog]);
+  }, [userLog]);
 
   useEffect(() => {
     if (userDataServObj !== {}) {
@@ -104,7 +118,7 @@ function UserHome() {
     }
   }, [getAllServicesAdmin, servicesArr]);
 
-  useEffect(() => {
+  // useEffect(() => {
     // const d1 = Date.now();
     // const d2 = new Date(d1);
     // const year = d2.getFullYear();
@@ -123,7 +137,7 @@ function UserHome() {
     //   navigate('/userHome', { replace: true });
     // }
     // console.log('found_today', service_today);
-  }, []);
+  // }, []);
 
   useEffect(() => {
     switch (optionShow) {
@@ -331,18 +345,38 @@ function UserHome() {
   const handleOpen = () => {
     setOptions(true);
   };
+  const [isTokenFound, setTokenFound] = useState(false);
+  const [tokenMessaging, setTokenMessaging] = useState('');
+  const [notification, setNotification] = useState({ title: '', body: '' });
+  // console.log('token: ', tokenMessaging);
+
+  // const displayMsg = () => {
+    //   toast(<div><h3>{notification.title}</h3> <p>{notification.body}</p></div>);
+    //   // toast(Msg) would also work
+    // };
+
+  // onMessageListener().then((payload) => {
+  //   setNotification({ title: payload.notification.title, body: payload.notification.body });
+  //   console.log(payload);
+  //   // displayMsg();
+  // }).catch((err) => console.log('failed: ', err));
+
+  // useEffect(() => {
+  //   console.log('notis: ', userNotifList);
+  // }, [userNotifList]);
 
   return (
     <div style={{ background: grey[300] }}>
       <SidebarMenu />
-      <div className="mainContainer">
+      <div className="mainContainerHome">
+        {openToast ? (<ToasterNotification />) : ''}
         <Button
           variant="text"
           style={{
             color: blueGrey[700],
             fontSize: '1.1rem',
             padding: '0 8px',
-            marginTop: '1rem',
+            marginTop: '0.5rem',
           }}
           onClick={() => setOptions(!options)}
         >

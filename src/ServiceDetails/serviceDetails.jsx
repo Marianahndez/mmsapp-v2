@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable no-case-declarations */
 /* eslint-disable react/jsx-indent */
 /* eslint-disable arrow-body-style */
 /* eslint-disable indent */
@@ -41,6 +43,7 @@ import MapSharpIcon from '@mui/icons-material/MapSharp';
 import SendIcon from '@mui/icons-material/Send';
 // import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 // import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import moment from 'moment';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { servicesData } from '../service/servicesData.js';
@@ -74,7 +77,7 @@ function SimpleDialog({ onClose, selectedValue, open, title }) {
 function ServiceDetails() {
   const { t } = useTranslation();
   const location = useLocation();
-  const { getServiceDetail, service, getUser, userDataServObj } =
+  const { getServiceDetail, service, getUser, userDataServObj, sendNotification } =
     userDataService();
   const { updateServiceHandler, updateServicePropHandler, statusCall } = servicesData();
 
@@ -178,6 +181,11 @@ function ServiceDetails() {
   const [checkedMX, setCheckedMX] = useState(false);
   const [checkedUSA, setCheckedUSA] = useState(false);
   const [onTransit, setOnTransit] = useState('');
+  const [msg, setMsg] = useState('');
+  const [msgFamily, setMsgFamily] = useState('');
+  const [toNum, setToNum] = useState('');
+  const [serviceForNotif, setServiceForNotif] = useState('');
+  const [familiesPhones, setFamiliesPhones] = useState([]);
 
   const {
     register,
@@ -200,6 +208,7 @@ function ServiceDetails() {
   const [open4, setOpen4] = useState(false);
 
   const [formEdit, setFormEdit] = useState(false);
+  const [hasService, setHasService] = useState(false);
 
   const [valueTime, setValueTime] = useState(
     new Date('2018-01-01T00:00:00.000Z'),
@@ -218,6 +227,24 @@ function ServiceDetails() {
   }, []);
 
   useEffect(() => {
+    console.log('phone = ', userDataServObj);
+    console.log('family phones = ', familiesPhones);
+
+    switch (service.service) {
+      case 'e-ruta':
+        return setServiceForNotif('En ruta');
+      case 'e-punta':
+        return setServiceForNotif('De punta A a punta B');
+      case 't-tramites':
+        return setServiceForNotif('Con trámites y preparación');
+      case 't-translado':
+        return setServiceForNotif('Solo translado');
+      default:
+        break;
+    }
+  }, [userDataServObj]);
+
+  useEffect(() => {
     getServiceDetail(location.state.data, params.id);
   }, []);
 
@@ -228,51 +255,283 @@ function ServiceDetails() {
 
   useEffect(() => {
     console.log('ser: ', service);
+    console.log('phone = ', service.user_phone);
+    setToNum(`+${service.user_phone}`);
     setAtaud(service.ataud);
+    if (service !== undefined) {
+      setHasService(true);
+    }
   }, [service]);
+
+  useEffect(() => {
+    const listphones = [];
+    if (hasService) {
+      if (service.auth_list_phone.length !== 0) {
+        service.auth_list_phone.map((phone) => {
+          listphones.push(`+${phone}`);
+          setFamiliesPhones(listphones);
+        });
+      }
+    }
+  }, [hasService]);
 
   const updateDate = (data) => {
     updateServiceHandler(data, service, params.id);
   };
 
   const handleEdit = (todo) => {
+    setMsg(`Tu cotización esta lista y ya puedes solicitar el transporte.\n
+      - Servicio: ${serviceForNotif}\n
+      - Origen: ${service.origen}\n
+      - Destino: ${service.destino}\n
+      - Fecha de recolección: ${service.fecha}\n
+      - NIP: ${service.nip_rastreo}\n
+      
+      Ir a la App ahora`);
     const editObject = {
       cotizacion: `${todo.cotizacion} ${alignment}`,
       status: 'cotizado',
     };
+    const notificationObj = {
+      title: 'Cotización lista',
+      body: `Ya puedes solicitar tu transporte para el servicio con NIP ${service.nip_rastreo}`,
+      for: service.user_id,
+      service_id: params.id,
+      track_id: service.nip_rastreo,
+      createdAt: moment().format('LT'),
+      dateCreated: moment().format('L'),
+      timestamp: new Date().setMilliseconds(100),
+    };
+    sendNotification(notificationObj);
     updateServicePropHandler(editObject, params.id);
   };
 
   const handleConfirmarTranslado = () => {
+    setMsg(`Tu transporte ya fue confirmado.\n
+      - Servicio: ${serviceForNotif}\n
+      - Origen: ${service.origen}\n
+      - Destino: ${service.destino}\n
+      - Fecha de recolección: ${service.fecha}\n
+      - NIP: ${service.nip_rastreo}\n
+      
+      Ir a la App ahora`);
     const updateObj = {
       status: 'confirmado',
     };
+    const notificationObj3 = {
+      title: 'Servicio confirmado',
+      body: `Tu transporte ya fue confirmado (NIP: ${service.nip_rastreo})`,
+      for: service.user_id,
+      service_id: params.id,
+      track_id: service.nip_rastreo,
+      createdAt: moment().format('LT'),
+      dateCreated: moment().format('L'),
+      timestamp: new Date().setMilliseconds(100),
+    };
+    sendNotification(notificationObj3);
     updateServicePropHandler(updateObj, params.id);
   };
 
-  const onSubmit = (data) => {
-    if (status === 'papeleria-pte') {
-      const obj1 = {
-        ...data,
-        ...service,
-        status: 'pendiente_confirmar',
-      };
-      updateServicePropHandler(obj1, params.id);
-    } else if (status === 'confirmado') {
-      const obj2 = {
-        ...data,
-        ...service,
-        status: 'confirmado',
-      };
-      updateServicePropHandler(obj2, params.id);
-    } else {
-      const obj3 = {
-        ...data,
-        ...service,
-        status,
-      };
-      updateServicePropHandler(obj3, params.id);
+  const send = async () => {
+    // await e.preventDefault();
+    const res = await fetch('/api/sendMessage', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ to: toNum, body: msg }),
+    });
+
+    const data = await res.json();
+    console.log('sending, ', data);
+
+    if (data.success) {
+      navigate('/userHome', { replace: true });
     }
+  };
+
+  const sendToFamily = async () => {
+    // await e.preventDefault();
+    const res = await fetch('/api/sendMultipleMessage', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ numbersToMessage: familiesPhones, body: msgFamily }),
+    });
+
+    const data = await res.json();
+    console.log('sending, ', data);
+  };
+
+  useEffect(() => {
+    if (msg !== '') {
+      send();
+    }
+    if (setFamiliesPhones.length !== 0) {
+      sendToFamily();
+    }
+  }, [msg, msgFamily]);
+
+  const onSubmit = (data) => {
+    const obj3 = {
+      ...data,
+      ...service,
+      status,
+    };
+    switch (status) {
+      case 'confirmado':
+        setMsg(`Tu transporte ya fue confirmado\n
+
+        - Servicio: ${serviceForNotif}\n
+        - Origen: ${obj3.origen}\n
+        - Destino: ${obj3.destino}\n
+        - Fecha de recolección: ${obj3.fecha}\n
+        - NIP: ${obj3.nip_rastreo}\n
+        
+        Ir a la App ahora`);
+        setMsgFamily(`Tu transporte ya fue confirmado\n
+
+        - Origen: ${obj3.origen}\n
+        - Destino: ${obj3.destino}\n
+        - Fecha de recolección: ${obj3.fecha}\n
+        - NIP de rastreo: ${obj3.nip_rastreo}\n
+        
+        Para más detalles visita la App www.funeralnip.com, ingresando tu numero ó correo verificado y el NIP de rastreo`);
+        const notificationObj3 = {
+          title: 'Tu transporte ya fue confirmado',
+          body: `NIP de servicio ${obj3.nip_rastreo}`,
+          for: service.user_id,
+          service_id: params.id,
+          track_id: service.nip_rastreo,
+          createdAt: moment().format('LT'),
+          dateCreated: moment().format('L'),
+          timestamp: new Date().setMilliseconds(100),
+        };
+
+        return (sendNotification(notificationObj3), msg, msgFamily);
+      case 'transito_usa':
+        setMsg(`En tránsito USA\n
+
+        - Servicio: ${serviceForNotif}\n
+        - Origen: ${obj3.origen}\n
+        - Destino: ${obj3.destino}\n
+        - Fecha de recolección: ${obj3.fecha}\n
+        - NIP: ${obj3.nip_rastreo}\n
+        
+        Ir a la App ahora`);
+        setMsgFamily(`En tránsito USA\n
+
+        - Origen: ${obj3.origen}\n
+        - Destino: ${obj3.destino}\n
+        - Fecha de recolección: ${obj3.fecha}\n
+        - NIP de rastreo: ${obj3.nip_rastreo}\n
+        
+        Para más detalles visita la App www.funeralnip.com, ingresando tu numero ó correo verificado y el NIP de rastreo`);
+        const notificationObj4 = {
+          title: 'En tránsito USA',
+          body: `NIP de servicio ${obj3.nip_rastreo}`,
+          for: service.user_id,
+          service_id: params.id,
+          track_id: service.nip_rastreo,
+          createdAt: moment().format('LT'),
+          dateCreated: moment().format('L'),
+          timestamp: new Date().setMilliseconds(100),
+        };
+        return (sendNotification(notificationObj4), msg, msgFamily);
+      case 'transito_mx':
+        setMsg(`En tránsito MX\n
+
+        - Servicio: ${serviceForNotif}\n
+        - Origen: ${obj3.origen}\n
+        - Destino: ${obj3.destino}\n
+        - Fecha de recolección: ${obj3.fecha}\n
+        - NIP: ${obj3.nip_rastreo}\n
+        
+        Ir a la App ahora`);
+        setMsgFamily(`En tránsito MX\n
+
+        - Origen: ${obj3.origen}\n
+        - Destino: ${obj3.destino}\n
+        - Fecha de recolección: ${obj3.fecha}\n
+        - NIP de rastreo: ${obj3.nip_rastreo}\n
+        
+        Para más detalles visita la App www.funeralnip.com, ingresando tu numero ó correo verificado y el NIP de rastreo`);
+        const notificationObj5 = {
+          title: 'En tránsito MX',
+          body: `NIP de servicio ${obj3.nip_rastreo}`,
+          for: service.user_id,
+          service_id: params.id,
+          track_id: service.nip_rastreo,
+          createdAt: moment().format('LT'),
+          dateCreated: moment().format('L'),
+          timestamp: new Date().setMilliseconds(100),
+        };
+        return (sendNotification(notificationObj5), msg, msgFamily);
+      case 'recoger_hoy':
+        setMsg(`Recoger hoy en (...)\n
+
+        - Servicio: ${serviceForNotif}\n
+        - Origen: ${obj3.origen}\n
+        - Destino: ${obj3.destino}\n
+        - Fecha de recolección: ${obj3.fecha}\n
+        - NIP: ${obj3.nip_rastreo}\n
+        
+        Ir a la App ahora`);
+        setMsgFamily(`Se recoge el día de hoy por la funeraria\n
+
+        - Origen: ${obj3.origen}\n
+        - Destino: ${obj3.destino}\n
+        - Fecha de recolección: ${obj3.fecha}\n
+        - NIP de rastreo: ${obj3.nip_rastreo}\n
+        
+        Para más detalles visita la App www.funeralnip.com, ingresando tu numero ó correo verificado y el NIP de rastreo`);
+        const notificationObj6 = {
+          title: 'Recoger hoy en funeraria',
+          body: `NIP de servicio ${obj3.nip_rastreo}`,
+          for: service.user_id,
+          service_id: params.id,
+          track_id: service.nip_rastreo,
+          createdAt: moment().format('LT'),
+          dateCreated: moment().format('L'),
+          timestamp: new Date().setMilliseconds(100),
+        };
+        return (sendNotification(notificationObj6), msg, msgFamily);
+      case 'entregado':
+        setMsg(`Tu transporte ya fue entregado\n
+
+        - Servicio: ${serviceForNotif}\n
+        - Origen: ${obj3.origen}\n
+        - Destino: ${obj3.destino}\n
+        - Fecha de recolección: ${obj3.fecha}\n
+        - NIP: ${obj3.nip_rastreo}\n
+        
+        Ir a la App ahora`);
+        setMsgFamily(`Su ser querido ya fue entregado a la funeraria\n
+
+        - Origen: ${obj3.origen}\n
+        - Destino: ${obj3.destino}\n
+        - Fecha de recolección: ${obj3.fecha}\n
+        - NIP de rastreo: ${obj3.nip_rastreo}\n
+        
+        Para más detalles visita la App www.funeralnip.com, ingresando tu numero ó correo verificado y el NIP de rastreo`);
+        const notificationObj7 = {
+          title: 'Tu transporte ya fue entregado',
+          body: `NIP de servicio ${obj3.nip_rastreo}`,
+          for: service.user_id,
+          service_id: params.id,
+          track_id: service.nip_rastreo,
+          createdAt: moment().format('LT'),
+          dateCreated: moment().format('L'),
+          timestamp: new Date().setMilliseconds(100),
+        };
+        return (sendNotification(notificationObj7), msg, msgFamily);
+
+      default:
+        break;
+    }
+    updateServicePropHandler(obj3, params.id);
+    // Enviar notificacion al usuario de este servicio y a los tokens de la familia
   };
 
   const onEditSub = (data) => {
@@ -282,6 +541,17 @@ function ServiceDetails() {
       direccion_alterna: data.direccion_alterna,
       ataud,
     };
+    const notificationObj4 = {
+      title: 'Tu servicio fue modificado',
+      body: `NIP de servicio ${service.nip_rastreo}`,
+      for: service.user_id,
+      service_id: params.id,
+      track_id: service.nip_rastreo,
+      createdAt: moment().format('LT'),
+      dateCreated: moment().format('L'),
+      timestamp: new Date().setMilliseconds(100),
+    };
+    sendNotification(notificationObj4);
     updateServicePropHandler(objEdit, params.id);
   };
 
@@ -326,12 +596,6 @@ function ServiceDetails() {
         break;
     }
   };
-
-  useEffect(() => {
-    if (statusCall) {
-      navigate('/userHome', { replace: true });
-    }
-  }, [statusCall]);
 
   return (
     <div style={{ background: grey[300], height: '100vh' }}>

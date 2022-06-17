@@ -1,7 +1,7 @@
 @import '/src/globalStyles';
 
-.mainContainer {
-  padding: 1rem 1.7rem;
+.mainContainerHome {
+  padding: 0.5rem 1.7rem;
 }
 
 .customCardHome {
@@ -135,6 +135,17 @@
   align-items: center;
 }
 
+.top-right {
+  position: absolute;
+  top: 6%;
+  right: 5px;
+  float: right;
+  // transition: transform .6s ease-in-out !important;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s !important;
+  width: 75%;
+  z-index: 99;
+}
+
 @media only screen and (max-width: 1536px) and (min-width: 767px) {
   .listCardsDesktop {
     & .customCardHome {
@@ -150,7 +161,7 @@
     bottom: 0;
   }
 
-  .mainContainer {
+  .mainContainerHome {
     padding: 1rem 5rem;
   }
 

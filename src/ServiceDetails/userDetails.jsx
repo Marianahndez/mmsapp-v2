@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable indent */
 /* eslint-disable operator-linebreak */
 /* eslint-disable no-nested-ternary */
@@ -9,6 +10,7 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect, useState } from 'react';
+import * as emailjs from 'emailjs-com';
 import { useParams, useLocation, Link, useNavigate } from 'react-router-dom';
 import { grey, blueGrey } from '@mui/material/colors';
 import {
@@ -47,6 +49,7 @@ import SendIcon from '@mui/icons-material/Send';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
+import moment from 'moment';
 import { db, storage } from '../firebase.js';
 import { userDataService } from '../service/userData.js';
 import { servicesData } from '../service/servicesData.js';
@@ -58,7 +61,7 @@ function UserDetails() {
   const location = useLocation();
 
   const params = useParams();
-  const { getServiceDetail, service, getUser, userDataServObj } =
+  const { getServiceDetail, service, getUser, userDataServObj, sendNotification, adminsIDs, getAdminsIDs, adminsPhones, getAdminsPhones } =
     userDataService();
   const { updateServicePropHandler, statusCall } = servicesData();
 
@@ -90,8 +93,10 @@ function UserDetails() {
   const [expanded, setExpanded] = useState(false);
   const [ataud, setAtaud] = useState('');
   const [sucursal, setSucursal] = useState([]);
+  const [ids, setIDs] = useState([]);
   const [sucursalName, setSucursalName] = useState('');
   const [sucursalOpt, setSucursalOpt] = useState('');
+  const [msg, setMsg] = useState('');
 
   // const [valueTime, setValueTime] = useState<Date | null>(editPost.hora_hasta);
   // const [valueTime2, setValueTime2] = useState<Date | null>(
@@ -100,6 +105,8 @@ function UserDetails() {
 
   useEffect(() => {
     getUser();
+    getAdminsIDs();
+    getAdminsPhones();
   }, []);
 
   useEffect(() => {
@@ -130,6 +137,19 @@ function UserDetails() {
     // setSucursalOpt(sucursal.nombre_sucursal);
     console.log('ser: ', service);
   }, [service]);
+
+  // const newList = [];
+  // useEffect(() => {
+  //   console.log('admins ids: ', adminsIDs);
+  //   if (adminsIDs !== []) {
+  //     adminsIDs.map((item) => {
+  //       if (item !== undefined) {
+  //         newList.push(item);
+  //         setIDs(newList);
+  //       }
+  //     });
+  //   }
+  // }, [adminsIDs]);
 
   useEffect(() => {
     if (sucursal !== undefined) {
@@ -425,7 +445,48 @@ function UserDetails() {
     }
   };
 
+  const send = async () => {
+    // await e.preventDefault();
+    const phoneList = [];
+    if (adminsPhones !== []) {
+      adminsPhones.map((item) => {
+        if (item !== undefined) {
+          phoneList.push(`+${item}`);
+          setIDs(phoneList);
+        }
+      });
+    }
+
+    const res = await fetch('/api/sendMultipleMessage', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ numbersToMessage: phoneList, body: msg }),
+    });
+
+    const data = await res.json();
+    if (data.success === true) {
+      console.log('sending, ', data);
+      navigate('/userHome', { replace: true });
+    }
+  };
+
+  useEffect(() => {
+    if (msg !== '') {
+      send();
+    }
+  }, [msg]);
+
   const onSubmit = async () => {
+    setMsg(`Actualización de papelería por MMS\n
+
+    - Servicio: ${service.service}\n
+    - Origen: ${service.origen}\n
+    - Destino: ${service.destino}\n
+    - NIP: ${service.nip_rastreo}\n
+    
+    Ir a la App ahora`);
     const newObj1 = {
       ...service,
       doc_acta_defuncion: imgUrl,
@@ -435,11 +496,30 @@ function UserDetails() {
       doc_finalizado: imgUrl4,
       sucursal: {},
     };
-    navigate('/userHome', { replace: true });
+
+    const notificationObj = {
+      title: 'Documents added',
+      body: 'Some documents has been added',
+      for: 'Admin',
+      service_id: params.item,
+      track_id: service.nip_rastreo,
+      createdAt: moment().format('LT'),
+      dateCreated: moment().format('L'),
+      timestamp: new Date().setMilliseconds(100),
+    };
+    sendNotification(notificationObj);
     await updateServicePropHandler(newObj1, params.item);
   };
 
   const onEditSub = async (data) => {
+    setMsg(`Actualización de la información por MMS\n
+
+    - Servicio: ${service.service}\n
+    - Origen: ${service.origen}\n
+    - Destino: ${service.destino}\n
+    - NIP: ${service.nip_rastreo}\n
+    
+    Ir a la App ahora`);
     console.log('change location: ', sucursalName);
     if (sucursalName !== '') {
       resetField('direccion_alterna');
@@ -450,8 +530,19 @@ function UserDetails() {
         // direccion_alterna: data.direccion_alterna,
         ataud,
       };
-      navigate('/userHome', { replace: true });
+      const notificationObj = {
+        title: 'Service edited',
+        body: 'The service has been modified',
+        for: 'Admin',
+        service_id: params.item,
+        track_id: service.nip_rastreo,
+        createdAt: moment().format('LT'),
+        dateCreated: moment().format('L'),
+        timestamp: new Date().setMilliseconds(100),
+      };
+      sendNotification(notificationObj);
       await updateServicePropHandler(newObj1, params.item);
+      // navigate('/userHome', { replace: true });
     } else {
       setSucursalName('');
       const newObj2 = {
@@ -461,8 +552,19 @@ function UserDetails() {
         direccion_alterna: data.direccion_alterna,
         ataud,
       };
-      navigate('/userHome', { replace: true });
+      const notificationObj = {
+        title: 'Service edited',
+        body: 'The service has been modified',
+        for: 'Admin',
+        service_id: params.item,
+        track_id: service.nip_rastreo,
+        createdAt: moment().format('LT'),
+        dateCreated: moment().format('L'),
+        timestamp: new Date().setMilliseconds(100),
+      };
+      sendNotification(notificationObj);
       await updateServicePropHandler(newObj2, params.item);
+      // navigate('/userHome', { replace: true });
     }
   };
 

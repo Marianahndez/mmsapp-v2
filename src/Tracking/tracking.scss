@@ -45,6 +45,14 @@
 .trackingMainArea {
   margin: 2rem 0 0 0;
 
+  h3 {
+    margin-bottom: 0.5rem;
+  }
+
+  .labelNotification {
+    margin: 0 0 3rem 0 !important;
+  }
+
   .dnone {
     display: none !important;
   }
@@ -60,14 +68,19 @@
     }
 
     p {
-      margin-left: 2rem;
+      margin-left: 1rem;
+      width: 100%;
+      display: grid;
+      position: relative;
+      bottom: 8px;
 
       span {
         font-size: 0.8rem;
         float: right;
         position: relative;
         right: 0px;
-        // bottom: 10px;
+        width: 95%;
+        text-align: right;
       }
     }
 
@@ -102,6 +115,14 @@
     margin-top: 1rem;
     color: white;
   }
+}
+
+.inputPhone {
+  display: flex;
+}
+
+.noMargin {
+  margin: 0 !important;
 }
 
 .inputSearch {
