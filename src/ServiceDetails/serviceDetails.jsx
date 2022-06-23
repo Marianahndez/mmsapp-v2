@@ -368,7 +368,7 @@ function ServiceDetails() {
     if (msg !== '') {
       send();
     }
-    if (setFamiliesPhones.length !== 0) {
+    if (familiesPhones.length !== 0) {
       sendToFamily();
     }
   }, [msg, msgFamily]);
