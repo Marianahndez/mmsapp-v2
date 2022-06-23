@@ -223,24 +223,27 @@ function Tracking() {
   };
   const send = async () => {
     // await e.preventDefault();
-    const res = await fetch('/api/sendMessage', {
+    const res = await fetch('/.netlify/functions/sendMessageNtl', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
       body: JSON.stringify({ to: toNum, body: msg }),
-    });
+    }).then(async (data) => ({
+      status: data.status,
+      body: await data,
+    })).then(({ status, body }) => {
+      console.log('Status: ', status);
+      console.log('Body: ', body);
+    }).catch((err) => console.log('error: ', err));
 
-    const data = await res.json();
-    console.log('sending, ', data);
+    // const data = await res.json();
+    console.log('sending, ', res);
 
-    if (data.success) {
-      await setTo('');
-      reset3({ phone: '', name: '' });
-    } else {
-      await setTo('');
-      reset3({ phone: '', name: '' });
-    }
+    // if (data.success) {
+    //   await setTo('');
+    //   reset3({ phone: '', name: '' });
+    // } else {
+    //   await setTo('');
+    //   reset3({ phone: '', name: '' });
+    // }
   };
 
   useEffect(() => {
