@@ -10,11 +10,12 @@ const client = require('twilio')(
 
 exports.handler = async function (event, context) {
   const eventTo = JSON.parse(event.body);
+  console.log('event: ', eventTo);
   client.messages.create({
     from: process.env.REACT_APP_TWILIO_PHONE_NUMBER,
     to: eventTo.to,
     body: eventTo.body,
-  });
+  }).then((res) => console.log('res ', res));
   return {
     statusCode: 200,
     body: JSON.stringify({ success: true }),
