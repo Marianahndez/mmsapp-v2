@@ -36,7 +36,7 @@
     "react-scripts": "5.0.0",
     "react-toastify": "^9.0.3",
     "sass": "^1.49.9",
-    "twilio": "^3.77.2",
+    "twilio": "^3.77.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
