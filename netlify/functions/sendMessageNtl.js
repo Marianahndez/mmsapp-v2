@@ -3,6 +3,7 @@
 /* eslint-disable no-return-await */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable indent */
+require('dotenv');
 const client = require('twilio')(
   process.env.REACT_APP_TWILIO_ACCOUNT_SID,
   process.env.REACT_APP_TWILIO_AUTH_TOKEN,
