@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable max-len */
 /* eslint-disable arrow-body-style */
 /* eslint-disable react/jsx-one-expression-per-line */
@@ -55,8 +56,10 @@ function Transport() {
 
   const [branches, setBranches] = useState([]);
   const [sucursal, setSucursal] = useState('');
+  const [msg, setMsg] = useState('');
+  const [ids, setIDs] = useState([]);
   const inputFile = useRef('' || null);
-  const { getServiceDetail, service, getUser, userDataServObj } = userDataService();
+  const { getServiceDetail, service, getUser, userDataServObj, adminsPhones } = userDataService();
   const { updateServicePropHandler, statusCall } = servicesData();
 
   const [userIDLocal, setUserIDLocal] = useState({});
@@ -263,6 +266,43 @@ function Transport() {
 
     handleUploadImg4();
   }, [image4]);
+
+  const send = async () => {
+    // await e.preventDefault();
+    console.log('admin phones: ', adminsPhones);
+    const phoneList = [];
+    if (adminsPhones !== []) {
+      adminsPhones.map((phone) => {
+        if (phone !== undefined) {
+          phoneList.push(`+${phone}`);
+          setIDs(phoneList);
+        }
+      });
+    }
+    console.log('body: ', JSON.stringify({ numbersToMessage: phoneList, body: msg }));
+    const res = await fetch('https://mms-mvp-app.vercel.app/api/sendMultipleMessage', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // 'Access-Control-Request-Method': 'POST',
+      },
+      body: JSON.stringify({ numbersToMessage: phoneList, body: msg }),
+    }).then((data) => data.json()).catch((err) => console.log('error: ', err));
+
+    // const data = await res.json();
+    // if (data.success === true) {
+    //   console.log('sending, ', JSON.stringify(data));
+    //   navigate('/userHome', { replace: true });
+    // }
+  };
+
+  useEffect(() => {
+    if (msg !== '') {
+      console.log('msg: ', msg);
+      console.log('admin phones: ', adminsPhones);
+      send();
+    }
+  }, [msg]);
 
   const onSubmit = async (data) => {
     if (params.id) {

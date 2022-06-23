@@ -105,6 +105,41 @@ function AddService() {
     }
   }, [services]);
 
+  // const send = async () => {
+  //   // await e.preventDefault();
+  //   const phoneList = [];
+  //   if (adminsPhones !== []) {
+  //     adminsPhones.map((item) => {
+  //       if (item !== undefined) {
+  //         phoneList.push(`+${item}`);
+  //       }
+  //     });
+  //   }
+  //   console.log('body; ', JSON.stringify({ numbersToMessage: phoneList, body: msg }));
+  //   const res = await fetch('https://mms-mvp-app.vercel.app/api/sendMultipleMessage', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       // 'Access-Control-Request-Method': 'POST',
+  //     },
+  //     body: JSON.stringify({ numbersToMessage: phoneList, body: msg }),
+  //   }).then((data) => data.json()).catch((err) => console.log('error: ', err));
+  //   // console.log('sending, ', JSON.stringify(data));
+
+  //   // const data = await res.json();
+  //   // if (data.success === true) {
+  //   //   console.log('sending, ', JSON.stringify(data));
+  //   //   setLoading(false);
+  //   //   navigate('/userHome', { replace: true });
+  //   // }
+  // };
+
+  // useEffect(() => {
+  //   if (msg !== '') {
+  //     send();
+  //   }
+  // }, [msg]);
+
   const onSubmit = async (data) => {
     // Generating NIP
     const d1 = Date.now();

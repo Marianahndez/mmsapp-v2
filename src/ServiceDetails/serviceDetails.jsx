@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable react/jsx-indent */
 /* eslint-disable arrow-body-style */
 /* eslint-disable indent */
@@ -231,6 +232,18 @@ function ServiceDetails() {
     setAtaud(service.ataud);
   }, [service]);
 
+  // useEffect(() => {
+  //   const listphones = [];
+  //   if (hasService) {
+  //     if (service.auth_list_phone.length !== 0) {
+  //       service.auth_list_phone.map((phone) => {
+  //         listphones.push(`+${phone.phone}`);
+  //         setFamiliesPhones(listphones);
+  //       });
+  //     }
+  //   }
+  // }, [hasService]);
+
   const updateDate = (data) => {
     updateServiceHandler(data, service, params.id);
   };
@@ -249,6 +262,47 @@ function ServiceDetails() {
     };
     updateServicePropHandler(updateObj, params.id);
   };
+
+  // const send = async () => {
+  //   // await e.preventDefault();
+  //   const res = await fetch('https://mms-mvp-app.vercel.app/api/sendMessage', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       // 'Access-Control-Request-Method': 'POST',
+  //     },
+  //     body: JSON.stringify({ to: toNum, body: msg }),
+  //   }).then((data) => data.json()).catch((err) => console.log('error: ', err));
+
+  //   // const data = await res.json();
+
+  //   // if (data.success) {
+  //   //   console.log('sending, ', JSON.stringify(data));
+  //   //   navigate('/userHome', { replace: true });
+  //   // }
+  // };
+
+  // const sendToFamily = async () => {
+  //   // await e.preventDefault();
+  //   const res = await fetch('https://mms-mvp-app.vercel.app/api/sendMultipleMessage', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       // 'Access-Control-Request-Method': 'POST',
+  //     },
+  //     body: JSON.stringify({ numbersToMessage: familiesPhones, body: msgFamily }),
+  //   }).then((data) => data.json()).catch((err) => console.log('error: ', err));
+  // };
+
+  // useEffect(() => {
+  //   if (msg !== '') {
+  //     send();
+  //   }
+  //   if (familiesPhones.length !== 0) {
+  //     console.log('msgFamily: ', msgFamily);
+  //     sendToFamily();
+  //   }
+  // }, [msg, msgFamily]);
 
   const onSubmit = (data) => {
     if (status === 'papeleria-pte') {
