@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable react/function-component-definition */
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 /* eslint-disable max-len */
@@ -99,6 +101,68 @@ function Transport() {
       setDireccionEntrega(service.sucursal.direccion_sucursal);
     }
   }, [userDataServObj]);
+
+  const Label = (x) => {
+    switch (x) {
+      case 'pendiente_cotizar':
+        return (
+          <p className="labelNotification n-red">
+            {t('EsperandoCotizacion')}
+          </p>
+        );
+      case 'cotizado':
+        return (
+          <p className="labelNotification n-blue">
+            {t('StatusLBLSolicitarTransporte')}
+          </p>
+        );
+      case 'translado_solicitado':
+        return (
+          <p className="labelNotification n-orange">
+            {t('LBLStatusTransladoSolicitado')}
+          </p>
+        );
+      case 'pendiente_confirmar':
+        return (
+          <p className="labelNotification n-orange">
+            {t('LBLStatusPendienteConfirmar')}
+          </p>
+        );
+      case 'confirmado':
+        return (
+          <p className="labelNotification n-red-custom">
+            {t('LBLStatusConfirmado')}
+          </p>
+        );
+      case 'recoger_hoy':
+        return (
+          <p className="labelNotification n-yellow">
+            {t('LBLStatusRecogerHoy')}
+          </p>
+        );
+      case 'transito_usa':
+        return (
+          <p className="labelNotification n-green-light">
+            {t('LBLStatusEnTransito')} USA
+          </p>
+        );
+      case 'transito_mx':
+        return (
+          <p className="labelNotification n-green">
+            {t('LBLStatusEnTransito')} MX
+          </p>
+        );
+      case 'entregado':
+        return (
+          <p className="labelNotification n-purple">
+            {t('LBLStatusEntregado')}
+          </p>
+        );
+
+      default:
+        break;
+    }
+  };
 
   useEffect(() => {
     switch (service.service) {
@@ -420,9 +484,7 @@ function Transport() {
             >
               {item.origen} - {item.destino}
             </p>
-            <p className="labelNotification n-blue">
-              {t('SolicitaTuTranslado')}
-            </p>
+            {Label(item.status)}
             <div>
               <p style={{ margin: '1.5rem 0 0.5rem 0' }}>
                 $ {item.cotizacion || item.cotizacion_ruta}

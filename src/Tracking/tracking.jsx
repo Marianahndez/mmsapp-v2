@@ -400,7 +400,7 @@ function Tracking() {
       servicio: serviceForNotif,
       origen: trackingInfo.origen,
       destino: trackingInfo.destino,
-      remitente: `${userDataServObj.email}`,
+      remitente: userDataServObj.email,
      }, 'PBj_zOlr2lgy2b9sE')
       .then((result) => {
       console.log(result.text);
@@ -611,7 +611,7 @@ function Tracking() {
             </div>
           )}
           <p style={{ display: 'flex', alignItems: 'center' }}>
-            <CalendarMonthRoundedIcon /> {t('FechaEntrega')}: {trackingInfo.fecha}
+            <CalendarMonthRoundedIcon /> {t('FechaRecoleccion')}: {trackingInfo.fecha}
           </p>
           <h4>{t('FechaDestino')}</h4>
           {trackingInfo.arrivalDate && !showEditDate ? (

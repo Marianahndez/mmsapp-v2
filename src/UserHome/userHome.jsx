@@ -45,6 +45,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { TailSpin } from 'react-loader-spinner';
 import { getMessaging } from 'firebase/messaging';
+import moment from 'moment';
 import { ToastContainer, toast } from 'react-toastify';
 import { userDataService } from '../service/userData.js';
 import { servicesData } from '../service/servicesData.js';
@@ -70,14 +71,14 @@ const LoaderComponent = () => {
 function UserHome() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { userDataServObj, getUser, servicesArr, getAllServicesAdmin, loading, getMyNotifications, userNotifList, getTodaysServices, todays } =
+  const { userDataServObj, getUser, servicesArr, sendNotification, getAllServicesAdmin, loading, getMyNotifications, userNotifList, getTodaysServices, todays } =
     userDataService();
   const { updateServicePropHandler } = servicesData();
   const [userIDLocal, setUserIDLocal] = useState({});
 
   const [options, setOptions] = useState(false);
   const [openToast, setOpenToast] = useState(false);
-  const [value, setValue] = useState('');
+  const [serviceForNotif, setServiceForNotif] = useState('');
   const [servicesRegistered, setServicesRegistered] = useState([]);
   const [optionShow, setOptionShow] = useState('todos');
   const [optionShowCases, setOptionShowCases] = useState('');
@@ -120,6 +121,60 @@ function UserHome() {
         const newUpdate = {
           status: 'recoger_hoy',
         };
+        const notificationObj = {
+          title: 'Recoger hoy en funeraria',
+          body: `NIP de servicio ${item.nip_rastreo}`,
+          for: item.user_id,
+          service_id: item.id,
+          track_id: item.nip_rastreo,
+          createdAt: moment().format('LT'),
+          dateCreated: moment().format('L'),
+          timestamp: new Date().setMilliseconds(100),
+        };
+        sendNotification(notificationObj);
+        switch (item.service) {
+          case 'e-ruta':
+            return setServiceForNotif('En ruta');
+          case 'e-punta':
+            return setServiceForNotif('De punta A a punta B');
+          case 't-tramites':
+            return setServiceForNotif('Con trámites y preparación');
+          case 't-translado':
+            return setServiceForNotif('Solo translado');
+          default:
+            break;
+        }
+        // Emails for users
+        emailjs.send('service_9e1ebv5', 'template_egqe8zg', {
+          direcion_entrega: `${item.direccion_alterna} / ${item.sucursal.direccion_sucursal}`,
+          origen: item.origen,
+          destino: item.destino,
+          servicio: serviceForNotif,
+          remitente: item.user_email,
+          fecha: item.fecha,
+          nip: item.nip_rastreo,
+        }, 'PBj_zOlr2lgy2b9sE')
+        .then((result) => {
+          navigate('/userHome', { replace: true });
+          console.log(result.text);
+        }, (error) => {
+          console.log(error.text);
+        });
+        // Email for admins
+        emailjs.send('service_9e1ebv5', 'template_d2n14v3', {
+          funeraria: item.mortuary_name,
+          direcion_entrega: `${item.direccion_alterna} / ${item.sucursal.direccion_sucursal}`,
+          origen: item.origen,
+          destino: item.destino,
+          servicio: serviceForNotif,
+          nip: item.nip_rastreo,
+        }, 'PBj_zOlr2lgy2b9sE')
+        .then((result) => {
+          navigate('/userHome', { replace: true });
+          console.log(result.text);
+        }, (error) => {
+          console.log(error.text);
+        });
         updateServicePropHandler(newUpdate, item.id);
       });
     }

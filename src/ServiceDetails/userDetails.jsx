@@ -525,7 +525,7 @@ function UserDetails() {
       origen: service.origen,
       destino: service.destino,
       director_funerario: service.user_name,
-      servicio: `${serviceForNotif}`,
+      servicio: serviceForNotif,
       remitente: service.user_email,
       nip: service.nip_rastreo,
     }, 'PBj_zOlr2lgy2b9sE')
@@ -564,7 +564,7 @@ function UserDetails() {
         origen: service.origen,
         destino: service.destino,
         director_funerario: service.user_name,
-        servicio: `${serviceForNotif}`,
+        servicio: serviceForNotif,
         remitente: service.user_email,
         nip: service.nip_rastreo,
       }, 'PBj_zOlr2lgy2b9sE')
@@ -602,7 +602,7 @@ function UserDetails() {
         origen: service.origen,
         destino: service.destino,
         director_funerario: service.user_name,
-        servicio: `${serviceForNotif}`,
+        servicio: serviceForNotif,
         remitente: service.user_email,
         nip: service.nip_rastreo,
       }, 'PBj_zOlr2lgy2b9sE')

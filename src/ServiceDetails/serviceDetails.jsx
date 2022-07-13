@@ -299,7 +299,7 @@ function ServiceDetails() {
         funeraria: service.mortuary_name,
         origen: service.origen,
         destino: service.destino,
-        servicio: `${serviceForNotif}`,
+        servicio: serviceForNotif,
         remitente: service.user_email,
         fecha_recoleccion: service.fecha,
         nip: service.nip_rastreo,
@@ -340,7 +340,7 @@ function ServiceDetails() {
       direcion_entrega: `${direccionEntrega}`,
       origen: service.origen,
       destino: service.destino,
-      servicio: `${serviceForNotif}`,
+      servicio: serviceForNotif,
       remitente: service.user_email,
       fecha: service.fecha,
       nip: service.nip_rastreo,
@@ -446,10 +446,10 @@ function ServiceDetails() {
         };
         // Email for users
         emailjs.send('service_9e1ebv5', 'template_xizuaxd', {
-          direcion_entrega: `${direccionEntrega}`,
+          direcion_entrega: direccionEntrega,
           origen: service.origen,
           destino: service.destino,
-          servicio: `${serviceForNotif}`,
+          servicio: serviceForNotif,
           remitente: service.user_email,
           fecha: service.fecha,
           nip: service.nip_rastreo,
@@ -489,10 +489,10 @@ function ServiceDetails() {
         };
         // Emails for users
         emailjs.send('service_9e1ebv5', 'template_9k44txb', {
-          direcion_entrega: `${direccionEntrega}`,
+          direcion_entrega: direccionEntrega,
           origen: service.origen,
           destino: service.destino,
-          servicio: `${serviceForNotif}`,
+          servicio: serviceForNotif,
           remitente: service.user_email,
           fecha: service.fecha,
           nip: service.nip_rastreo,
@@ -506,10 +506,10 @@ function ServiceDetails() {
         // Email for admins
         emailjs.send('service_9e1ebv5', 'template_4tk97zh', {
           funeraria: service.mortuary_name,
-          direcion_entrega: `${direccionEntrega}`,
+          direcion_entrega: direccionEntrega,
           origen: service.origen,
           destino: service.destino,
-          servicio: `${serviceForNotif}`,
+          servicio: serviceForNotif,
           nip: service.nip_rastreo,
         }, 'PBj_zOlr2lgy2b9sE')
           .then((result) => {
@@ -547,10 +547,10 @@ function ServiceDetails() {
         };
         // Emails for users
         emailjs.send('service_9e1ebv5', 'template_r2k7chr', {
-          direcion_entrega: `${direccionEntrega}`,
+          direcion_entrega: direccionEntrega,
           origen: service.origen,
           destino: service.destino,
-          servicio: `${serviceForNotif}`,
+          servicio: serviceForNotif,
           remitente: service.user_email,
           fecha: service.fecha,
           nip: service.nip_rastreo,
@@ -564,10 +564,10 @@ function ServiceDetails() {
         // Email for admins
         emailjs.send('service_9e1ebv5', 'template_so3ciaq', {
           funeraria: service.mortuary_name,
-          direcion_entrega: `${direccionEntrega}`,
+          direcion_entrega: direccionEntrega,
           origen: service.origen,
           destino: service.destino,
-          servicio: `${serviceForNotif}`,
+          servicio: serviceForNotif,
           nip: service.nip_rastreo,
         }, 'PBj_zOlr2lgy2b9sE')
           .then((result) => {
@@ -605,10 +605,10 @@ function ServiceDetails() {
         };
         // Emails for users
         emailjs.send('service_9e1ebv5', 'template_egqe8zg', {
-          direcion_entrega: `${direccionEntrega}`,
+          direcion_entrega: direccionEntrega,
           origen: service.origen,
           destino: service.destino,
-          servicio: `${serviceForNotif}`,
+          servicio: serviceForNotif,
           remitente: service.user_email,
           fecha: service.fecha,
           nip: service.nip_rastreo,
@@ -622,10 +622,10 @@ function ServiceDetails() {
         // Email for admins
         emailjs.send('service_9e1ebv5', 'template_d2n14v3', {
           funeraria: service.mortuary_name,
-          direcion_entrega: `${direccionEntrega}`,
+          direcion_entrega: direccionEntrega,
           origen: service.origen,
           destino: service.destino,
-          servicio: `${serviceForNotif}`,
+          servicio: serviceForNotif,
           nip: service.nip_rastreo,
         }, 'PBj_zOlr2lgy2b9sE')
           .then((result) => {
@@ -663,10 +663,10 @@ function ServiceDetails() {
         };
         // Emails for users
         emailjs.send('service_9e1ebv5', 'template_54xdauo', {
-          direcion_entrega: `${direccionEntrega}`,
+          direcion_entrega: direccionEntrega,
           origen: service.origen,
           destino: service.destino,
-          servicio: `${serviceForNotif}`,
+          servicio: serviceForNotif,
           remitente: service.user_email,
           fecha: service.fecha,
           nip: service.nip_rastreo,
@@ -680,10 +680,10 @@ function ServiceDetails() {
         // Email for admins
         emailjs.send('service_9e1ebv5', 'template_kj7061j', {
           funeraria: service.mortuary_name,
-          direcion_entrega: `${direccionEntrega}`,
+          direcion_entrega: direccionEntrega,
           origen: service.origen,
           destino: service.destino,
-          servicio: `${serviceForNotif}`,
+          servicio: serviceForNotif,
           nip: service.nip_rastreo,
         }, 'PBj_zOlr2lgy2b9sE')
           .then((result) => {
@@ -726,7 +726,7 @@ function ServiceDetails() {
     emailjs.send('service_9e1ebv5', 'template_rx20lnh', {
       origen: service.origen,
       destino: service.destino,
-      servicio: `${serviceForNotif}`,
+      servicio: serviceForNotif,
       remitente: service.user_email,
       nip: service.nip_rastreo,
     }, 'PBj_zOlr2lgy2b9sE')
@@ -741,7 +741,7 @@ function ServiceDetails() {
       origen: service.origen,
       destino: service.destino,
       director_funerario: service.user_name,
-      servicio: `${serviceForNotif}`,
+      servicio: serviceForNotif,
       remitente: service.user_email,
       nip: service.nip_rastreo,
     }, 'PBj_zOlr2lgy2b9sE')
