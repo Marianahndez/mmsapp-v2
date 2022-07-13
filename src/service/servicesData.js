@@ -10,12 +10,10 @@ export const servicesData = () => {
 
   const addServiceHandler = async (data) => {
     try {
-      console.log('data to post: ', data);
       await addDoc(collection(db, 'services'), data);
       setStatusCall(true);
     } catch (error) {
       setStatusCall(false);
-      console.log('err post: ', error);
     }
   };
 
@@ -28,19 +26,16 @@ export const servicesData = () => {
       setStatusCall(true);
     } catch (error) {
       setStatusCall(false);
-      console.log('err post: ', error);
     }
   };
 
   const updateServicePropHandler = async (data, id) => {
+    console.log('update: ', id);
     try {
       updateDoc(doc(db, 'services', id), data);
       setStatusCall(true);
-      console.log('data= ', statusCall);
-      console.log('data= ', data);
     } catch (error) {
       setStatusCall(false);
-      console.log('err post: ', error);
     }
   };
 

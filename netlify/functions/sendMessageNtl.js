@@ -4,15 +4,15 @@
 /* eslint-disable no-return-await */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable indent */
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_ACCOUNT_TOKEN;
+const accountSid = process.env.REACT_APP_TWILIO_ACCOUNT_SID;
+const authToken = process.env.REACT_APP_TWILIO_AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
 
 exports.handler = async function (event, context) {
   const eventTo = JSON.parse(event.body);
   console.log('event: ', eventTo);
   await client.messages.create({
-    from: process.env.TWILIO_PHONE_NUMBER,
+    from: process.env.REACT_APP_TWILIO_PHONE_NUMBER,
     to: eventTo.to,
     body: eventTo.body,
   }).then((res) => console.log('res ', res.sid));

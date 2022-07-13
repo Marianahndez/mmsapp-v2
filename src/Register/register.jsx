@@ -1,7 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Stepper,
@@ -23,11 +23,13 @@ import {
 } from 'firebase/auth';
 import { useTranslation } from 'react-i18next';
 import { collection, addDoc } from 'firebase/firestore';
+import { userDataService } from '../service/userData.js';
 import { db, auth } from '../firebase.js';
 import './register.scss';
 
 function GetStepContent(step) {
   const { t } = useTranslation();
+  const { validateExistingUser, userExist } = userDataService();
   const [currentUser, setCurrentUser] = useState(null);
   const [errorM, setErrorM] = useState('');
 
@@ -40,12 +42,14 @@ function GetStepContent(step) {
   const {
     register,
     handleSubmit,
-    setValue,
-    formState: { isDirty, isValid, errors },
+    getValues,
+    reset,
+    formState,
   } = useForm({
-    mode: 'onBlur',
+    mode: 'onChange',
+    reValidateMode: 'onChange',
   });
-
+  const { touchedFields } = formState;
   const {
     register: register2,
     handleSubmit: handleSubmit2,
@@ -57,12 +61,31 @@ function GetStepContent(step) {
 
   useEffect(() => {
     localStorage.setItem('email', '');
-    console.log('initEmail: ', localStorage.getItem('email'));
+    // console.log('initEmail: ', localStorage.getItem('email'));
   }, []);
+
+  useEffect(() => {
+    if (userExist) {
+      setErrorM('Este correo ya este en uso');
+      setTimeout(() => {
+        reset({ email: '' });
+        setErrorM('');
+      }, 3000);
+    }
+  }, [userExist]);
+
+  const verifying = getValues('email');
+  const handleValidateEmail = () => {
+    validateExistingUser(verifying);
+    console.log('initEmail: ', verifying);
+  };
+
+  useEffect(() => {
+    handleValidateEmail();
+  }, [verifying]);
 
   const onSubmitEmail = async (event) => {
     localStorage.setItem('email', JSON.stringify(event));
-    console.log('email: ', event);
     await addDoc(collection(db, 'emailLeads'), {
       ...event,
     });
@@ -139,6 +162,9 @@ function GetStepContent(step) {
             style={{ width: '80%', marginTop: '1rem' }}
             required
           />
+          <span style={{ color: '#a54131' }}>
+            {errorM && <p>{errorM}</p>}
+          </span>
           <TextField
             {...register('password', {
               required: true,
@@ -152,9 +178,10 @@ function GetStepContent(step) {
             variant="standard"
             style={{ width: '80%', margin: '1rem 0 0rem 0' }}
             required
+            // onChange={handleValidateEmail}
           />
           <span style={{ color: '#a54131' }}>
-            {errors.password && <p>{t(`${errors.password.message}`)}</p>}
+            {formState.errors.password && <p>{t(`${formState.errors.password.message}`)}</p>}
           </span>
         </form>
       );

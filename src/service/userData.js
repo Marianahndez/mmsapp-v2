@@ -7,7 +7,7 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable object-curly-newline */
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   collection,
   query,
@@ -22,6 +22,7 @@ import {
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import { db, auth } from '../firebase.js';
+import { servicesData } from './servicesData.js';
 
 export const userDataService = () => {
   const [userDataServObj, setUserData] = useState({});
@@ -29,10 +30,19 @@ export const userDataService = () => {
   const [adminsIDs, setAdminsIDs] = useState([]);
   const [adminsPhones, setAdminsPhones] = useState([]);
   const [userNotifList, setUserNotifications] = useState([]);
+  const [todays, setTodays] = useState([]);
   const [service, setService] = useState({});
   const [loading, setLoading] = useState(false);
+  const [userExist, setUserExist] = useState(false);
+  const { updateServicePropHandler } = servicesData();
 
   const navigate = useNavigate();
+
+  const getTodaysServices = (arr) => {
+    const today = moment().format('MM/DD/YYYY');
+    const newArr = arr.filter((i) => i.fecha === today);
+    setTodays(newArr);
+  };
 
   const getAllServicesAdmin = async (adminObj) => {
     if (adminObj.role === 'Admin') {
@@ -67,6 +77,26 @@ export const userDataService = () => {
           setServicesArr(servArr);
         });
       });
+    }
+  };
+
+  const validateExistingUser = async (emailExist) => {
+    setLoading(true);
+    try {
+      const dataRef = collection(db, 'users');
+      const q = query(dataRef, where('email', '==', emailExist));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.docs.map((doc1) => {
+        console.log('found user_', doc1.data());
+        setUserExist(true);
+      });
+    } catch (error) {
+      console.log('error user data: ', error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        setUserExist(false);
+      }, 1000);
     }
   };
 
@@ -117,7 +147,7 @@ export const userDataService = () => {
     const querySnapshotAdmins = await getDocs(qAdmins);
     querySnapshotAdmins.docs.map((docAdmins) => {
       if (docAdmins !== undefined) {
-        arrPhones.push(docAdmins.data().phone);
+        arrPhones.push(docAdmins.data().email);
         setAdminsPhones(arrPhones);
       }
     });
@@ -235,5 +265,9 @@ export const userDataService = () => {
     getAdminsIDs,
     getAdminsPhones,
     adminsPhones,
+    getTodaysServices,
+    todays,
+    validateExistingUser,
+    userExist,
   };
 };

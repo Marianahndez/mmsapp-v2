@@ -139,7 +139,7 @@ function SidebarMenu() {
                 <PersonRoundedIcon />
               </Avatar>
               <p className="personName">{userIDLocal.name}</p>
-              <span className="personRole">{userIDLocal.role}</span>
+              <span className="personRole">{userIDLocal.role === 'Cliente' ? 'Partner' : 'Admin'}</span>
             </Box>
             <Avatar variant="square" style={{ borderRadius: '15px' }}>
               <IconButton onClick={() => setIsDrawerOpen(false)}>
@@ -206,6 +206,14 @@ function SidebarMenu() {
               </>
             ) : (
               <>
+                <ListItem button component={Link} to="/history">
+                  <FormatListBulletedRoundedIcon style={{ color: '#fff' }} />
+                  <ListItemText
+                    style={{ margin: '1rem 0 1rem 1rem' }}
+                    primary={t('Historial')}
+                    className="listStyle"
+                  />
+                </ListItem>
                 <ListItem button component={Link} to="/notifications">
                   <NotificationsRoundedIcon style={{ color: '#fff' }} />
                   <ListItemText

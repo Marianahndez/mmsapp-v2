@@ -12,6 +12,7 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useEffect } from 'react';
+import * as emailjs from 'emailjs-com';
 import { grey, blueGrey } from '@mui/material/colors';
 import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import { useNavigate, useParams, Link, useLocation } from 'react-router-dom';
@@ -217,6 +218,7 @@ function ServiceDetails() {
     new Date('2018-01-01T00:00:00.000Z'),
   );
   const [ataud, setAtaud] = useState('');
+  const [direccionEntrega, setDireccionEntrega] = useState('');
 
   const handleAlignment = (event, newAlignment) => {
     setAlignment(newAlignment);
@@ -266,9 +268,14 @@ function ServiceDetails() {
   useEffect(() => {
     const listphones = [];
     if (hasService) {
-      if (service.auth_list_phone.length !== 0) {
-        service.auth_list_phone.map((phone) => {
-          listphones.push(`+${phone}`);
+      if (service.direcion_entrega !== '') {
+        setDireccionEntrega(service.direcion_entrega);
+      } else {
+        setDireccionEntrega(service.sucursal.direccion_sucursal);
+      }
+      if (service.auth_list_email.length !== 0) {
+        service.auth_list_email.map((item) => {
+          listphones.push(item.email);
           setFamiliesPhones(listphones);
         });
       }
@@ -280,14 +287,29 @@ function ServiceDetails() {
   };
 
   const handleEdit = (todo) => {
-    setMsg(`Tu cotización esta lista y ya puedes solicitar el transporte.\n
-      - Servicio: ${serviceForNotif}\n
-      - Origen: ${service.origen}\n
-      - Destino: ${service.destino}\n
-      - Fecha de recolección: ${service.fecha}\n
-      - NIP: ${service.nip_rastreo}\n
-      
-      Ir a la App ahora`);
+    // setMsg(`Tu cotización esta lista y ya puedes solicitar el transporte.\n
+    //   - Servicio: ${serviceForNotif}\n
+    //   - Origen: ${service.origen}\n
+    //   - Destino: ${service.destino}\n
+    //   - Fecha de recolección: ${service.fecha}\n
+    //   - NIP: ${service.nip_rastreo}\n
+    //   Ir a la App ahora`);
+      // Email para director funerario
+      emailjs.send('service_9e1ebv5', 'template_gazhjwo', {
+        funeraria: service.mortuary_name,
+        origen: service.origen,
+        destino: service.destino,
+        servicio: `${serviceForNotif}`,
+        remitente: service.user_email,
+        fecha_recoleccion: service.fecha,
+        nip: service.nip_rastreo,
+      }, 'PBj_zOlr2lgy2b9sE')
+      .then((result) => {
+        navigate('/userHome', { replace: true });
+        console.log(result.text);
+      }, (error) => {
+        console.log(error.text);
+      });
     const editObject = {
       cotizacion: `${todo.cotizacion} ${alignment}`,
       status: 'cotizado',
@@ -307,14 +329,28 @@ function ServiceDetails() {
   };
 
   const handleConfirmarTranslado = () => {
-    setMsg(`Tu transporte ya fue confirmado.\n
-      - Servicio: ${serviceForNotif}\n
-      - Origen: ${service.origen}\n
-      - Destino: ${service.destino}\n
-      - Fecha de recolección: ${service.fecha}\n
-      - NIP: ${service.nip_rastreo}\n
-      
-      Ir a la App ahora`);
+    // setMsg(`Tu transporte ya fue confirmado.\n
+    //   - Servicio: ${serviceForNotif}\n
+    //   - Origen: ${service.origen}\n
+    //   - Destino: ${service.destino}\n
+    //   - Fecha de recolección: ${service.fecha}\n
+    //   - NIP: ${service.nip_rastreo}\n
+    //   Ir a la App ahora`);
+    emailjs.send('service_9e1ebv5', 'template_xizuaxd', {
+      direcion_entrega: `${direccionEntrega}`,
+      origen: service.origen,
+      destino: service.destino,
+      servicio: `${serviceForNotif}`,
+      remitente: service.user_email,
+      fecha: service.fecha,
+      nip: service.nip_rastreo,
+    }, 'PBj_zOlr2lgy2b9sE')
+    .then((result) => {
+      navigate('/userHome', { replace: true });
+      console.log(result.text);
+    }, (error) => {
+      console.log(error.text);
+    });
     const updateObj = {
       status: 'confirmado',
     };
@@ -332,46 +368,46 @@ function ServiceDetails() {
     updateServicePropHandler(updateObj, params.id);
   };
 
-  const send = async () => {
-    // await e.preventDefault();
-    const res = await fetch('/api/sendMessage', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ to: toNum, body: msg }),
-    });
+  // const send = async () => {
+  //   // await e.preventDefault();
+  //   const res = await fetch('/api/sendMessage', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ to: toNum, body: msg }),
+  //   });
 
-    const data = await res.json();
-    console.log('sending, ', data);
+  //   const data = await res.json();
+  //   console.log('sending, ', data);
 
-    if (data.success) {
-      navigate('/userHome', { replace: true });
-    }
-  };
+  //   if (data.success) {
+  //     navigate('/userHome', { replace: true });
+  //   }
+  // };
 
-  const sendToFamily = async () => {
-    // await e.preventDefault();
-    const res = await fetch('/api/sendMultipleMessage', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ numbersToMessage: familiesPhones, body: msgFamily }),
-    });
+  // const sendToFamily = async () => {
+  //   // await e.preventDefault();
+  //   const res = await fetch('/api/sendMultipleMessage', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ numbersToMessage: familiesPhones, body: msgFamily }),
+  //   });
 
-    const data = await res.json();
-    console.log('sending, ', data);
-  };
+  //   const data = await res.json();
+  //   console.log('sending, ', data);
+  // };
 
-  useEffect(() => {
-    if (msg !== '') {
-      send();
-    }
-    if (familiesPhones.length !== 0) {
-      sendToFamily();
-    }
-  }, [msg, msgFamily]);
+  // useEffect(() => {
+  //   if (msg !== '') {
+  //     send();
+  //   }
+  //   if (familiesPhones.length !== 0) {
+  //     sendToFamily();
+  //   }
+  // }, [msg, msgFamily]);
 
   const onSubmit = (data) => {
     const obj3 = {
@@ -379,25 +415,25 @@ function ServiceDetails() {
       ...service,
       status,
     };
+    updateServicePropHandler(obj3, params.id);
+
     switch (status) {
       case 'confirmado':
-        setMsg(`Tu transporte ya fue confirmado\n
+        // setMsg(`Tu transporte ya fue confirmado\n
 
-        - Servicio: ${serviceForNotif}\n
-        - Origen: ${obj3.origen}\n
-        - Destino: ${obj3.destino}\n
-        - Fecha de recolección: ${obj3.fecha}\n
-        - NIP: ${obj3.nip_rastreo}\n
-        
-        Ir a la App ahora`);
-        setMsgFamily(`Tu transporte ya fue confirmado\n
+        // - Servicio: ${serviceForNotif}\n
+        // - Origen: ${obj3.origen}\n
+        // - Destino: ${obj3.destino}\n
+        // - Fecha de recolección: ${obj3.fecha}\n
+        // - NIP: ${obj3.nip_rastreo}\n
+        // Ir a la App ahora`);
+        // setMsgFamily(`Tu transporte ya fue confirmado\n
 
-        - Origen: ${obj3.origen}\n
-        - Destino: ${obj3.destino}\n
-        - Fecha de recolección: ${obj3.fecha}\n
-        - NIP de rastreo: ${obj3.nip_rastreo}\n
-        
-        Para más detalles visita la App www.funeralnip.com, ingresando tu numero ó correo verificado y el NIP de rastreo`);
+        // - Origen: ${obj3.origen}\n
+        // - Destino: ${obj3.destino}\n
+        // - Fecha de recolección: ${obj3.fecha}\n
+        // - NIP de rastreo: ${obj3.nip_rastreo}\n
+        // Para más detalles visita la App www.funeralnip.com, ingresando tu numero ó correo verificado y el NIP de rastreo`);
         const notificationObj3 = {
           title: 'Tu transporte ya fue confirmado',
           body: `NIP de servicio ${obj3.nip_rastreo}`,
@@ -408,26 +444,39 @@ function ServiceDetails() {
           dateCreated: moment().format('L'),
           timestamp: new Date().setMilliseconds(100),
         };
-
-        return (sendNotification(notificationObj3), msg, msgFamily);
+        // Email for users
+        emailjs.send('service_9e1ebv5', 'template_xizuaxd', {
+          direcion_entrega: `${direccionEntrega}`,
+          origen: service.origen,
+          destino: service.destino,
+          servicio: `${serviceForNotif}`,
+          remitente: service.user_email,
+          fecha: service.fecha,
+          nip: service.nip_rastreo,
+        }, 'PBj_zOlr2lgy2b9sE')
+        .then((result) => {
+          navigate('/userHome', { replace: true });
+          console.log(result.text);
+        }, (error) => {
+          console.log(error.text);
+        });
+        return sendNotification(notificationObj3);
       case 'transito_usa':
-        setMsg(`En tránsito USA\n
+        // setMsg(`En tránsito USA\n
 
-        - Servicio: ${serviceForNotif}\n
-        - Origen: ${obj3.origen}\n
-        - Destino: ${obj3.destino}\n
-        - Fecha de recolección: ${obj3.fecha}\n
-        - NIP: ${obj3.nip_rastreo}\n
-        
-        Ir a la App ahora`);
-        setMsgFamily(`En tránsito USA\n
+        // - Servicio: ${serviceForNotif}\n
+        // - Origen: ${obj3.origen}\n
+        // - Destino: ${obj3.destino}\n
+        // - Fecha de recolección: ${obj3.fecha}\n
+        // - NIP: ${obj3.nip_rastreo}\n
+        // Ir a la App ahora`);
+        // setMsgFamily(`En tránsito USA\n
 
-        - Origen: ${obj3.origen}\n
-        - Destino: ${obj3.destino}\n
-        - Fecha de recolección: ${obj3.fecha}\n
-        - NIP de rastreo: ${obj3.nip_rastreo}\n
-        
-        Para más detalles visita la App www.funeralnip.com, ingresando tu numero ó correo verificado y el NIP de rastreo`);
+        // - Origen: ${obj3.origen}\n
+        // - Destino: ${obj3.destino}\n
+        // - Fecha de recolección: ${obj3.fecha}\n
+        // - NIP de rastreo: ${obj3.nip_rastreo}\n
+        // Para más detalles visita la App www.funeralnip.com, ingresando tu numero ó correo verificado y el NIP de rastreo`);
         const notificationObj4 = {
           title: 'En tránsito USA',
           body: `NIP de servicio ${obj3.nip_rastreo}`,
@@ -438,25 +487,54 @@ function ServiceDetails() {
           dateCreated: moment().format('L'),
           timestamp: new Date().setMilliseconds(100),
         };
-        return (sendNotification(notificationObj4), msg, msgFamily);
+        // Emails for users
+        emailjs.send('service_9e1ebv5', 'template_9k44txb', {
+          direcion_entrega: `${direccionEntrega}`,
+          origen: service.origen,
+          destino: service.destino,
+          servicio: `${serviceForNotif}`,
+          remitente: service.user_email,
+          fecha: service.fecha,
+          nip: service.nip_rastreo,
+        }, 'PBj_zOlr2lgy2b9sE')
+        .then((result) => {
+          navigate('/userHome', { replace: true });
+          console.log(result.text);
+        }, (error) => {
+          console.log(error.text);
+        });
+        // Email for admins
+        emailjs.send('service_9e1ebv5', 'template_4tk97zh', {
+          funeraria: service.mortuary_name,
+          direcion_entrega: `${direccionEntrega}`,
+          origen: service.origen,
+          destino: service.destino,
+          servicio: `${serviceForNotif}`,
+          nip: service.nip_rastreo,
+        }, 'PBj_zOlr2lgy2b9sE')
+          .then((result) => {
+            navigate('/userHome', { replace: true });
+            console.log(result.text);
+          }, (error) => {
+            console.log(error.text);
+          });
+        return sendNotification(notificationObj4);
       case 'transito_mx':
-        setMsg(`En tránsito MX\n
+        // setMsg(`En tránsito MX\n
 
-        - Servicio: ${serviceForNotif}\n
-        - Origen: ${obj3.origen}\n
-        - Destino: ${obj3.destino}\n
-        - Fecha de recolección: ${obj3.fecha}\n
-        - NIP: ${obj3.nip_rastreo}\n
-        
-        Ir a la App ahora`);
-        setMsgFamily(`En tránsito MX\n
+        // - Servicio: ${serviceForNotif}\n
+        // - Origen: ${obj3.origen}\n
+        // - Destino: ${obj3.destino}\n
+        // - Fecha de recolección: ${obj3.fecha}\n
+        // - NIP: ${obj3.nip_rastreo}\n
+        // Ir a la App ahora`);
+        // setMsgFamily(`En tránsito MX\n
 
-        - Origen: ${obj3.origen}\n
-        - Destino: ${obj3.destino}\n
-        - Fecha de recolección: ${obj3.fecha}\n
-        - NIP de rastreo: ${obj3.nip_rastreo}\n
-        
-        Para más detalles visita la App www.funeralnip.com, ingresando tu numero ó correo verificado y el NIP de rastreo`);
+        // - Origen: ${obj3.origen}\n
+        // - Destino: ${obj3.destino}\n
+        // - Fecha de recolección: ${obj3.fecha}\n
+        // - NIP de rastreo: ${obj3.nip_rastreo}\n
+        // Para más detalles visita la App www.funeralnip.com, ingresando tu numero ó correo verificado y el NIP de rastreo`);
         const notificationObj5 = {
           title: 'En tránsito MX',
           body: `NIP de servicio ${obj3.nip_rastreo}`,
@@ -467,25 +545,54 @@ function ServiceDetails() {
           dateCreated: moment().format('L'),
           timestamp: new Date().setMilliseconds(100),
         };
-        return (sendNotification(notificationObj5), msg, msgFamily);
+        // Emails for users
+        emailjs.send('service_9e1ebv5', 'template_r2k7chr', {
+          direcion_entrega: `${direccionEntrega}`,
+          origen: service.origen,
+          destino: service.destino,
+          servicio: `${serviceForNotif}`,
+          remitente: service.user_email,
+          fecha: service.fecha,
+          nip: service.nip_rastreo,
+        }, 'PBj_zOlr2lgy2b9sE')
+        .then((result) => {
+          navigate('/userHome', { replace: true });
+          console.log(result.text);
+        }, (error) => {
+          console.log(error.text);
+        });
+        // Email for admins
+        emailjs.send('service_9e1ebv5', 'template_so3ciaq', {
+          funeraria: service.mortuary_name,
+          direcion_entrega: `${direccionEntrega}`,
+          origen: service.origen,
+          destino: service.destino,
+          servicio: `${serviceForNotif}`,
+          nip: service.nip_rastreo,
+        }, 'PBj_zOlr2lgy2b9sE')
+          .then((result) => {
+            navigate('/userHome', { replace: true });
+            console.log(result.text);
+          }, (error) => {
+            console.log(error.text);
+          });
+        return sendNotification(notificationObj5);
       case 'recoger_hoy':
-        setMsg(`Recoger hoy en (...)\n
+        // setMsg(`Recoger hoy en (...)\n
 
-        - Servicio: ${serviceForNotif}\n
-        - Origen: ${obj3.origen}\n
-        - Destino: ${obj3.destino}\n
-        - Fecha de recolección: ${obj3.fecha}\n
-        - NIP: ${obj3.nip_rastreo}\n
-        
-        Ir a la App ahora`);
-        setMsgFamily(`Se recoge el día de hoy por la funeraria\n
+        // - Servicio: ${serviceForNotif}\n
+        // - Origen: ${obj3.origen}\n
+        // - Destino: ${obj3.destino}\n
+        // - Fecha de recolección: ${obj3.fecha}\n
+        // - NIP: ${obj3.nip_rastreo}\n
+        // Ir a la App ahora`);
+        // setMsgFamily(`Se recoge el día de hoy por la funeraria\n
 
-        - Origen: ${obj3.origen}\n
-        - Destino: ${obj3.destino}\n
-        - Fecha de recolección: ${obj3.fecha}\n
-        - NIP de rastreo: ${obj3.nip_rastreo}\n
-        
-        Para más detalles visita la App www.funeralnip.com, ingresando tu numero ó correo verificado y el NIP de rastreo`);
+        // - Origen: ${obj3.origen}\n
+        // - Destino: ${obj3.destino}\n
+        // - Fecha de recolección: ${obj3.fecha}\n
+        // - NIP de rastreo: ${obj3.nip_rastreo}\n
+        // Para más detalles visita la App www.funeralnip.com, ingresando tu numero ó correo verificado y el NIP de rastreo`);
         const notificationObj6 = {
           title: 'Recoger hoy en funeraria',
           body: `NIP de servicio ${obj3.nip_rastreo}`,
@@ -496,25 +603,54 @@ function ServiceDetails() {
           dateCreated: moment().format('L'),
           timestamp: new Date().setMilliseconds(100),
         };
-        return (sendNotification(notificationObj6), msg, msgFamily);
+        // Emails for users
+        emailjs.send('service_9e1ebv5', 'template_egqe8zg', {
+          direcion_entrega: `${direccionEntrega}`,
+          origen: service.origen,
+          destino: service.destino,
+          servicio: `${serviceForNotif}`,
+          remitente: service.user_email,
+          fecha: service.fecha,
+          nip: service.nip_rastreo,
+        }, 'PBj_zOlr2lgy2b9sE')
+        .then((result) => {
+          navigate('/userHome', { replace: true });
+          console.log(result.text);
+        }, (error) => {
+          console.log(error.text);
+        });
+        // Email for admins
+        emailjs.send('service_9e1ebv5', 'template_d2n14v3', {
+          funeraria: service.mortuary_name,
+          direcion_entrega: `${direccionEntrega}`,
+          origen: service.origen,
+          destino: service.destino,
+          servicio: `${serviceForNotif}`,
+          nip: service.nip_rastreo,
+        }, 'PBj_zOlr2lgy2b9sE')
+          .then((result) => {
+            navigate('/userHome', { replace: true });
+            console.log(result.text);
+          }, (error) => {
+            console.log(error.text);
+          });
+        return sendNotification(notificationObj6);
       case 'entregado':
-        setMsg(`Tu transporte ya fue entregado\n
+        // setMsg(`Tu transporte ya fue entregado\n
 
-        - Servicio: ${serviceForNotif}\n
-        - Origen: ${obj3.origen}\n
-        - Destino: ${obj3.destino}\n
-        - Fecha de recolección: ${obj3.fecha}\n
-        - NIP: ${obj3.nip_rastreo}\n
-        
-        Ir a la App ahora`);
-        setMsgFamily(`Su ser querido ya fue entregado a la funeraria\n
+        // - Servicio: ${serviceForNotif}\n
+        // - Origen: ${obj3.origen}\n
+        // - Destino: ${obj3.destino}\n
+        // - Fecha de recolección: ${obj3.fecha}\n
+        // - NIP: ${obj3.nip_rastreo}\n
+        // Ir a la App ahora`);
+        // setMsgFamily(`Su ser querido ya fue entregado a la funeraria\n
 
-        - Origen: ${obj3.origen}\n
-        - Destino: ${obj3.destino}\n
-        - Fecha de recolección: ${obj3.fecha}\n
-        - NIP de rastreo: ${obj3.nip_rastreo}\n
-        
-        Para más detalles visita la App www.funeralnip.com, ingresando tu numero ó correo verificado y el NIP de rastreo`);
+        // - Origen: ${obj3.origen}\n
+        // - Destino: ${obj3.destino}\n
+        // - Fecha de recolección: ${obj3.fecha}\n
+        // - NIP de rastreo: ${obj3.nip_rastreo}\n
+        // Para más detalles visita la App www.funeralnip.com, ingresando tu numero ó correo verificado y el NIP de rastreo`);
         const notificationObj7 = {
           title: 'Tu transporte ya fue entregado',
           body: `NIP de servicio ${obj3.nip_rastreo}`,
@@ -525,14 +661,49 @@ function ServiceDetails() {
           dateCreated: moment().format('L'),
           timestamp: new Date().setMilliseconds(100),
         };
-        return (sendNotification(notificationObj7), msg, msgFamily);
+        // Emails for users
+        emailjs.send('service_9e1ebv5', 'template_54xdauo', {
+          direcion_entrega: `${direccionEntrega}`,
+          origen: service.origen,
+          destino: service.destino,
+          servicio: `${serviceForNotif}`,
+          remitente: service.user_email,
+          fecha: service.fecha,
+          nip: service.nip_rastreo,
+        }, 'PBj_zOlr2lgy2b9sE')
+        .then((result) => {
+          navigate('/userHome', { replace: true });
+          console.log(result.text);
+        }, (error) => {
+          console.log(error.text);
+        });
+        // Email for admins
+        emailjs.send('service_9e1ebv5', 'template_kj7061j', {
+          funeraria: service.mortuary_name,
+          direcion_entrega: `${direccionEntrega}`,
+          origen: service.origen,
+          destino: service.destino,
+          servicio: `${serviceForNotif}`,
+          nip: service.nip_rastreo,
+        }, 'PBj_zOlr2lgy2b9sE')
+          .then((result) => {
+            navigate('/userHome', { replace: true });
+            console.log(result.text);
+          }, (error) => {
+            console.log(error.text);
+          });
+        return sendNotification(notificationObj7);
 
       default:
         break;
     }
-    updateServicePropHandler(obj3, params.id);
     // Enviar notificacion al usuario de este servicio y a los tokens de la familia
   };
+  useEffect(() => {
+    if (statusCall) {
+      navigate('/userHome', { replace: true });
+    }
+  }, [statusCall]);
 
   const onEditSub = (data) => {
     const objEdit = {
@@ -551,6 +722,35 @@ function ServiceDetails() {
       dateCreated: moment().format('L'),
       timestamp: new Date().setMilliseconds(100),
     };
+    // Emails for users
+    emailjs.send('service_9e1ebv5', 'template_rx20lnh', {
+      origen: service.origen,
+      destino: service.destino,
+      servicio: `${serviceForNotif}`,
+      remitente: service.user_email,
+      nip: service.nip_rastreo,
+    }, 'PBj_zOlr2lgy2b9sE')
+    .then((result) => {
+      navigate('/userHome', { replace: true });
+      console.log(result.text);
+    }, (error) => {
+      console.log(error.text);
+    });
+    // Emails for admins
+    emailjs.send('service_9e1ebv5', 'template_rceewvc', {
+      origen: service.origen,
+      destino: service.destino,
+      director_funerario: service.user_name,
+      servicio: `${serviceForNotif}`,
+      remitente: service.user_email,
+      nip: service.nip_rastreo,
+    }, 'PBj_zOlr2lgy2b9sE')
+    .then((result) => {
+      navigate('/userHome', { replace: true });
+      console.log(result.text);
+    }, (error) => {
+      console.log(error.text);
+    });
     sendNotification(notificationObj4);
     updateServicePropHandler(objEdit, params.id);
   };

@@ -89,6 +89,8 @@ i18n
           Actualizar: 'Actualizar',
           ActualizarFecha: 'Actualizar fecha',
           Fecha: 'Fecha',
+          FechaEntrega: 'Fecha de entrega',
+          FechaDestino: 'Fecha de llegada al destino',
           AgregarSucursales: 'Agregar mis sucursales',
           LBLAgregarSucursales:
             'En la sección de Sucursales podrá editar los datos necesarios.',
@@ -271,6 +273,7 @@ i18n
           Actualizar: 'Update',
           ActualizarFecha: 'Update date',
           Fecha: 'Date',
+          FechaEntrega: 'Delivery date',
           AgregarSucursales: 'Add my funeral home locations',
           LBLAgregarSucursales: 'In this section you can edit',
           RevisarSucursales: 'Check my locations',

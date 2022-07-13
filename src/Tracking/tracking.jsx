@@ -20,6 +20,9 @@
 import React, { useState, useEffect } from 'react';
 import * as emailjs from 'emailjs-com';
 import { useTranslation } from 'react-i18next';
+import MobileDatePicker from '@mui/lab/MobileDatePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DateAdapter from '@mui/lab/AdapterDateFns';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { blueGrey, grey } from '@mui/material/colors';
 import BusinessRoundedIcon from '@mui/icons-material/BusinessRounded';
@@ -30,6 +33,7 @@ import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded';
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import SendIcon from '@mui/icons-material/Send';
 import {
@@ -82,6 +86,20 @@ function Tracking() {
   const [subject, setSubject] = useState('');
   const [text, setText] = useState('');
   const [html, setHtml] = useState('');
+  const [date, setDate] = useState();
+  const [showEditDate, setEditDate] = useState(false);
+
+  const handleChange = (newValue) => {
+    setDate(newValue);
+  };
+
+  const onSubmit = (data) => {
+    const dateObj = {
+      ...data,
+    };
+    updateServicePropHandler(dateObj, params.id);
+    navigate('/userHome', { replace: true });
+  };
 
   const {
     register,
@@ -221,37 +239,40 @@ function Tracking() {
   const handleChangeLada = (event) => {
     setLada(event.target.value);
   };
-  const send = async () => {
-    // await e.preventDefault();
-    const res = await fetch('/.netlify/functions/sendMessageNtl', {
-      method: 'POST',
-      body: JSON.stringify({ to: toNum, body: msg }),
-    }).then(async (data) => ({
-      status: data.status,
-      body: await data,
-    })).then(({ status, body }) => {
-      console.log('Status: ', status);
-      console.log('Body: ', body);
-    }).catch((err) => console.log('error: ', err));
 
-    // const data = await res.json();
-    console.log('sending, ', res);
+  // Send message disabled until confirm twilio
+  // const send = async () => {
+  //   // await e.preventDefault();
+  //   const res = await fetch('/.netlify/functions/sendMessageNtl', {
+  //     method: 'POST',
+  //     body: JSON.stringify({ to: toNum, body: msg }),
+  //   }).then(async (data) => ({
+  //     status: data.status,
+  //     body: await data,
+  //   })).then(({ status, body }) => {
+  //     console.log('Status: ', status);
+  //     console.log('Body: ', body);
+  //   }).catch((err) => console.log('error: ', err));
 
-    // if (data.success) {
-    //   await setTo('');
-    //   reset3({ phone: '', name: '' });
-    // } else {
-    //   await setTo('');
-    //   reset3({ phone: '', name: '' });
-    // }
-  };
+  //   // const data = await res.json();
+  //   console.log('sending, ', res);
 
-  useEffect(() => {
-    if (toNum !== '' && msg !== '') {
-      console.log('sending to: ', toNum);
-      send();
-    }
-  }, [toNum]);
+  //   // if (data.success) {
+  //   //   await setTo('');
+  //   //   reset3({ phone: '', name: '' });
+  //   // } else {
+  //   //   await setTo('');
+  //   //   reset3({ phone: '', name: '' });
+  //   // }
+  // };
+
+  // Send message disabled until confirm twilio
+  // useEffect(() => {
+  //   if (toNum !== '' && msg !== '') {
+  //     console.log('sending to: ', toNum);
+  //     send();
+  //   }
+  // }, [toNum]);
 
   useEffect(() => {
     switch (trackingInfo.service) {
@@ -278,7 +299,7 @@ function Tracking() {
       const rastreoObjEditedEmail = {
         auth_list_email: authlistEmail,
       };
-      emailjs.send('service_xe7lwht', 'template_ed25fks', { to_name: dataFamily.name, remitente: dataFamily.email, nip: trackingInfo.nip_rastreo }, '1fHzJtz4F7GUuplcs')
+      emailjs.send('service_9e1ebv5', 'template_fnipooj', { to_name: dataFamily.name, remitente: dataFamily.email, nip: trackingInfo.nip_rastreo }, 'PBj_zOlr2lgy2b9sE')
       .then((result) => {
       console.log(result.text);
       }, (error) => {
@@ -338,26 +359,24 @@ function Tracking() {
       dateCreated: moment().format('L'),
       timestamp: new Date().setMilliseconds(100),
     };
-    if (trackingInfo.auth_list_phone !== []) {
-      trackingInfo.auth_list_phone.map((item) => {
-        setMsg(`Actualización de seguimiento del traslado \n
+    // if (trackingInfo.auth_list_phone !== []) {
+    //   trackingInfo.auth_list_phone.map((item) => {
+    //     setMsg(`Actualización de seguimiento del traslado \n
 
-        ${dataNewOne.tracking_info} ${moment().format('LLL')}\n
-        
-        - Servicio: ${serviceForNotif}\n
-        - Origen: ${trackingInfo.origen}\n
-        - Destino: ${trackingInfo.destino}\n
-        - NIP: ${trackingInfo.nip_rastreo}\n
-        
-        Ir a la App ahora www.funeralnip.com ${trackingInfo.nip_rastreo}`);
-        setTo(`+${item.phone}`);
-        send();
-      });
-    }
+    //     ${dataNewOne.tracking_info} ${moment().format('LLL')}\n
+    //     - Servicio: ${serviceForNotif}\n
+    //     - Origen: ${trackingInfo.origen}\n
+    //     - Destino: ${trackingInfo.destino}\n
+    //     - NIP: ${trackingInfo.nip_rastreo}\n
+    //     Ir a la App ahora www.funeralnip.com ${trackingInfo.nip_rastreo}`);
+    //     setTo(`+${item.phone}`);
+    //     // send();
+    //   });
+    // }
     if (authlistEmail !== []) {
       authlistEmail.map((item) => {
         console.log('emails: ', item);
-        emailjs.send('service_xe7lwht', 'template_pakkeh8', {
+        emailjs.send('service_9e1ebv5', 'template_5pt76li', {
           nip_rastreo: trackingInfo.nip_rastreo,
           tracking: dataNewOne.tracking_info,
           date: moment().format('LLL'),
@@ -365,7 +384,7 @@ function Tracking() {
           origen: trackingInfo.origen,
           destino: trackingInfo.destino,
           remitente: item.email,
-         }, '1fHzJtz4F7GUuplcs')
+         }, 'PBj_zOlr2lgy2b9sE')
           .then((result) => {
           console.log(result.text);
           }, (error) => {
@@ -373,7 +392,8 @@ function Tracking() {
           });
       });
     }
-    emailjs.send('service_xe7lwht', 'template_pakkeh8', {
+    // Emails for users
+    emailjs.send('service_9e1ebv5', 'template_oux3mtj', {
       nip_rastreo: trackingInfo.nip_rastreo,
       tracking: dataNewOne.tracking_info,
       date: moment().format('LLL'),
@@ -381,22 +401,38 @@ function Tracking() {
       origen: trackingInfo.origen,
       destino: trackingInfo.destino,
       remitente: `${userDataServObj.email}`,
-     }, '1fHzJtz4F7GUuplcs')
+     }, 'PBj_zOlr2lgy2b9sE')
       .then((result) => {
       console.log(result.text);
       }, (error) => {
       console.log(error.text);
       });
-    setMsg(`Actualización de seguimiento del traslado \n
-      ${dataNewOne.tracking_info} ${moment().format('LLL')}\n
-      - Servicio: ${serviceForNotif}\n
-      - Origen: ${trackingInfo.origen}\n
-      - Destino: ${trackingInfo.destino}\n
-      - NIP: ${trackingInfo.nip_rastreo}\n
 
-      Ir a la App ahora`);
-      setTo(`+${userDataServObj.phone}`);
-      send();
+    // Emails for admin
+    emailjs.send('service_9e1ebv5', 'template_4yetyrj', {
+      nip_rastreo: trackingInfo.nip_rastreo,
+      tracking: dataNewOne.tracking_info,
+      admin: userDataServObj.name,
+      date: moment().format('LLL'),
+      servicio: serviceForNotif,
+      origen: trackingInfo.origen,
+      destino: trackingInfo.destino,
+     }, 'PBj_zOlr2lgy2b9sE')
+      .then((result) => {
+      console.log(result.text);
+      }, (error) => {
+      console.log(error.text);
+      });
+    // setMsg(`Actualización de seguimiento del traslado \n
+    //   ${dataNewOne.tracking_info} ${moment().format('LLL')}\n
+    //   - Servicio: ${serviceForNotif}\n
+    //   - Origen: ${trackingInfo.origen}\n
+    //   - Destino: ${trackingInfo.destino}\n
+    //   - NIP: ${trackingInfo.nip_rastreo}\n
+
+    //   Ir a la App ahora`);
+    //   setTo(`+${userDataServObj.phone}`);
+      // send();
     sendNotification(notificationObj1);
     await updateServicePropHandler(rastreoObj, params.id);
     setList(list);
@@ -575,8 +611,54 @@ function Tracking() {
             </div>
           )}
           <p style={{ display: 'flex', alignItems: 'center' }}>
-            <CalendarMonthRoundedIcon /> {t('Fecha')}: {trackingInfo.fecha}
+            <CalendarMonthRoundedIcon /> {t('FechaEntrega')}: {trackingInfo.fecha}
           </p>
+          <h4>{t('FechaDestino')}</h4>
+          {trackingInfo.arrivalDate && !showEditDate ? (
+            <>
+              <p style={{ display: 'flex', alignItems: 'center' }}>
+                <CalendarMonthRoundedIcon /> {trackingInfo.arrivalDate}
+              </p>
+              <IconButton
+                onClick={() => setEditDate(true)}
+                className="updateDate"
+              >
+                <EditRoundedIcon fontSize="small" />
+              </IconButton>
+            </>
+          ) : (
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <LocalizationProvider dateAdapter={DateAdapter}>
+                  <MobileDatePicker
+                    label={t('FechaDestino')}
+                    inputFormat="MM/dd/yyyy"
+                    value={date}
+                    onChange={handleChange}
+                    renderInput={(paramsx) => (
+                      <TextField
+                        style={{ marginTop: '2rem' }}
+                        {...paramsx}
+                        {...register('arrivalDate', { required: true })}
+                      />
+                    )}
+                  />
+                </LocalizationProvider>
+                <Button
+                  variant="contained"
+                  type="submit"
+                  style={{
+                    margin: '3rem auto',
+                    borderRadius: '20px',
+                    padding: '1rem',
+                    width: '85%',
+                    background: '#a54131',
+                    fontSize: '1rem',
+                  }}
+                >
+                  {t('Guardar')}
+                </Button>
+              </form>
+          )}
           <h4>Family members authorized</h4>
           {authlistPhone.length !== 0 ? (
             <>
@@ -648,6 +730,7 @@ function Tracking() {
                       />
                       <FormControlLabel
                         value="telefono"
+                        disabled
                         control={<Radio />}
                         label={t('Telefono')}
                       />

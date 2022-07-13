@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 /* eslint-disable max-len */
 /* eslint-disable arrow-body-style */
@@ -6,6 +7,7 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useRef, useEffect } from 'react';
+import * as emailjs from 'emailjs-com';
 import {
   TextField,
   MenuItem,
@@ -64,6 +66,8 @@ function Transport() {
   const { updateServicePropHandler, statusCall } = servicesData();
 
   const [userIDLocal, setUserIDLocal] = useState({});
+  const [serviceForNotif, setServiceForNotif] = useState('');
+  const [direccionEntrega, setDireccionEntrega] = useState('');
 
   useEffect(() => {
     getUser();
@@ -88,6 +92,26 @@ function Transport() {
       } else {
         setSucursal('funeraria');
       }
+    }
+    if (service.direcion_entrega !== '') {
+      setDireccionEntrega(service.direcion_entrega);
+    } else {
+      setDireccionEntrega(service.sucursal.direccion_sucursal);
+    }
+  }, [userDataServObj]);
+
+  useEffect(() => {
+    switch (service.service) {
+      case 'e-ruta':
+        return setServiceForNotif('En ruta');
+      case 'e-punta':
+        return setServiceForNotif('De punta A a punta B');
+      case 't-tramites':
+        return setServiceForNotif('Con trámites y preparación');
+      case 't-translado':
+        return setServiceForNotif('Solo translado');
+      default:
+        break;
     }
   }, [userDataServObj]);
 
@@ -269,41 +293,41 @@ function Transport() {
     handleUploadImg4();
   }, [image4]);
 
-  const send = async () => {
-    // await e.preventDefault();
-    console.log('admin phones: ', adminsPhones);
-    const phoneList = [];
-    if (adminsPhones !== []) {
-      adminsPhones.map((phone) => {
-        if (phone !== undefined) {
-          phoneList.push(`+${phone}`);
-          setIDs(phoneList);
-        }
-      });
-    }
+  // const send = async () => {
+  //   // await e.preventDefault();
+  //   console.log('admin phones: ', adminsPhones);
+  //   const phoneList = [];
+  //   if (adminsPhones !== []) {
+  //     adminsPhones.map((phone) => {
+  //       if (phone !== undefined) {
+  //         phoneList.push(`+${phone}`);
+  //         setIDs(phoneList);
+  //       }
+  //     });
+  //   }
 
-    const res = await fetch('/api/sendMultipleMessage', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ numbersToMessage: phoneList, body: msg }),
-    });
+  //   const res = await fetch('/api/sendMultipleMessage', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ numbersToMessage: phoneList, body: msg }),
+  //   });
 
-    const data = await res.json();
-    if (data.success === true) {
-      console.log('sending, ', data);
-      navigate('/userHome', { replace: true });
-    }
-  };
+  //   const data = await res.json();
+  //   if (data.success === true) {
+  //     console.log('sending, ', data);
+  //     navigate('/userHome', { replace: true });
+  //   }
+  // };
 
-  useEffect(() => {
-    if (msg !== '') {
-      console.log('msg: ', msg);
-      console.log('admin phones: ', adminsPhones);
-      send();
-    }
-  }, [msg]);
+  // useEffect(() => {
+  //   if (msg !== '') {
+  //     console.log('msg: ', msg);
+  //     console.log('admin phones: ', adminsPhones);
+  //     send();
+  //   }
+  // }, [msg]);
 
   const onSubmit = async (data) => {
     if (params.id) {
@@ -338,15 +362,29 @@ function Transport() {
         await updateServicePropHandler(newObj2, params.id);
       }
     }
-    setMsg(`Confirma el transporte solicitado\n
+    // setMsg(`Confirma el transporte solicitado\n
 
-    - Funeraria: ${service.mortuary_name}\n
-    - Servicio: ${service.service}\n
-    - Origen: ${service.origen}\n
-    - Destino: ${service.destino}\n
-    - NIP: ${service.nip_rastreo}\n
-    
-    Confirmar en la App ahora`);
+    // - Funeraria: ${service.mortuary_name}\n
+    // - Servicio: ${service.service}\n
+    // - Origen: ${service.origen}\n
+    // - Destino: ${service.destino}\n
+    // - NIP: ${service.nip_rastreo}\n
+    // Confirmar en la App ahora`);
+    // Emails for users
+    emailjs.send('service_9e1ebv5', 'template_vczs2a6', {
+      direcion_entrega: `${direccionEntrega}`,
+      origen: service.origen,
+      funeraria: service.mortuary_name,
+      destino: service.destino,
+      servicio: `${serviceForNotif}`,
+      nip: service.nip_rastreo,
+    }, 'PBj_zOlr2lgy2b9sE')
+      .then((result) => {
+        navigate('/userHome', { replace: true });
+        console.log(result.text);
+      }, (error) => {
+        console.log(error.text);
+      });
     const notificationObj = {
       title: 'Transporte solicitado',
       body: `Confirma el transporte solicitado NIP: ${service.nip_rastreo}`,

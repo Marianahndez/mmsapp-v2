@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable prefer-template */
 /* eslint-disable quote-props */
@@ -69,8 +70,9 @@ const LoaderComponent = () => {
 function UserHome() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { userDataServObj, getUser, servicesArr, getAllServicesAdmin, loading, getMyNotifications, userNotifList } =
+  const { userDataServObj, getUser, servicesArr, getAllServicesAdmin, loading, getMyNotifications, userNotifList, getTodaysServices, todays } =
     userDataService();
+  const { updateServicePropHandler } = servicesData();
   const [userIDLocal, setUserIDLocal] = useState({});
 
   const [options, setOptions] = useState(false);
@@ -85,7 +87,7 @@ function UserHome() {
   useEffect(() => {
     getUser();
     getMyNotifications();
-    setOpenToast(true);
+    // setOpenToast(true);
   }, []);
 
   useEffect(() => {
@@ -106,6 +108,22 @@ function UserHome() {
   useEffect(() => {
     getAllServicesAdmin(userIDLocal);
   }, [userIDLocal]);
+
+  useEffect(() => {
+    getTodaysServices(servicesArr);
+  }, [servicesRegistered]);
+
+  useEffect(() => {
+    console.log('today services: ', todays);
+    if (todays !== []) {
+      todays.map((item) => {
+        const newUpdate = {
+          status: 'recoger_hoy',
+        };
+        updateServicePropHandler(newUpdate, item.id);
+      });
+    }
+  }, [loading, servicesArr]);
 
   useEffect(() => {
     if (optionShow === 'todos') {
@@ -210,9 +228,14 @@ function UserHome() {
         return (
           <>
             {userRole !== 'Admin' ? (
-              <p className="labelNotification n-red">
+              <Button
+                component={Link}
+                to={`/transport/${id}`}
+                className="labelNotification n-red"
+                state={{ data: servicesArr }}
+              >
                 {t('EsperandoCotizacion')}
-              </p>
+              </Button>
             ) : (
               <p className="labelNotification n-red">
                 {t('LBLStatusPendienteCotizar')}
@@ -483,7 +506,6 @@ function UserHome() {
                     >
                       {userIDLocal.role !== 'Admin' ? (
                         item.status === 'translado_solicitado' ||
-                        item.status === 'pendiente_cotizar' ||
                         item.status === 'pendiente_confirmar' ||
                         item.status === 'confirmado' ||
                         item.status === 'recoger_hoy' ||
@@ -535,8 +557,8 @@ function UserHome() {
                             className="container"
                             component={Link}
                             to={
-                              item.cotizacion !== '' ||
-                              item.cotizacion_ruta !== ''
+                              item.status === 'pendiente_cotizar' ||
+                              item.status === 'cotizado'
                                 ? `/transport/${item.id}`
                                 : `/userDetails/${item.id}`
                               }

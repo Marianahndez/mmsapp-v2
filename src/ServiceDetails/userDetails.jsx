@@ -97,6 +97,7 @@ function UserDetails() {
   const [sucursalName, setSucursalName] = useState('');
   const [sucursalOpt, setSucursalOpt] = useState('');
   const [msg, setMsg] = useState('');
+  const [serviceForNotif, setServiceForNotif] = useState('');
 
   // const [valueTime, setValueTime] = useState<Date | null>(editPost.hora_hasta);
   // const [valueTime2, setValueTime2] = useState<Date | null>(
@@ -134,7 +135,19 @@ function UserDetails() {
 
   useEffect(() => {
     setAtaud(service.ataud);
-    // setSucursalOpt(sucursal.nombre_sucursal);
+
+    switch (service.service) {
+      case 'e-ruta':
+        return setServiceForNotif('En ruta');
+      case 'e-punta':
+        return setServiceForNotif('De punta A a punta B');
+      case 't-tramites':
+        return setServiceForNotif('Con trámites y preparación');
+      case 't-translado':
+        return setServiceForNotif('Solo translado');
+      default:
+        break;
+    }
     console.log('ser: ', service);
   }, [service]);
 
@@ -445,48 +458,48 @@ function UserDetails() {
     }
   };
 
-  const send = async () => {
-    // await e.preventDefault();
-    const phoneList = [];
-    if (adminsPhones !== []) {
-      adminsPhones.map((item) => {
-        if (item !== undefined) {
-          phoneList.push(`+${item}`);
-          setIDs(phoneList);
-        }
-      });
-    }
+  // const send = async () => {
+  //   // await e.preventDefault();
+  //   const phoneList = [];
+  //   if (adminsPhones !== []) {
+  //     adminsPhones.map((item) => {
+  //       if (item !== undefined) {
+  //         phoneList.push(`+${item}`);
+  //         setIDs(phoneList);
+  //       }
+  //     });
+  //   }
 
-    const res = await fetch('/api/sendMultipleMessage', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ numbersToMessage: phoneList, body: msg }),
-    });
+  //   const res = await fetch('/api/sendMultipleMessage', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ numbersToMessage: phoneList, body: msg }),
+  //   });
 
-    const data = await res.json();
-    if (data.success === true) {
-      console.log('sending, ', data);
-      navigate('/userHome', { replace: true });
-    }
-  };
+  //   const data = await res.json();
+  //   if (data.success === true) {
+  //     console.log('sending, ', data);
+  //     navigate('/userHome', { replace: true });
+  //   }
+  // };
 
-  useEffect(() => {
-    if (msg !== '') {
-      send();
-    }
-  }, [msg]);
+  // useEffect(() => {
+  //   if (msg !== '') {
+  //     send();
+  //   }
+  // }, [msg]);
 
   const onSubmit = async () => {
-    setMsg(`Actualización de papelería por MMS\n
+    // setMsg(`Actualización de papelería por MMS\n
 
-    - Servicio: ${service.service}\n
-    - Origen: ${service.origen}\n
-    - Destino: ${service.destino}\n
-    - NIP: ${service.nip_rastreo}\n
-    
-    Ir a la App ahora`);
+    // - Servicio: ${service.service}\n
+    // - Origen: ${service.origen}\n
+    // - Destino: ${service.destino}\n
+    // - NIP: ${service.nip_rastreo}\n
+
+    // Ir a la App ahora`);
     const newObj1 = {
       ...service,
       doc_acta_defuncion: imgUrl,
@@ -507,27 +520,33 @@ function UserDetails() {
       dateCreated: moment().format('L'),
       timestamp: new Date().setMilliseconds(100),
     };
+    // Emails for admins
+    emailjs.send('service_9e1ebv5', 'template_rceewvc', {
+      origen: service.origen,
+      destino: service.destino,
+      director_funerario: service.user_name,
+      servicio: `${serviceForNotif}`,
+      remitente: service.user_email,
+      nip: service.nip_rastreo,
+    }, 'PBj_zOlr2lgy2b9sE')
+    .then((result) => {
+      navigate('/userHome', { replace: true });
+      console.log(result.text);
+    }, (error) => {
+      console.log(error.text);
+    });
     sendNotification(notificationObj);
     await updateServicePropHandler(newObj1, params.item);
   };
 
   const onEditSub = async (data) => {
-    setMsg(`Actualización de la información por MMS\n
-
-    - Servicio: ${service.service}\n
-    - Origen: ${service.origen}\n
-    - Destino: ${service.destino}\n
-    - NIP: ${service.nip_rastreo}\n
-    
-    Ir a la App ahora`);
-    console.log('change location: ', sucursalName);
     if (sucursalName !== '') {
       resetField('direccion_alterna');
       const newObj1 = {
         ...service,
         ...data,
         sucursal: sucursalName,
-        // direccion_alterna: data.direccion_alterna,
+        direccion_alterna: '',
         ataud,
       };
       const notificationObj = {
@@ -540,15 +559,31 @@ function UserDetails() {
         dateCreated: moment().format('L'),
         timestamp: new Date().setMilliseconds(100),
       };
+      // Emails for admins
+      emailjs.send('service_9e1ebv5', 'template_rceewvc', {
+        origen: service.origen,
+        destino: service.destino,
+        director_funerario: service.user_name,
+        servicio: `${serviceForNotif}`,
+        remitente: service.user_email,
+        nip: service.nip_rastreo,
+      }, 'PBj_zOlr2lgy2b9sE')
+      .then((result) => {
+        navigate('/userHome', { replace: true });
+        console.log(result.text);
+      }, (error) => {
+        console.log(error.text);
+      });
       sendNotification(notificationObj);
       await updateServicePropHandler(newObj1, params.item);
-      // navigate('/userHome', { replace: true });
+      navigate('/userHome', { replace: true });
+      // setFormEdit(false);
     } else {
       setSucursalName('');
       const newObj2 = {
         ...service,
         ...data,
-        // sucursal: sucursalName,
+        sucursal: {},
         direccion_alterna: data.direccion_alterna,
         ataud,
       };
@@ -562,9 +597,25 @@ function UserDetails() {
         dateCreated: moment().format('L'),
         timestamp: new Date().setMilliseconds(100),
       };
+      // Emails for admins
+      emailjs.send('service_9e1ebv5', 'template_rceewvc', {
+        origen: service.origen,
+        destino: service.destino,
+        director_funerario: service.user_name,
+        servicio: `${serviceForNotif}`,
+        remitente: service.user_email,
+        nip: service.nip_rastreo,
+      }, 'PBj_zOlr2lgy2b9sE')
+      .then((result) => {
+        navigate('/userHome', { replace: true });
+        console.log(result.text);
+      }, (error) => {
+        console.log(error.text);
+      });
       sendNotification(notificationObj);
       await updateServicePropHandler(newObj2, params.item);
-      // navigate('/userHome', { replace: true });
+      navigate('/userHome', { replace: true });
+      // setFormEdit(false);
     }
   };
 
@@ -648,18 +699,41 @@ function UserDetails() {
                   ) : (
                     ''
                   )}
-                  <p>{t('LBLRangoHoras')}</p>
                   {service.hora_desde && service.hora_hasta !== undefined ? (
-                    <p>
-                      {service.hora_desde} {t('Hasta')} {service.hora_hasta}
-                    </p>
+                    <>
+                      <p>{t('LBLRangoHoras')}</p>
+                      <p>
+                        {service.hora_desde} {t('Hasta')} {service.hora_hasta}
+                      </p>
+                    </>
                   ) : (
                     ''
                   )}
                   {handleService(service.service)}
                   <div>
-                    <p style={{ margin: '0.5rem 0 2rem 0' }}>{service.fecha}</p>
-
+                    <p style={{ margin: '0.5rem 0 1rem 0' }}>{service.fecha}</p>
+                    <p style={{ margin: '0.5rem 0 1rem 0' }}>
+                      {service.direccion_alterna ? (
+                        <>
+                          {t('SitioRecoleccion')}: {service.direccion_alterna}
+                        </>
+                      ) : (
+                        ''
+                      )}
+                    </p>
+                    <p style={{ margin: '0rem 0 1rem 0' }}>
+                      {service.sucursal ? (
+                        <>
+                          <hr />
+                          {t('SitioRecoleccion')} {t('SucursalFuneraria')}: {service.sucursal.nombre_sucursal}
+                          <p>{t('Direccion')}: {service.sucursal.direccion_sucursal}</p>
+                          <p>{t('Telefono')}: {service.sucursal.telefono_sucursal}</p>
+                          <hr />
+                        </>
+                      ) : (
+                        ''
+                      )}
+                    </p>
                     {service.cotizacion !== '' ||
                     service.cotizacion_ruta !== '' ? (
                       <p style={{ margin: '0.5rem 0 2rem 0' }}>
@@ -769,8 +843,7 @@ function UserDetails() {
                       )}
                     </p>
                     {/* here the cutted part */}
-                    {service.status === 'pendiente_cotizar' ||
-                    service.status === 'entregado' ? (
+                    {service.status === 'entregado' ? (
                       ''
                     ) : (
                       <>

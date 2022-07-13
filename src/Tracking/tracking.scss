@@ -102,19 +102,28 @@
     }
   }
 
-  .updateTrack {
-    background: $green-light;
-    float: right;
-    margin: 1rem 0 0 1rem;
-    color: white;
-  }
-
   .cancelTrack {
     background: $red-custom;
     float: right;
     margin-top: 1rem;
     color: white;
   }
+}
+
+.updateTrack {
+  background: $green-light;
+  float: right;
+  margin: 1rem 0 0 1rem;
+  color: white;
+}
+
+.updateDate {
+  background: #4caf50 !important;
+  float: right;
+  margin: 1rem 0 0 1rem !important;
+  color: white !important;
+  position: relative !important;
+  bottom: 90px !important;
 }
 
 .inputPhone {

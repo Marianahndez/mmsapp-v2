@@ -100,12 +100,7 @@ function Welcome() {
         // if they open the link on the same device.
         // console.log('user', userCredential.user);
         setEmail(userCredential.user.email);
-        getUser();
-        if (userDataServObj !== undefined) {
-          navigate('/userHome', { replace: true });
-          localStorage.setItem('userLoged', true);
-          console.log('enter???');
-        }
+        navigate('/userHome', { replace: true });
       })
       .catch((error) => {
         console.log('error login', error);

@@ -9,6 +9,7 @@
 /* eslint-disable object-curly-newline */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useCallback, useEffect } from 'react';
+import * as emailjs from 'emailjs-com';
 import {
   TextField,
   MenuItem,
@@ -131,37 +132,37 @@ function AddService() {
     }
   }, [services]);
 
-  const send = async () => {
-    // await e.preventDefault();
-    const phoneList = [];
-    if (adminsPhones !== []) {
-      adminsPhones.map((item) => {
-        if (item !== undefined) {
-          phoneList.push(`+${item}`);
-        }
-      });
-    }
-    const res = await fetch('/api/sendMultipleMessage', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ numbersToMessage: phoneList, body: msg }),
-    });
+  // const send = async () => {
+  //   // await e.preventDefault();
+  //   const phoneList = [];
+  //   if (adminsPhones !== []) {
+  //     adminsPhones.map((item) => {
+  //       if (item !== undefined) {
+  //         phoneList.push(`+${item}`);
+  //       }
+  //     });
+  //   }
+  //   const res = await fetch('/api/sendMultipleMessage', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ numbersToMessage: phoneList, body: msg }),
+  //   });
 
-    const data = await res.json();
-    console.log('sending, ', data);
-    if (data.success === true) {
-      setLoading(false);
-      navigate('/userHome', { replace: true });
-    }
-  };
+  //   const data = await res.json();
+  //   console.log('sending, ', data);
+  //   if (data.success === true) {
+  //     setLoading(false);
+  //     navigate('/userHome', { replace: true });
+  //   }
+  // };
 
-  useEffect(() => {
-    if (msg !== '') {
-      send();
-    }
-  }, [msg]);
+  // useEffect(() => {
+  //   if (msg !== '') {
+  //     send();
+  //   }
+  // }, [msg]);
 
   const onSubmit = async (data) => {
     // Generating NIP
@@ -181,6 +182,7 @@ function AddService() {
           user_id: userDataServObj.id,
           user_name: userDataServObj.name,
           user_phone: userDataServObj.phone,
+          user_email: userDataServObj.email,
           mortuary_name: userDataServObj.mortuary_name,
           service: services,
           status: 'cotizado',
@@ -194,21 +196,34 @@ function AddService() {
           nip_rastreo: NIPCreated,
         };
 
-        setMsg(`Nueva cotización\n
+        // setMsg(`Nueva cotización\n
 
-        - Funeral home: ${userDataServObj.mortuary_name}\n
-        - Servicio: En ruta\n
-        - Origen: ${originSelect}\n
-        - Destino: ${data.destino}\n
-        - NIP: ${NIPCreated}\n
-        
-        Cotizar en la App ahora`);
+        // - Funeral home: ${userDataServObj.mortuary_name}\n
+        // - Servicio: En ruta\n
+        // - Origen: ${originSelect}\n
+        // - Destino: ${data.destino}\n
+        // - NIP: ${NIPCreated}\n
+        // Cotizar en la App ahora`);
+        emailjs.send('service_9e1ebv5', 'template_c0cqkg3', {
+          funeraria: userDataServObj.mortuary_name,
+          nip: NIPCreated,
+          servicio: 'En ruta',
+          origen: originSelect,
+          destino: data.destino,
+        }, 'PBj_zOlr2lgy2b9sE')
+          .then((result) => {
+            setLoading(false);
+            navigate('/userHome', { replace: true });
+          }, (error) => {
+            console.log(error.text);
+          });
         await addServiceHandler(addObject);
       } else {
         const elseObject = {
           user_id: userDataServObj.id,
           user_name: userDataServObj.name,
           user_phone: userDataServObj.phone,
+          user_email: userDataServObj.email,
           mortuary_name: userDataServObj.mortuary_name,
           service: services,
           status: 'cotizado',
@@ -222,15 +237,27 @@ function AddService() {
           auth_list_phone: [],
           nip_rastreo: NIPCreated,
         };
-        setMsg(`Nueva cotización\n
+        // setMsg(`Nueva cotización\n
 
-        - Funeral home: ${userDataServObj.mortuary_name}\n
-        - Servicio: En ruta\n
-        - Origen: ${oficinaSelect}\n
-        - Destino: ${originSelect}\n
-        - NIP: ${NIPCreated}\n
-        
-        Cotizar en la App ahora`);
+        // - Funeral home: ${userDataServObj.mortuary_name}\n
+        // - Servicio: En ruta\n
+        // - Origen: ${oficinaSelect}\n
+        // - Destino: ${originSelect}\n
+        // - NIP: ${NIPCreated}\n
+        // Cotizar en la App ahora`);
+        emailjs.send('service_9e1ebv5', 'template_c0cqkg3', {
+          funeraria: userDataServObj.mortuary_name,
+          nip: NIPCreated,
+          servicio: 'En ruta',
+          origen: originSelect,
+          destino: data.destino,
+        }, 'PBj_zOlr2lgy2b9sE')
+          .then((result) => {
+            setLoading(false);
+            navigate('/userHome', { replace: true });
+          }, (error) => {
+            console.log(error.text);
+          });
         await addServiceHandler(elseObject);
       }
       const body = {
@@ -248,6 +275,7 @@ function AddService() {
         user_id: userDataServObj.id,
         user_name: userDataServObj.name,
         user_phone: userDataServObj.phone,
+        user_email: userDataServObj.email,
         mortuary_name: userDataServObj.mortuary_name,
         service: services,
         status: 'pendiente_cotizar',
@@ -270,16 +298,28 @@ function AddService() {
             for: 'Admin',
             body: `Servicio: ${t('MOption1')}`,
           };
-          setMsg(`Nueva cotización\n
+          // setMsg(`Nueva cotización\n
 
-          - Funeral home: ${userDataServObj.mortuary_name}\n
-          - Servicio: ${t('MOption1')}\n
-          - Origen: ${data.origen}\n
-          - Destino: ${data.destino}\n
-          - NIP: ${NIPCreated}\n
-          
-          Cotizar en la App ahora`);
-          return (sendNotification(body), msg);
+          // - Funeral home: ${userDataServObj.mortuary_name}\n
+          // - Servicio: ${t('MOption1')}\n
+          // - Origen: ${data.origen}\n
+          // - Destino: ${data.destino}\n
+          // - NIP: ${NIPCreated}\n
+          // Cotizar en la App ahora`);
+          emailjs.send('service_9e1ebv5', 'template_c0cqkg3', {
+            funeraria: userDataServObj.mortuary_name,
+            nip: NIPCreated,
+            servicio: `${t('MOption1')}`,
+            origen: data.origen,
+            destino: data.destino,
+          }, 'PBj_zOlr2lgy2b9sE')
+            .then((result) => {
+              setLoading(false);
+              navigate('/userHome', { replace: true });
+            }, (error) => {
+              console.log(error.text);
+            });
+          return sendNotification(body);
         case 't-tramites':
           const body2 = {
             createdAt: moment().format('LT'),
@@ -289,16 +329,28 @@ function AddService() {
             for: 'Admin',
             body: `Servicio: ${t('MOption2')}`,
           };
-          setMsg(`Nueva cotización\n
+          // setMsg(`Nueva cotización\n
 
-          - Funeral home: ${userDataServObj.mortuary_name}\n
-          - Servicio: ${t('MOption2')}\n
-          - Origen: ${data.origen}\n
-          - Destino: ${data.destino}\n
-          - NIP: ${NIPCreated}\n
-          
-          Cotizar en la App ahora`);
-          return (sendNotification(body2), msg);
+          // - Funeral home: ${userDataServObj.mortuary_name}\n
+          // - Servicio: ${t('MOption2')}\n
+          // - Origen: ${data.origen}\n
+          // - Destino: ${data.destino}\n
+          // - NIP: ${NIPCreated}\n
+          // Cotizar en la App ahora`);
+          emailjs.send('service_9e1ebv5', 'template_c0cqkg3', {
+            funeraria: userDataServObj.mortuary_name,
+            nip: NIPCreated,
+            servicio: `${t('MOption2')}`,
+            origen: data.origen,
+            destino: data.destino,
+          }, 'PBj_zOlr2lgy2b9sE')
+            .then((result) => {
+              setLoading(false);
+              navigate('/userHome', { replace: true });
+            }, (error) => {
+              console.log(error.text);
+            });
+          return sendNotification(body2);
         case 'e-punta':
           const body3 = {
             createdAt: moment().format('LT'),
@@ -308,16 +360,28 @@ function AddService() {
             for: 'Admin',
             body: `Servicio: ${t('MOption21')}`,
           };
-          setMsg(`Nueva cotización\n
+          // setMsg(`Nueva cotización\n
 
-          - Funeral home: ${userDataServObj.mortuary_name}\n
-          - Servicio: ${t('MOption21')}\n
-          - Origen: ${data.origen}\n
-          - Destino: ${data.destino}\n
-          - NIP: ${NIPCreated}\n
-          
-          Cotizar en la App ahora`);
-          return (sendNotification(body3), msg);
+          // - Funeral home: ${userDataServObj.mortuary_name}\n
+          // - Servicio: ${t('MOption21')}\n
+          // - Origen: ${data.origen}\n
+          // - Destino: ${data.destino}\n
+          // - NIP: ${NIPCreated}\n
+          // Cotizar en la App ahora`);
+          emailjs.send('service_9e1ebv5', 'template_c0cqkg3', {
+            funeraria: userDataServObj.mortuary_name,
+            nip: NIPCreated,
+            servicio: `${t('MOption21')}`,
+            origen: data.origen,
+            destino: data.destino,
+          }, 'PBj_zOlr2lgy2b9sE')
+            .then((result) => {
+              setLoading(false);
+              navigate('/userHome', { replace: true });
+            }, (error) => {
+              console.log(error.text);
+            });
+          return sendNotification(body3);
 
         default:
           break;
