@@ -32,6 +32,8 @@ function Welcome() {
   const { changeL } = useContext(userDataContext);
   const { userDataServObj, getUser } = userDataService();
 
+  // const userLog = Boolean(localStorage.getItem('userLoged'));
+
   const {
     register,
     handleSubmit,
@@ -100,15 +102,23 @@ function Welcome() {
         // if they open the link on the same device.
         // console.log('user', userCredential.user);
         setEmail(userCredential.user.email);
+        localStorage.setItem('userLoged', true);
         navigate('/userHome', { replace: true });
       })
       .catch((error) => {
+        localStorage.setItem('userLoged', false);
         console.log('error login', error);
         console.log('email smth_ ', email);
         const errorCode = error.code;
         setErrorMessage('Email o Contraseña incorrectos');
       });
   };
+
+  // useEffect(() => {
+  //   if (userLog) {
+  //     navigate('/userHome', { replace: true });
+  //   }
+  // }, [userLog]);
 
   return (
     <Grid

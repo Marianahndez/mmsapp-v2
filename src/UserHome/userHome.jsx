@@ -85,20 +85,21 @@ function UserHome() {
 
   const userLog = Boolean(localStorage.getItem('userLoged'));
 
-  useEffect(() => {
-    getUser();
-    getMyNotifications();
-    // setOpenToast(true);
-  }, []);
+  // useEffect(() => {
+  //   getUser();
+  //   getMyNotifications();
+  //   // setOpenToast(true);
+  // }, []);
 
   useEffect(() => {
+    console.log('user loged? ', localStorage.getItem('userLoged'));
     if (userLog) {
-      console.log('user loged? ', userLog);
       getUser();
+      getMyNotifications();
     } else {
       navigate('/', { replace: true });
     }
-  }, [userLog]);
+  }, []);
 
   useEffect(() => {
     if (userDataServObj !== {}) {
