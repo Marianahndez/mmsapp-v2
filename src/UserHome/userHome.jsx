@@ -613,8 +613,7 @@ function UserHome() {
                             className="container"
                             component={Link}
                             to={
-                              item.status === 'pendiente_cotizar' ||
-                              item.status === 'cotizado'
+                              item.nombre_finado === undefined
                                 ? `/transport/${item.id}`
                                 : `/userDetails/${item.id}`
                               }

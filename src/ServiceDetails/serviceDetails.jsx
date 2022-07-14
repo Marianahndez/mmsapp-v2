@@ -314,11 +314,21 @@ function ServiceDetails() {
       }, (error) => {
         console.log(error.text);
       });
-    const editObject = {
-      ...service,
-      cotizacion: `${todo.cotizacion} ${alignment}`,
-      status: 'cotizado',
-    };
+    if (service.status === 'pendiente_confirmar') {
+      const editObject = {
+        ...service,
+        cotizacion: `${todo.cotizacion} ${alignment}`,
+        status: 'pendiente_confirmar',
+      };
+      updateServicePropHandler(editObject, params.id);
+    } else if (service.status === 'pendiente_cotizar') {
+      const editObject2 = {
+        ...service,
+        cotizacion: `${todo.cotizacion} ${alignment}`,
+        status: 'cotizado',
+      };
+      updateServicePropHandler(editObject2, params.id);
+    }
     const notificationObj = {
       title: 'Cotización lista',
       body: `Ya puedes solicitar tu transporte para el servicio con NIP ${service.nip_rastreo}`,
@@ -330,7 +340,6 @@ function ServiceDetails() {
       timestamp: new Date().setMilliseconds(100),
     };
     sendNotification(notificationObj);
-    updateServicePropHandler(editObject, params.id);
   };
 
   const handleConfirmarTranslado = () => {
