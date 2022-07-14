@@ -37,6 +37,10 @@ import {
   Dialog,
   DialogTitle,
   Avatar,
+  RadioGroup,
+  FormLabel,
+  FormControlLabel,
+  Radio,
 } from '@mui/material';
 import AttachMoneyRoundedIcon from '@mui/icons-material/AttachMoneyRounded';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
@@ -477,6 +481,25 @@ function ServiceDetails() {
         // - Fecha de recolección: ${obj3.fecha}\n
         // - NIP de rastreo: ${obj3.nip_rastreo}\n
         // Para más detalles visita la App www.funeralnip.com, ingresando tu numero ó correo verificado y el NIP de rastreo`);
+        if (service.auth_list_email !== []) {
+          service.auth_list_email.map((item) => {
+            console.log('emails: ', item);
+            emailjs.send('service_9e1ebv5', 'template_rllol2a', {
+              nip_rastreo: service.nip_rastreo,
+              fecha: moment().format('LLL'),
+              servicio: serviceForNotif,
+              origen: service.origen,
+              direcion_entrega: direccionEntrega,
+              destino: service.destino,
+              remitente: item.email,
+             }, 'PBj_zOlr2lgy2b9sE')
+              .then((result) => {
+              console.log(result.text);
+              }, (error) => {
+              console.log(error.text);
+              });
+          });
+        }
         const notificationObj4 = {
           title: 'En tránsito USA',
           body: `NIP de servicio ${obj3.nip_rastreo}`,
@@ -545,6 +568,25 @@ function ServiceDetails() {
           dateCreated: moment().format('L'),
           timestamp: new Date().setMilliseconds(100),
         };
+        if (service.auth_list_email !== []) {
+          service.auth_list_email.map((item) => {
+            console.log('emails: ', item);
+            emailjs.send('service_9e1ebv5', 'template_45z3gdp', {
+              nip_rastreo: service.nip_rastreo,
+              fecha: moment().format('LLL'),
+              servicio: serviceForNotif,
+              direcion_entrega: direccionEntrega,
+              origen: service.origen,
+              destino: service.destino,
+              remitente: item.email,
+             }, 'PBj_zOlr2lgy2b9sE')
+              .then((result) => {
+              console.log(result.text);
+              }, (error) => {
+              console.log(error.text);
+              });
+          });
+        }
         // Emails for users
         emailjs.send('service_9e1ebv5', 'template_r2k7chr', {
           direcion_entrega: direccionEntrega,
@@ -603,6 +645,25 @@ function ServiceDetails() {
           dateCreated: moment().format('L'),
           timestamp: new Date().setMilliseconds(100),
         };
+        if (service.auth_list_email !== []) {
+          service.auth_list_email.map((item) => {
+            console.log('emails: ', item);
+            emailjs.send('service_9e1ebv5', 'template_bu44qnq', {
+              nip_rastreo: service.nip_rastreo,
+              fecha: moment().format('LLL'),
+              direcion_entrega: direccionEntrega,
+              servicio: serviceForNotif,
+              origen: service.origen,
+              destino: service.destino,
+              remitente: item.email,
+             }, 'PBj_zOlr2lgy2b9sE')
+              .then((result) => {
+              console.log(result.text);
+              }, (error) => {
+              console.log(error.text);
+              });
+          });
+        }
         // Emails for users
         emailjs.send('service_9e1ebv5', 'template_egqe8zg', {
           direcion_entrega: direccionEntrega,
@@ -661,6 +722,25 @@ function ServiceDetails() {
           dateCreated: moment().format('L'),
           timestamp: new Date().setMilliseconds(100),
         };
+        if (service.auth_list_email !== []) {
+          service.auth_list_email.map((item) => {
+            console.log('emails: ', item);
+            emailjs.send('service_9e1ebv5', 'template_inah5kj', {
+              nip_rastreo: service.nip_rastreo,
+              direcion_entrega: direccionEntrega,
+              fecha: moment().format('LLL'),
+              servicio: serviceForNotif,
+              origen: service.origen,
+              destino: service.destino,
+              remitente: item.email,
+             }, 'PBj_zOlr2lgy2b9sE')
+              .then((result) => {
+              console.log(result.text);
+              }, (error) => {
+              console.log(error.text);
+              });
+          });
+        }
         // Emails for users
         emailjs.send('service_9e1ebv5', 'template_54xdauo', {
           direcion_entrega: direccionEntrega,
@@ -709,7 +789,8 @@ function ServiceDetails() {
     const objEdit = {
       ...service,
       ...data,
-      direccion_alterna: data.direccion_alterna,
+      direccion_alterna: data.sucursal.direccion_sucursal,
+      sucursal: {},
       ataud,
     };
     const notificationObj4 = {
@@ -755,6 +836,9 @@ function ServiceDetails() {
     updateServicePropHandler(objEdit, params.id);
   };
 
+  const [sucursalOpt, setSucursalOpt] = useState('');
+  const [sucursalName, setSucursalName] = useState('');
+
   useEffect(() => {
     if (service.cotizacion_ruta !== '' || service.cotizacion !== '') {
       setEdited(true);
@@ -797,6 +881,10 @@ function ServiceDetails() {
     }
   };
 
+  const handleSucursal = (event) => {
+    setSucursalOpt(event.target.value);
+  };
+
   return (
     <div style={{ background: grey[300], height: '100vh' }}>
       <SidebarMenu />
@@ -827,7 +915,6 @@ function ServiceDetails() {
                   {service.origen} - {service.destino}
                 </p>
                 {service.status === 'pendiente_cotizar' ||
-                service.status === 'cotizado' ||
                 service.status === 'entregado' ? (
                   ''
                 ) : (
@@ -1184,8 +1271,7 @@ function ServiceDetails() {
                       </form>
                     </LocalizationProvider>
                   )}
-
-                  {service.status === 'pendiente_cotizar' ? (
+                  {service.cotizacion === '' ? (
                     <form
                       onSubmit={handleSubmit(handleEdit)}
                       id="hook-form"
@@ -1227,7 +1313,8 @@ function ServiceDetails() {
                         {t('BtnEnviarCotizacion')}
                       </Button>
                     </form>
-                  ) : service.status === 'pendiente_confirmar' ? (
+                  ) : ('')}
+                  {service.status === 'pendiente_confirmar' ? (
                     <>
                       <Button
                         variant="contained"
@@ -1243,6 +1330,7 @@ function ServiceDetails() {
                       </Button>
                     </>
                   ) : service.status === 'confirmado' ||
+                    service.status === 'cotizado' ||
                     service.status === 'recoger_hoy' ||
                     service.status === 'transito_usa' ||
                     service.status === 'transito_mx' ? (
@@ -1336,7 +1424,7 @@ function ServiceDetails() {
                     />
                   </LocalizationProvider> */}
                   <TextField
-                    {...register('direccion_alterna')}
+                    {...register('sucursal.direccion_sucursal')}
                     label={t('AnotherAddress')}
                     type="text"
                     variant="outlined"
@@ -1486,6 +1574,7 @@ function ServiceDetails() {
                 </form>
               )}
               {service.status === 'confirmado' ||
+              service.status === 'cotizado' ||
               service.status === 'recoger_hoy' ||
               service.status === 'transito_usa' ||
               service.status === 'transito_mx' ||

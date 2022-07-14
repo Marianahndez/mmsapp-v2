@@ -28,10 +28,13 @@ import {
   Radio,
   FormLabel,
   FormControlLabel,
+  DialogTitle,
+  Dialog,
 } from '@mui/material';
 import LabelRoundedIcon from '@mui/icons-material/LabelRounded';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded';
+import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 // import LocalizationProvider from '@mui/lab/LocalizationProvider';
 // import DateAdapter from '@mui/lab/AdapterDateFns';
 import MobileDatePicker from '@mui/lab/MobileDatePicker';
@@ -39,6 +42,7 @@ import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import AttachMoneyRoundedIcon from '@mui/icons-material/AttachMoneyRounded';
+import FilePresentRoundedIcon from '@mui/icons-material/FilePresentRounded';
 import AirportShuttleRoundedIcon from '@mui/icons-material/AirportShuttleRounded';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
@@ -54,6 +58,29 @@ import { db, storage } from '../firebase.js';
 import { userDataService } from '../service/userData.js';
 import { servicesData } from '../service/servicesData.js';
 import SidebarMenu from '../Menu/menu.jsx';
+
+function SimpleDialog({ onClose, selectedValue, open, title }) {
+  const handleClose = () => {
+    onClose(selectedValue);
+  };
+
+  return (
+    <Dialog onClose={handleClose} open={open}>
+      <DialogTitle style={{ display: 'flex', justifyContent: 'space-between' }}>
+        {title}{' '}
+        <a
+          href={selectedValue}
+          target="_blank"
+          rel="noreferrer"
+          style={{ color: '#01579b' }}
+        >
+          <DownloadRoundedIcon />
+        </a>
+      </DialogTitle>
+      <img src={selectedValue} alt={title} />
+    </Dialog>
+  );
+}
 
 function UserDetails() {
   const { t } = useTranslation();
@@ -98,7 +125,11 @@ function UserDetails() {
   const [sucursalOpt, setSucursalOpt] = useState('');
   const [msg, setMsg] = useState('');
   const [serviceForNotif, setServiceForNotif] = useState('');
-
+  const [open, setOpen] = useState(false);
+  const [open1, setOpen1] = useState(false);
+  const [open2, setOpen2] = useState(false);
+  const [open3, setOpen3] = useState(false);
+  const [open4, setOpen4] = useState(false);
   // const [valueTime, setValueTime] = useState<Date | null>(editPost.hora_hasta);
   // const [valueTime2, setValueTime2] = useState<Date | null>(
   //   editPost.hora_desde,
@@ -842,6 +873,118 @@ function UserDetails() {
                         ''
                       )}
                     </p>
+                    {service.doc_acta_defuncion === '' ||
+                    service.doc_acta_defuncion === undefined ? (
+                      ''
+                    ) : (
+                      <div className="docBtn">
+                        <Button onClick={() => setOpen(true)} variant="contained">
+                          {' '}
+                          <FilePresentRoundedIcon
+                            style={{ marginRight: '0.5rem' }}
+                          />{' '}
+                          Acta de defunción{' '}
+                        </Button>
+                        <SimpleDialog
+                          selectedValue={service.doc_acta_defuncion}
+                          open={open}
+                          onClose={() => setOpen(false)}
+                          title="Acta de defunción"
+                        />
+                      </div>
+                    )}
+                    {service.doc_permiso_transito === '' ||
+                    service.doc_permiso_transito === undefined ? (
+                      ''
+                    ) : (
+                      <div className="docBtn">
+                        <Button
+                          onClick={() => setOpen1(true)}
+                          variant="contained"
+                        >
+                          {' '}
+                          <FilePresentRoundedIcon
+                            style={{ marginRight: '0.5rem' }}
+                          />{' '}
+                          Permiso de tránsito{' '}
+                        </Button>
+                        <SimpleDialog
+                          selectedValue={service.doc_permiso_transito}
+                          open={open1}
+                          onClose={() => setOpen1(false)}
+                          title="Permiso de tránsito"
+                        />
+                      </div>
+                    )}
+                    {service.doc_constncia_cpreparado === '' ||
+                    service.doc_constncia_cpreparado === undefined ? (
+                      ''
+                    ) : (
+                      <div className="docBtn">
+                        <Button
+                          onClick={() => setOpen2(true)}
+                          variant="contained"
+                        >
+                          {' '}
+                          <FilePresentRoundedIcon
+                            style={{ marginRight: '0.5rem' }}
+                          />{' '}
+                          Constancia de cuerpo preparado{' '}
+                        </Button>
+                        <SimpleDialog
+                          selectedValue={service.doc_constncia_cpreparado}
+                          open={open2}
+                          onClose={() => setOpen2(false)}
+                          title="Constancia de cuerpo preparado"
+                        />
+                      </div>
+                    )}
+                    {service.doc_visado_consular === '' ||
+                    service.doc_visado_consular === undefined ? (
+                      ''
+                    ) : (
+                      <div className="docBtn">
+                        <Button
+                          onClick={() => setOpen3(true)}
+                          variant="contained"
+                        >
+                          {' '}
+                          <FilePresentRoundedIcon
+                            style={{ marginRight: '0.5rem' }}
+                          />{' '}
+                          Visado consular{' '}
+                        </Button>
+                        <SimpleDialog
+                          selectedValue={service.doc_visado_consular}
+                          open={open3}
+                          onClose={() => setOpen3(false)}
+                          title="Visado consular"
+                        />
+                      </div>
+                    )}
+                    {service.doc_finalizado === '' ||
+                    service.doc_finalizado === undefined ? (
+                      ''
+                    ) : (
+                      <div className="docBtn">
+                        <Button
+                          onClick={() => setOpen4(true)}
+                          variant="contained"
+                        >
+                          {' '}
+                          <FilePresentRoundedIcon
+                            style={{ marginRight: '0.5rem' }}
+                          />{' '}
+                          Documento de finalizado{' '}
+                        </Button>
+                        <SimpleDialog
+                          selectedValue={service.doc_finalizado}
+                          open={open4}
+                          onClose={() => setOpen4(false)}
+                          title="Documento de finalizado"
+                        />
+                      </div>
+                    )}
                     {/* here the cutted part */}
                     {service.status === 'entregado' ? (
                       ''

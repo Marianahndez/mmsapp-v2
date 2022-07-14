@@ -2,27 +2,32 @@
 
 .editDate {
   display: block;
+
   button {
     margin-left: 0.5rem;
   }
 }
+
 .btnUpdateDate {
-  border: 1px solid $red-strong !important;
-  color: $red-strong !important;
+  border: 1px solid $red-strong  !important;
+  color: $red-strong  !important;
   margin: 1rem 0 !important;
   border-radius: 20px !important;
   padding: 1rem !important;
   width: 100% !important;
+
   &.floatLeft {
     width: 10% !important;
     position: absolute;
     right: 20px;
     top: 23%;
   }
+
   &.half2 {
     width: 45% !important;
   }
 }
+
 .sdMainContainer {
   padding: 2rem;
 }
@@ -49,7 +54,7 @@
   border-radius: 20px !important;
   padding: 1rem !important;
   width: 45% !important;
-  background: $green-dark !important;
+  background: $green-dark  !important;
   font-size: 1rem !important;
 }
 
@@ -59,15 +64,17 @@
   border-radius: 20px !important;
   padding: 1rem !important;
   width: 45% !important;
-  background: $blue-dark !important;
+  background: $blue-dark  !important;
   font-size: 1rem !important;
+
   a {
     color: white !important;
   }
 }
 
 .docBtn {
-  margin-top: 1rem;
+  margin: 1rem 0;
+
   button {
     background: $blue;
     border-radius: 10px;
@@ -84,7 +91,24 @@
   top: 35px;
   left: 75%;
   z-index: 999 !important;
-  background-color: $blue-map !important;
+  background-color: $blue-map  !important;
+
+  a {
+    color: #fff !important;
+    font-weight: bold !important;
+  }
+}
+
+.btnCotizar {
+  border-radius: 50% !important;
+  height: 5rem !important;
+  width: 5rem !important;
+  position: fixed !important;
+  bottom: 35px;
+  left: 75%;
+  z-index: 999 !important;
+  background-color: $blue-map  !important;
+
   a {
     color: #fff !important;
     font-weight: bold !important;
@@ -95,17 +119,21 @@
   .sdMainContainer {
     padding: 2rem 15rem;
   }
+
   .desktopCotizaion {
     display: flex;
+
     .inputCotizacion {
       width: 30%;
       margin-right: 1rem;
     }
+
     .gropBtns {
       height: 3rem;
       margin-top: 2.5rem;
     }
   }
+
   .btnSendCotizacion {
     margin: 3rem 0 !important;
     width: 50% !important;

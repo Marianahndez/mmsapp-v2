@@ -90,7 +90,7 @@ i18n
           ActualizarFecha: 'Actualizar fecha',
           Fecha: 'Fecha',
           FechaEntrega: 'Fecha de entrega',
-          FechaDestino: 'Fecha de llegada al destino',
+          FechaDestino: 'Fecha estimada de llegada',
           AgregarSucursales: 'Agregar mis sucursales',
           LBLAgregarSucursales:
             'En la sección de Sucursales podrá editar los datos necesarios.',
@@ -221,6 +221,7 @@ i18n
           Origen: 'Origin',
           Destino: 'Destination',
           FechaRecoleccion: 'Date of removal',
+          FechaDestino: 'Estimated date of arriving',
           Cotizacion: 'Price',
           LBLCotizacion: 'Pending confirmation by funeral director',
           LBLPteConfirmar: 'Pending to confirm',

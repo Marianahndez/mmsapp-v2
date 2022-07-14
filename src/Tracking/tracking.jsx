@@ -400,7 +400,7 @@ function Tracking() {
       servicio: serviceForNotif,
       origen: trackingInfo.origen,
       destino: trackingInfo.destino,
-      remitente: userDataServObj.email,
+      remitente: trackingInfo.user_email,
      }, 'PBj_zOlr2lgy2b9sE')
       .then((result) => {
       console.log(result.text);
@@ -619,12 +619,14 @@ function Tracking() {
               <p style={{ display: 'flex', alignItems: 'center' }}>
                 <CalendarMonthRoundedIcon /> {trackingInfo.arrivalDate}
               </p>
-              <IconButton
-                onClick={() => setEditDate(true)}
-                className="updateDate"
-              >
-                <EditRoundedIcon fontSize="small" />
-              </IconButton>
+              {userDataServObj.role === 'Admin' ? (
+                <IconButton
+                  onClick={() => setEditDate(true)}
+                  className="updateDate"
+                >
+                  <EditRoundedIcon fontSize="small" />
+                </IconButton>
+              ) : ('')}
             </>
           ) : (
               <form onSubmit={handleSubmit(onSubmit)}>
