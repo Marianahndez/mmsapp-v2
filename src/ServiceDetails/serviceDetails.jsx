@@ -315,6 +315,7 @@ function ServiceDetails() {
         console.log(error.text);
       });
     const editObject = {
+      ...service,
       cotizacion: `${todo.cotizacion} ${alignment}`,
       status: 'cotizado',
     };
