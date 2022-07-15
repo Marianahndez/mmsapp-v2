@@ -131,7 +131,10 @@ function Tracking() {
     setTrackingInfo(location.state.data);
     setList(location.state.data.rastreo);
     setAuthListPhone(location.state.data.auth_list_phone ? location.state.data.auth_list_phone : []);
-    setAuthListEmail(location.state.data.auth_list_email ? location.state.data.auth_list_email : []);
+    // setAuthListEmail(location.state.data.auth_list_email ? location.state.data.auth_list_email : []);
+    location.state.data.auth_list_email.map((item) => {
+      setAuthListEmail(item.email);
+    });
   }, []);
 
   const handleServiceToShow = (serviceValue) => {
@@ -373,25 +376,40 @@ function Tracking() {
     //     // send();
     //   });
     // }
-    if (authlistEmail !== []) {
-      authlistEmail.map((item) => {
-        console.log('emails: ', item);
-        emailjs.send('service_9e1ebv5', 'template_5pt76li', {
-          nip_rastreo: trackingInfo.nip_rastreo,
-          tracking: dataNewOne.tracking_info,
-          date: moment().format('LLL'),
-          servicio: serviceForNotif,
-          origen: trackingInfo.origen,
-          destino: trackingInfo.destino,
-          remitente: item.email,
-         }, 'PBj_zOlr2lgy2b9sE')
-          .then((result) => {
-          console.log(result.text);
-          }, (error) => {
-          console.log(error.text);
-          });
+    // if (authlistEmail !== []) {
+    //   authlistEmail.map((item) => {
+    //     console.log('emails: ', item);
+    //     emailjs.send('service_9e1ebv5', 'template_5pt76li', {
+    //       nip_rastreo: trackingInfo.nip_rastreo,
+    //       tracking: dataNewOne.tracking_info,
+    //       date: moment().format('LLL'),
+    //       servicio: serviceForNotif,
+    //       origen: trackingInfo.origen,
+    //       destino: trackingInfo.destino,
+    //       remitente: item.email,
+    //      }, 'PBj_zOlr2lgy2b9sE')
+    //       .then((result) => {
+    //       console.log(result.text);
+    //       }, (error) => {
+    //       console.log(error.text);
+    //       });
+    //   });
+    // }
+    console.log('emails: ', authlistEmail);
+    emailjs.send('service_9e1ebv5', 'template_5pt76li', {
+      nip_rastreo: trackingInfo.nip_rastreo,
+      tracking: dataNewOne.tracking_info,
+      date: moment().format('LLL'),
+      servicio: serviceForNotif,
+      origen: trackingInfo.origen,
+      destino: trackingInfo.destino,
+      remitente: authlistEmail,
+      }, 'PBj_zOlr2lgy2b9sE')
+      .then((result) => {
+      console.log(result.text);
+      }, (error) => {
+      console.log(error.text);
       });
-    }
     // Emails for users
     emailjs.send('service_9e1ebv5', 'template_oux3mtj', {
       nip_rastreo: trackingInfo.nip_rastreo,
@@ -677,7 +695,7 @@ function Tracking() {
           {authlistEmail.length !== 0 ? (
             <>
               <p>Emails registered</p>
-              {authlistEmail.map((item, i) => (
+              {location.state.data.auth_list_email.map((item, i) => (
                 <ul>
                   <li>{item.name} : {item.email}</li>
                 </ul>
