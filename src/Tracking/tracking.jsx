@@ -75,6 +75,7 @@ function Tracking() {
   const [option, setOption] = useState('correo');
   const [lada, setLada] = useState('usa');
   const [authlistEmail, setAuthListEmail] = useState([]);
+  const [familyEmails, setFamilyEmails] = useState([]);
   const [authlistPhone, setAuthListPhone] = useState([]);
   const [serviceForNotif, setServiceForNotif] = useState('');
   // Send sms config
@@ -131,9 +132,11 @@ function Tracking() {
     setTrackingInfo(location.state.data);
     setList(location.state.data.rastreo);
     setAuthListPhone(location.state.data.auth_list_phone ? location.state.data.auth_list_phone : []);
-    // setAuthListEmail(location.state.data.auth_list_email ? location.state.data.auth_list_email : []);
+    setAuthListEmail(location.state.data.auth_list_email ? location.state.data.auth_list_email : []);
+    const arr = [];
     location.state.data.auth_list_email.map((item) => {
-      setAuthListEmail(item.email);
+      arr.push(item.email);
+      setFamilyEmails(arr);
     });
   }, []);
 
@@ -342,6 +345,7 @@ function Tracking() {
     setOpen(false);
   };
 
+  console.log('emails: ', familyEmails);
   const onSubmitNewData = async (dataNewOne) => {
     const trackObj = {
       ...dataNewOne,
@@ -395,7 +399,7 @@ function Tracking() {
     //       });
     //   });
     // }
-    console.log('emails: ', authlistEmail);
+
     emailjs.send('service_9e1ebv5', 'template_5pt76li', {
       nip_rastreo: trackingInfo.nip_rastreo,
       tracking: dataNewOne.tracking_info,
@@ -403,7 +407,7 @@ function Tracking() {
       servicio: serviceForNotif,
       origen: trackingInfo.origen,
       destino: trackingInfo.destino,
-      remitente: authlistEmail,
+      remitente: familyEmails,
       }, 'PBj_zOlr2lgy2b9sE')
       .then((result) => {
       console.log(result.text);
@@ -696,7 +700,7 @@ function Tracking() {
           {authlistEmail.length !== 0 ? (
             <>
               <p>Emails registered</p>
-              {location.state.data.auth_list_email.map((item, i) => (
+              {authlistEmail.map((item, i) => (
                 <ul>
                   <li>{item.name} : {item.email}</li>
                 </ul>
