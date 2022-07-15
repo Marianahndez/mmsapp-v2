@@ -91,6 +91,7 @@ i18n
           Fecha: 'Fecha',
           FechaEntrega: 'Fecha de entrega',
           FechaDestino: 'Fecha estimada de llegada',
+          NotDefinedYet: 'Aun no se define la fecha',
           AgregarSucursales: 'Agregar mis sucursales',
           LBLAgregarSucursales:
             'En la sección de Sucursales podrá editar los datos necesarios.',
@@ -222,6 +223,7 @@ i18n
           Destino: 'Destination',
           FechaRecoleccion: 'Date of removal',
           FechaDestino: 'Estimated date of arriving',
+          NotDefinedYet: 'Not defined yet',
           Cotizacion: 'Price',
           LBLCotizacion: 'Pending confirmation by funeral director',
           LBLPteConfirmar: 'Pending to confirm',

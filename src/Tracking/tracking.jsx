@@ -631,11 +631,11 @@ function Tracking() {
           <p style={{ display: 'flex', alignItems: 'center' }}>
             <CalendarMonthRoundedIcon /> {t('FechaRecoleccion')}: {trackingInfo.fecha}
           </p>
-          <h4>{t('FechaDestino')}</h4>
-          {trackingInfo.arrivalDate && !showEditDate ? (
+          {(userDataServObj.role !== 'Admin' || (trackingInfo.arrivalDate && !showEditDate)) ? (
             <>
+              <h4>{t('FechaDestino')}</h4>
               <p style={{ display: 'flex', alignItems: 'center' }}>
-                <CalendarMonthRoundedIcon /> {trackingInfo.arrivalDate}
+                <CalendarMonthRoundedIcon /> {trackingInfo.arrivalDate ? trackingInfo.arrivalDate : `${t('NotDefinedYet')}`}
               </p>
               {userDataServObj.role === 'Admin' ? (
                 <IconButton
@@ -648,6 +648,7 @@ function Tracking() {
             </>
           ) : (
               <form onSubmit={handleSubmit(onSubmit)}>
+                <h4>{t('FechaDestino')}</h4>
                 <LocalizationProvider dateAdapter={DateAdapter}>
                   <MobileDatePicker
                     label={t('FechaDestino')}
