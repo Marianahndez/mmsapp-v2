@@ -1259,7 +1259,7 @@ function UserDetails() {
                     </TextField>
                   ) : (
                     <TextField
-                      {...register('direccion_alterna', { required: true })}
+                      {...register('direccion_alterna')}
                       label={t('AnotherAddress')}
                       type="text"
                       variant="outlined"

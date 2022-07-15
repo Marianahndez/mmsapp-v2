@@ -568,7 +568,7 @@ function Transport() {
                 </TextField>
               ) : (
                 <TextField
-                  {...register('direccion_alterna', { required: true })}
+                  {...register('direccion_alterna')}
                   label={t('AnotherAddress')}
                   type="text"
                   variant="outlined"
@@ -576,7 +576,7 @@ function Transport() {
                 />
               )}
               <TextField
-                {...register('nombre_finado', { required: true })}
+                {...register('nombre_finado')}
                 label={t('NombreFinado')}
                 type="text"
                 variant="outlined"
@@ -584,7 +584,7 @@ function Transport() {
               />
 
               <TextField
-                {...register('nombre_contacto', { required: true })}
+                {...register('nombre_contacto')}
                 label={t('NombreContacto')}
                 type="text"
                 variant="outlined"
@@ -602,7 +602,7 @@ function Transport() {
               />
 
               <TextField
-                {...register('parentesco', { required: true })}
+                {...register('parentesco')}
                 label={t('Parentesco')}
                 type="text"
                 variant="outlined"
@@ -610,7 +610,7 @@ function Transport() {
               />
 
               <TextField
-                {...register('nombre_familiar_recibe', { required: true })}
+                {...register('nombre_familiar_recibe')}
                 label={t('NombreFamiliarRecibe')}
                 type="text"
                 variant="outlined"
@@ -618,7 +618,7 @@ function Transport() {
               />
 
               <TextField
-                {...register('director_funerario', { required: true })}
+                {...register('director_funerario')}
                 label={t('FunerariaRecibe')}
                 type="text"
                 variant="outlined"
@@ -626,7 +626,7 @@ function Transport() {
               />
 
               <TextField
-                {...register('email_funeraria', { required: true })}
+                {...register('email_funeraria')}
                 label={t('CorreoDeLaFuneraria')}
                 type="text"
                 variant="outlined"
@@ -634,7 +634,7 @@ function Transport() {
               />
 
               <TextField
-                {...register('telefono_funeraria', { required: true })}
+                {...register('telefono_funeraria')}
                 label={t('TelefonoDeLaFuneraria')}
                 type="number"
                 variant="outlined"
@@ -642,7 +642,7 @@ function Transport() {
               />
 
               <TextField
-                {...register('direcion_entrega', { required: true })}
+                {...register('direcion_entrega')}
                 label={t('DireccionEntrega')}
                 type="text"
                 variant="outlined"
@@ -650,7 +650,7 @@ function Transport() {
               />
 
               <TextField
-                {...register('municipio', { required: true })}
+                {...register('municipio')}
                 label={t('Municipio')}
                 type="text"
                 variant="outlined"
@@ -658,7 +658,7 @@ function Transport() {
               />
 
               <TextField
-                {...register('estado', { required: true })}
+                {...register('estado')}
                 label={t('Estado')}
                 type="text"
                 variant="outlined"
