@@ -204,7 +204,7 @@ function AddService() {
         // - Destino: ${data.destino}\n
         // - NIP: ${NIPCreated}\n
         // Cotizar en la App ahora`);
-        emailjs.send('service_9e1ebv5', 'template_c0cqkg3', {
+        emailjs.send(' service_eyqulqg', 'template_c0cqkg3', {
           funeraria: userDataServObj.mortuary_name,
           nip: NIPCreated,
           servicio: 'En ruta',
@@ -245,7 +245,7 @@ function AddService() {
         // - Destino: ${originSelect}\n
         // - NIP: ${NIPCreated}\n
         // Cotizar en la App ahora`);
-        emailjs.send('service_9e1ebv5', 'template_c0cqkg3', {
+        emailjs.send(' service_eyqulqg', 'template_c0cqkg3', {
           funeraria: userDataServObj.mortuary_name,
           nip: NIPCreated,
           servicio: 'En ruta',
@@ -306,7 +306,7 @@ function AddService() {
           // - Destino: ${data.destino}\n
           // - NIP: ${NIPCreated}\n
           // Cotizar en la App ahora`);
-          emailjs.send('service_9e1ebv5', 'template_c0cqkg3', {
+          emailjs.send(' service_eyqulqg', 'template_c0cqkg3', {
             funeraria: userDataServObj.mortuary_name,
             nip: NIPCreated,
             servicio: `${t('MOption1')}`,
@@ -337,7 +337,7 @@ function AddService() {
           // - Destino: ${data.destino}\n
           // - NIP: ${NIPCreated}\n
           // Cotizar en la App ahora`);
-          emailjs.send('service_9e1ebv5', 'template_c0cqkg3', {
+          emailjs.send(' service_eyqulqg', 'template_c0cqkg3', {
             funeraria: userDataServObj.mortuary_name,
             nip: NIPCreated,
             servicio: `${t('MOption2')}`,
@@ -368,7 +368,7 @@ function AddService() {
           // - Destino: ${data.destino}\n
           // - NIP: ${NIPCreated}\n
           // Cotizar en la App ahora`);
-          emailjs.send('service_9e1ebv5', 'template_c0cqkg3', {
+          emailjs.send(' service_eyqulqg', 'template_c0cqkg3', {
             funeraria: userDataServObj.mortuary_name,
             nip: NIPCreated,
             servicio: `${t('MOption21')}`,

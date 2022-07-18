@@ -435,7 +435,7 @@ function Transport() {
     // - NIP: ${service.nip_rastreo}\n
     // Confirmar en la App ahora`);
     // Emails for users
-    emailjs.send('service_9e1ebv5', 'template_vczs2a6', {
+    emailjs.send(' service_eyqulqg', 'template_vczs2a6', {
       direcion_entrega: `${direccionEntrega}`,
       origen: service.origen,
       funeraria: service.mortuary_name,

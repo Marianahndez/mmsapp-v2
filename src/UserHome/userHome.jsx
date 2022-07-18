@@ -146,7 +146,7 @@ function UserHome() {
             break;
         }
         // Emails for users
-        emailjs.send('service_9e1ebv5', 'template_egqe8zg', {
+        emailjs.send(' service_eyqulqg', 'template_egqe8zg', {
           direcion_entrega: `${item.direccion_alterna} / ${item.sucursal.direccion_sucursal}`,
           origen: item.origen,
           destino: item.destino,
@@ -162,7 +162,7 @@ function UserHome() {
           console.log(error.text);
         });
         // Email for admins
-        emailjs.send('service_9e1ebv5', 'template_d2n14v3', {
+        emailjs.send(' service_eyqulqg', 'template_d2n14v3', {
           funeraria: item.mortuary_name,
           direcion_entrega: `${item.direccion_alterna} / ${item.sucursal.direccion_sucursal}`,
           origen: item.origen,
