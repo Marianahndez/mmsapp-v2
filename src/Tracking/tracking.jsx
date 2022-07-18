@@ -94,14 +94,6 @@ function Tracking() {
     setDate(newValue);
   };
 
-  const onSubmit = (data) => {
-    const dateObj = {
-      ...data,
-    };
-    updateServicePropHandler(dateObj, params.id);
-    navigate('/userHome', { replace: true });
-  };
-
   const {
     register,
     handleSubmit,
@@ -127,6 +119,14 @@ function Tracking() {
     // mode: 'onChange',
   });
 
+  const {
+    register: register4,
+    handleSubmit: handleSubmit4,
+    reset: reset4,
+  } = useForm({
+    // mode: 'onChange',
+  });
+
   useEffect(() => {
     getUser();
     setTrackingInfo(location.state.data);
@@ -139,6 +139,12 @@ function Tracking() {
       setFamilyEmails(arr);
     });
   }, []);
+
+  useEffect(() => {
+    const defValues = {};
+    reset({ ...defValues, ...trackingInfo });
+    // console.log('ser: ', service);
+  }, [showEditDate]);
 
   const handleServiceToShow = (serviceValue) => {
     switch (serviceValue) {
@@ -174,6 +180,15 @@ function Tracking() {
       default:
         break;
     }
+  };
+
+  const onSubmit = async (data) => {
+    const dateObj = {
+      ...data,
+    };
+    console.log('arrDate: ', data);
+    await updateServicePropHandler(dateObj, params.id);
+    navigate('/userHome', { replace: true });
   };
 
   const handleEditTracking = (id) => {
@@ -651,7 +666,7 @@ function Tracking() {
               ) : ('')}
             </>
           ) : (
-              <form onSubmit={handleSubmit(onSubmit)}>
+              <form onSubmit={handleSubmit4(onSubmit)} id="arrival-form">
                 <h4>{t('FechaDestino')}</h4>
                 <LocalizationProvider dateAdapter={DateAdapter}>
                   <MobileDatePicker
@@ -663,7 +678,7 @@ function Tracking() {
                       <TextField
                         style={{ marginTop: '2rem' }}
                         {...paramsx}
-                        {...register('arrivalDate', { required: true })}
+                        {...register4('arrivalDate')}
                       />
                     )}
                   />
@@ -671,6 +686,7 @@ function Tracking() {
                 <Button
                   variant="contained"
                   type="submit"
+                  form="arrival-form"
                   style={{
                     margin: '3rem auto',
                     borderRadius: '20px',
@@ -736,7 +752,7 @@ function Tracking() {
                     type="text"
                     fullWidth
                     variant="outlined"
-                    {...register3('name', { required: true })}
+                    {...register3('name')}
                   />
                   <RadioGroup
                     aria-labelledby="sucursales-radio"
@@ -770,7 +786,7 @@ function Tracking() {
                       type="email"
                       fullWidth
                       variant="outlined"
-                      {...register3('email', { required: true })}
+                      {...register3('email')}
                     />
                   ) : (
                     <div className="inputPhone">
@@ -796,7 +812,7 @@ function Tracking() {
                         type="number"
                         fullWidth
                         variant="standard"
-                        {...register3('phone', { required: true })}
+                        {...register3('phone')}
                         className="noMargin"
                       />
                     </div>
@@ -821,7 +837,7 @@ function Tracking() {
                 className="formTransport"
               >
                 <TextField
-                  {...register('tracking_info', { required: true })}
+                  {...register('tracking_info')}
                   label={t('TrackingAdd')}
                   type="text"
                   variant="outlined"
@@ -867,7 +883,7 @@ function Tracking() {
                         className="formTransport"
                       >
                         <TextField
-                          {...register2('tracking_info', { required: true })}
+                          {...register2('tracking_info')}
                           label={t('TrackingUpdate')}
                           type="text"
                           variant="outlined"

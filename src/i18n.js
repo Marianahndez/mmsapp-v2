@@ -110,7 +110,7 @@ i18n
           LBLDetallesServicio:
             'En esta sección podrá revisar el detalle de su servicio.',
           LBLServicioDesc:
-            'Bajo los siguientes detalles, favor de agregar costo de sercivio',
+            'Bajo los siguientes detalles, favor de agregar costo de servicio',
           LBLStatus: 'Estatus',
           LBLStatusPendienteCotizar: 'Pendiente de cotizar',
           LBLStatusCotizado: 'Cotizado',

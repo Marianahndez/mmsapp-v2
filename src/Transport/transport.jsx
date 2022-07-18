@@ -592,9 +592,7 @@ function Transport() {
               />
 
               <TextField
-                {...register('telefono_contacto_autorizado', {
-                  required: true,
-                })}
+                {...register('telefono_contacto_autorizado')}
                 label={t('TelefonoCAutorizado')}
                 type="number"
                 variant="outlined"

@@ -31,6 +31,7 @@ export const servicesData = () => {
 
   const updateServicePropHandler = async (data, id) => {
     console.log('update: ', id);
+    console.log('updated props: ', data);
     try {
       updateDoc(doc(db, 'services', id), data);
       setStatusCall(true);
