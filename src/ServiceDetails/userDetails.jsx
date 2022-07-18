@@ -552,7 +552,7 @@ function UserDetails() {
       timestamp: new Date().setMilliseconds(100),
     };
     // Emails for admins
-    emailjs.send(' service_eyqulqg', 'template_rceewvc', {
+    emailjs.send('service_g39knwe', 'template_rceewvc', {
       origen: service.origen,
       destino: service.destino,
       director_funerario: service.user_name,
@@ -591,7 +591,7 @@ function UserDetails() {
         timestamp: new Date().setMilliseconds(100),
       };
       // Emails for admins
-      emailjs.send(' service_eyqulqg', 'template_rceewvc', {
+      emailjs.send('service_g39knwe', 'template_rceewvc', {
         origen: service.origen,
         destino: service.destino,
         director_funerario: service.user_name,
@@ -629,7 +629,7 @@ function UserDetails() {
         timestamp: new Date().setMilliseconds(100),
       };
       // Emails for admins
-      emailjs.send(' service_eyqulqg', 'template_rceewvc', {
+      emailjs.send('service_g39knwe', 'template_rceewvc', {
         origen: service.origen,
         destino: service.destino,
         director_funerario: service.user_name,

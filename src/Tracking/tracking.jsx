@@ -143,7 +143,7 @@ function Tracking() {
   useEffect(() => {
     const defValues = {};
     reset({ ...defValues, ...trackingInfo });
-    // console.log('ser: ', service);
+    console.log('ser: ', trackingInfo);
   }, [showEditDate]);
 
   const handleServiceToShow = (serviceValue) => {
@@ -320,7 +320,7 @@ function Tracking() {
       const rastreoObjEditedEmail = {
         auth_list_email: authlistEmail,
       };
-      emailjs.send(' service_eyqulqg', 'template_fnipooj', { to_name: dataFamily.name, remitente: dataFamily.email, nip: trackingInfo.nip_rastreo }, 'PBj_zOlr2lgy2b9sE')
+      emailjs.send('service_g39knwe', 'template_fnipooj', { to_name: dataFamily.name, remitente: dataFamily.email, nip: trackingInfo.nip_rastreo }, 'PBj_zOlr2lgy2b9sE')
       .then((result) => {
       console.log(result.text);
       }, (error) => {
@@ -398,7 +398,7 @@ function Tracking() {
     // if (authlistEmail !== []) {
     //   authlistEmail.map((item) => {
     //     console.log('emails: ', item);
-    //     emailjs.send(' service_eyqulqg', 'template_5pt76li', {
+    //     emailjs.send('service_g39knwe', 'template_5pt76li', {
     //       nip_rastreo: trackingInfo.nip_rastreo,
     //       tracking: dataNewOne.tracking_info,
     //       date: moment().format('LLL'),
@@ -415,7 +415,7 @@ function Tracking() {
     //   });
     // }
 
-    emailjs.send(' service_eyqulqg', 'template_5pt76li', {
+    emailjs.send('service_eyqulqg', 'template_5pt76li', {
       nip_rastreo: trackingInfo.nip_rastreo,
       tracking: dataNewOne.tracking_info,
       date: moment().format('LLL'),
@@ -430,7 +430,7 @@ function Tracking() {
       console.log(error.text);
       });
     // Emails for users
-    emailjs.send(' service_eyqulqg', 'template_oux3mtj', {
+    emailjs.send('service_g39knwe', 'template_oux3mtj', {
       nip_rastreo: trackingInfo.nip_rastreo,
       tracking: dataNewOne.tracking_info,
       date: moment().format('LLL'),
@@ -446,7 +446,7 @@ function Tracking() {
       });
 
     // Emails for admin
-    emailjs.send(' service_eyqulqg', 'template_4yetyrj', {
+    emailjs.send('service_g39knwe', 'template_4yetyrj', {
       nip_rastreo: trackingInfo.nip_rastreo,
       tracking: dataNewOne.tracking_info,
       admin: userDataServObj.name,
@@ -454,6 +454,7 @@ function Tracking() {
       servicio: serviceForNotif,
       origen: trackingInfo.origen,
       destino: trackingInfo.destino,
+      funeraria: trackingInfo.mortuary_name,
      }, 'PBj_zOlr2lgy2b9sE')
       .then((result) => {
       console.log(result.text);

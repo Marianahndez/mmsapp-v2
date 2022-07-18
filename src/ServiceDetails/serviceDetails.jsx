@@ -299,7 +299,7 @@ function ServiceDetails() {
     //   - NIP: ${service.nip_rastreo}\n
     //   Ir a la App ahora`);
       // Email para director funerario
-      emailjs.send(' service_eyqulqg', 'template_gazhjwo', {
+      emailjs.send('service_g39knwe', 'template_gazhjwo', {
         funeraria: service.mortuary_name,
         origen: service.origen,
         destino: service.destino,
@@ -350,7 +350,7 @@ function ServiceDetails() {
     //   - Fecha de recolección: ${service.fecha}\n
     //   - NIP: ${service.nip_rastreo}\n
     //   Ir a la App ahora`);
-    emailjs.send(' service_eyqulqg', 'template_xizuaxd', {
+    emailjs.send('service_g39knwe', 'template_xizuaxd', {
       direcion_entrega: `${direccionEntrega}`,
       origen: service.origen,
       destino: service.destino,
@@ -459,7 +459,7 @@ function ServiceDetails() {
           timestamp: new Date().setMilliseconds(100),
         };
         // Email for users
-        emailjs.send(' service_eyqulqg', 'template_xizuaxd', {
+        emailjs.send('service_g39knwe', 'template_xizuaxd', {
           direcion_entrega: direccionEntrega,
           origen: service.origen,
           destino: service.destino,
@@ -494,7 +494,7 @@ function ServiceDetails() {
         if (service.auth_list_email !== []) {
           service.auth_list_email.map((item) => {
             console.log('emails: ', item);
-            emailjs.send(' service_eyqulqg', 'template_rllol2a', {
+            emailjs.send('service_g39knwe', 'template_rllol2a', {
               nip_rastreo: service.nip_rastreo,
               fecha: moment().format('LLL'),
               servicio: serviceForNotif,
@@ -521,7 +521,7 @@ function ServiceDetails() {
           timestamp: new Date().setMilliseconds(100),
         };
         // Emails for users
-        emailjs.send(' service_eyqulqg', 'template_9k44txb', {
+        emailjs.send('service_g39knwe', 'template_9k44txb', {
           direcion_entrega: direccionEntrega,
           origen: service.origen,
           destino: service.destino,
@@ -537,7 +537,7 @@ function ServiceDetails() {
           console.log(error.text);
         });
         // Email for admins
-        emailjs.send(' service_eyqulqg', 'template_4tk97zh', {
+        emailjs.send('service_g39knwe', 'template_4tk97zh', {
           funeraria: service.mortuary_name,
           direcion_entrega: direccionEntrega,
           origen: service.origen,
@@ -581,7 +581,7 @@ function ServiceDetails() {
         if (service.auth_list_email !== []) {
           service.auth_list_email.map((item) => {
             console.log('emails: ', item);
-            emailjs.send(' service_eyqulqg', 'template_45z3gdp', {
+            emailjs.send('service_g39knwe', 'template_45z3gdp', {
               nip_rastreo: service.nip_rastreo,
               fecha: moment().format('LLL'),
               servicio: serviceForNotif,
@@ -598,7 +598,7 @@ function ServiceDetails() {
           });
         }
         // Emails for users
-        emailjs.send(' service_eyqulqg', 'template_r2k7chr', {
+        emailjs.send('service_g39knwe', 'template_r2k7chr', {
           direcion_entrega: direccionEntrega,
           origen: service.origen,
           destino: service.destino,
@@ -614,7 +614,7 @@ function ServiceDetails() {
           console.log(error.text);
         });
         // Email for admins
-        emailjs.send(' service_eyqulqg', 'template_so3ciaq', {
+        emailjs.send('service_g39knwe', 'template_so3ciaq', {
           funeraria: service.mortuary_name,
           direcion_entrega: direccionEntrega,
           origen: service.origen,
@@ -658,7 +658,7 @@ function ServiceDetails() {
         if (service.auth_list_email !== []) {
           service.auth_list_email.map((item) => {
             console.log('emails: ', item);
-            emailjs.send(' service_eyqulqg', 'template_bu44qnq', {
+            emailjs.send('service_g39knwe', 'template_bu44qnq', {
               nip_rastreo: service.nip_rastreo,
               fecha: moment().format('LLL'),
               direcion_entrega: direccionEntrega,
@@ -675,7 +675,7 @@ function ServiceDetails() {
           });
         }
         // Emails for users
-        emailjs.send(' service_eyqulqg', 'template_egqe8zg', {
+        emailjs.send('service_g39knwe', 'template_egqe8zg', {
           direcion_entrega: direccionEntrega,
           origen: service.origen,
           destino: service.destino,
@@ -691,7 +691,7 @@ function ServiceDetails() {
           console.log(error.text);
         });
         // Email for admins
-        emailjs.send(' service_eyqulqg', 'template_d2n14v3', {
+        emailjs.send('service_g39knwe', 'template_d2n14v3', {
           funeraria: service.mortuary_name,
           direcion_entrega: direccionEntrega,
           origen: service.origen,
@@ -735,7 +735,7 @@ function ServiceDetails() {
         if (service.auth_list_email !== []) {
           service.auth_list_email.map((item) => {
             console.log('emails: ', item);
-            emailjs.send(' service_eyqulqg', 'template_inah5kj', {
+            emailjs.send('service_g39knwe', 'template_inah5kj', {
               nip_rastreo: service.nip_rastreo,
               direcion_entrega: direccionEntrega,
               fecha: moment().format('LLL'),
@@ -752,7 +752,7 @@ function ServiceDetails() {
           });
         }
         // Emails for users
-        emailjs.send(' service_eyqulqg', 'template_54xdauo', {
+        emailjs.send('service_g39knwe', 'template_54xdauo', {
           direcion_entrega: direccionEntrega,
           origen: service.origen,
           destino: service.destino,
@@ -768,7 +768,7 @@ function ServiceDetails() {
           console.log(error.text);
         });
         // Email for admins
-        emailjs.send(' service_eyqulqg', 'template_kj7061j', {
+        emailjs.send('service_g39knwe', 'template_kj7061j', {
           funeraria: service.mortuary_name,
           direcion_entrega: direccionEntrega,
           origen: service.origen,
@@ -814,7 +814,7 @@ function ServiceDetails() {
       timestamp: new Date().setMilliseconds(100),
     };
     // Emails for users
-    emailjs.send(' service_eyqulqg', 'template_rx20lnh', {
+    emailjs.send('service_g39knwe', 'template_rx20lnh', {
       origen: service.origen,
       destino: service.destino,
       servicio: serviceForNotif,
@@ -828,7 +828,7 @@ function ServiceDetails() {
       console.log(error.text);
     });
     // Emails for admins
-    emailjs.send(' service_eyqulqg', 'template_rceewvc', {
+    emailjs.send('service_g39knwe', 'template_rceewvc', {
       origen: service.origen,
       destino: service.destino,
       director_funerario: service.user_name,

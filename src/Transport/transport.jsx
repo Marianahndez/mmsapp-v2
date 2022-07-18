@@ -435,12 +435,12 @@ function Transport() {
     // - NIP: ${service.nip_rastreo}\n
     // Confirmar en la App ahora`);
     // Emails for users
-    emailjs.send(' service_eyqulqg', 'template_vczs2a6', {
-      direcion_entrega: `${direccionEntrega}`,
+    emailjs.send('service_g39knwe', 'template_vczs2a6', {
+      direcion_entrega: direccionEntrega,
       origen: service.origen,
       funeraria: service.mortuary_name,
       destino: service.destino,
-      servicio: `${serviceForNotif}`,
+      servicio: serviceForNotif,
       nip: service.nip_rastreo,
     }, 'PBj_zOlr2lgy2b9sE')
       .then((result) => {
