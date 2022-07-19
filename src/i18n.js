@@ -192,6 +192,7 @@ i18n
           TrackingUpdate: 'Actualizar rastreo',
           Guardar: 'Guardar',
           NoNotification: 'No tienes notificaciones aún',
+          DocUploaded: 'Este documento ya ha sido subido, haga clic aquí si desea reemplazarlo',
         },
       },
       en: {
@@ -375,6 +376,7 @@ i18n
           TrackingUpdate: 'Update tracking',
           Guardar: 'Save',
           NoNotification: 'Any notification yet',
+          DocUploaded: 'This document has been already uploaded, click here if you want to replace it',
         },
       },
     },

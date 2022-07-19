@@ -1042,7 +1042,7 @@ function UserDetails() {
                                   </>
                                   ) : (
                                     <>
-                                      <p className="docLabelUploaded">This document has been already uploaded, click here if you want to replace it</p>
+                                      <p className="docLabelUploaded">{t('DocUploaded')}</p>
                                       <>
                                         <input
                                           id="icon-button-file"
@@ -1094,7 +1094,7 @@ function UserDetails() {
                                   </>
                                 ) : (
                                   <>
-                                    <p className="docLabelUploaded">This document has been already uploaded, click here if you want to replace it</p>
+                                    <p className="docLabelUploaded">{t('DocUploaded')}</p>
                                     <>
                                       <input
                                         id="icon-button-file1"
@@ -1148,7 +1148,7 @@ function UserDetails() {
                                   </>
                                 ) : (
                                   <>
-                                    <p className="docLabelUploaded">This document has been already uploaded, click here if you want to replace it</p>
+                                    <p className="docLabelUploaded">{t('DocUploaded')}</p>
                                     <>
                                       <input
                                         id="icon-button-file2"
@@ -1202,7 +1202,7 @@ function UserDetails() {
                                   </>
                                 ) : (
                                   <>
-                                    <p className="docLabelUploaded">This document has been already uploaded, click here if you want to replace it</p>
+                                    <p className="docLabelUploaded">{t('DocUploaded')}</p>
                                     <>
                                       <input
                                         id="icon-button-file3"
@@ -1254,7 +1254,7 @@ function UserDetails() {
                                   </>
                                 ) : (
                                   <>
-                                    <p className="docLabelUploaded">This document has been already uploaded, click here if you want to replace it</p>
+                                    <p className="docLabelUploaded">{t('DocUploaded')}</p>
                                     <>
                                       <input
                                         id="icon-button-file4"
