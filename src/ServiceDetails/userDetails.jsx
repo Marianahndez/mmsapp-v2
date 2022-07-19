@@ -1016,112 +1016,269 @@ function UserDetails() {
                                   {t('LBLSubirPapeleria2')}
                                 </p>
                                 <hr />
-                                <input
-                                  id="icon-button-file"
-                                  type="file"
-                                  accept="image/*"
-                                  style={{ display: 'none' }}
-                                  onChange={handleImgObg}
-                                />
-                                <label htmlFor="icon-button-file">
-                                  <IconButton component="span">
-                                    <AddPhotoAlternateRoundedIcon fontSize="large" />
-                                    <h5>{t('ActaDefuncion')}</h5>
-                                  </IconButton>
-                                  {image !== null ? (
-                                    <p>
-                                      {imageName} <CloudDoneRoundedIcon />
-                                    </p>
+                                {service.doc_acta_defuncion === '' ||
+                                service.doc_acta_defuncion === undefined ? (
+                                  <>
+                                    <input
+                                      id="icon-button-file"
+                                      type="file"
+                                      accept="image/*"
+                                      style={{ display: 'none' }}
+                                      onChange={handleImgObg}
+                                    />
+                                    <label htmlFor="icon-button-file">
+                                      <IconButton component="span">
+                                        <AddPhotoAlternateRoundedIcon fontSize="large" />
+                                        <h5>{t('ActaDefuncion')}</h5>
+                                      </IconButton>
+                                      {image !== null ? (
+                                        <p>
+                                          {imageName} <CloudDoneRoundedIcon />
+                                        </p>
+                                        ) : (
+                                        ''
+                                      )}
+                                    </label>
+                                  </>
                                   ) : (
-                                    ''
+                                    <>
+                                      <p className="docLabelUploaded">This document has been already uploaded, click here if you want to replace it</p>
+                                      <>
+                                        <input
+                                          id="icon-button-file"
+                                          type="file"
+                                          accept="image/*"
+                                          style={{ display: 'none' }}
+                                          onChange={handleImgObg}
+                                        />
+                                        <label htmlFor="icon-button-file">
+                                          <IconButton component="span">
+                                            <AddPhotoAlternateRoundedIcon fontSize="large" />
+                                            <h5>{t('ActaDefuncion')}</h5>
+                                          </IconButton>
+                                          {image !== null ? (
+                                            <p>
+                                              {imageName} <CloudDoneRoundedIcon />
+                                            </p>
+                                            ) : (
+                                            ''
+                                          )}
+                                        </label>
+                                      </>
+                                    </>
                                   )}
-                                </label>
                                 <hr />
-                                <input
-                                  id="icon-button-file1"
-                                  type="file"
-                                  accept="image/*"
-                                  style={{ display: 'none' }}
-                                  onChange={handleImgObg1}
-                                />
-                                <label htmlFor="icon-button-file1">
-                                  <IconButton component="span">
-                                    <AddPhotoAlternateRoundedIcon fontSize="large" />
-                                    <h5>{t('PermisoTransito')}</h5>
-                                  </IconButton>
-                                  {image1 !== null ? (
-                                    <p>
-                                      {imageName1} <CloudDoneRoundedIcon />
-                                    </p>
-                                  ) : (
-                                    ''
-                                  )}
-                                </label>
+                                {service.doc_permiso_transito === '' ||
+                                service.doc_permiso_transito === undefined ? (
+                                  <>
+                                    <input
+                                      id="icon-button-file1"
+                                      type="file"
+                                      accept="image/*"
+                                      style={{ display: 'none' }}
+                                      onChange={handleImgObg1}
+                                    />
+                                    <label htmlFor="icon-button-file1">
+                                      <IconButton component="span">
+                                        <AddPhotoAlternateRoundedIcon fontSize="large" />
+                                        <h5>{t('PermisoTransito')}</h5>
+                                      </IconButton>
+                                      {image1 !== null ? (
+                                        <p>
+                                          {imageName1} <CloudDoneRoundedIcon />
+                                        </p>
+                                      ) : (
+                                        ''
+                                      )}
+                                    </label>
+                                  </>
+                                ) : (
+                                  <>
+                                    <p className="docLabelUploaded">This document has been already uploaded, click here if you want to replace it</p>
+                                    <>
+                                      <input
+                                        id="icon-button-file1"
+                                        type="file"
+                                        accept="image/*"
+                                        style={{ display: 'none' }}
+                                        onChange={handleImgObg1}
+                                      />
+                                      <label htmlFor="icon-button-file1">
+                                        <IconButton component="span">
+                                          <AddPhotoAlternateRoundedIcon fontSize="large" />
+                                          <h5>{t('PermisoTransito')}</h5>
+                                        </IconButton>
+                                        {image1 !== null ? (
+                                          <p>
+                                            {imageName1} <CloudDoneRoundedIcon />
+                                          </p>
+                                        ) : (
+                                          ''
+                                        )}
+                                      </label>
+                                    </>
+                                  </>
+                                )}
                                 <hr />
-                                <input
-                                  id="icon-button-file2"
-                                  type="file"
-                                  accept="image/*"
-                                  style={{ display: 'none' }}
-                                  onChange={handleImgObg2}
-                                />
-                                <label htmlFor="icon-button-file2">
-                                  <IconButton component="span">
-                                    <AddPhotoAlternateRoundedIcon fontSize="large" />
-                                    <h6 style={{ fontSize: '1.1rem' }}>
-                                      {t('ConstanciaCuerpo')}
-                                    </h6>
-                                  </IconButton>
-                                  {image2 !== null ? (
-                                    <p>
-                                      {imageName2} <CloudDoneRoundedIcon />
-                                    </p>
-                                  ) : (
-                                    ''
-                                  )}
-                                </label>
+                                {service.doc_constncia_cpreparado === '' ||
+                                service.doc_constncia_cpreparado === undefined ? (
+                                  <>
+                                    <input
+                                      id="icon-button-file2"
+                                      type="file"
+                                      accept="image/*"
+                                      style={{ display: 'none' }}
+                                      onChange={handleImgObg2}
+                                    />
+                                    <label htmlFor="icon-button-file2">
+                                      <IconButton component="span">
+                                        <AddPhotoAlternateRoundedIcon fontSize="large" />
+                                        <h6 style={{ fontSize: '1.1rem' }}>
+                                          {t('ConstanciaCuerpo')}
+                                        </h6>
+                                      </IconButton>
+                                      {image2 !== null ? (
+                                        <p>
+                                          {imageName2} <CloudDoneRoundedIcon />
+                                        </p>
+                                      ) : (
+                                        ''
+                                      )}
+                                    </label>
+                                  </>
+                                ) : (
+                                  <>
+                                    <p className="docLabelUploaded">This document has been already uploaded, click here if you want to replace it</p>
+                                    <>
+                                      <input
+                                        id="icon-button-file2"
+                                        type="file"
+                                        accept="image/*"
+                                        style={{ display: 'none' }}
+                                        onChange={handleImgObg2}
+                                      />
+                                      <label htmlFor="icon-button-file2">
+                                        <IconButton component="span">
+                                          <AddPhotoAlternateRoundedIcon fontSize="large" />
+                                          <h6 style={{ fontSize: '1.1rem' }}>
+                                            {t('ConstanciaCuerpo')}
+                                          </h6>
+                                        </IconButton>
+                                        {image2 !== null ? (
+                                          <p>
+                                            {imageName2} <CloudDoneRoundedIcon />
+                                          </p>
+                                        ) : (
+                                          ''
+                                        )}
+                                      </label>
+                                    </>
+                                  </>
+                                )}
                                 <hr />
-                                <input
-                                  id="icon-button-file3"
-                                  type="file"
-                                  accept="image/*"
-                                  style={{ display: 'none' }}
-                                  onChange={handleImgObg3}
-                                />
-                                <label htmlFor="icon-button-file3">
-                                  <IconButton component="span">
-                                    <AddPhotoAlternateRoundedIcon fontSize="large" />
-                                    <h5>{t('VisadoConsular')}</h5>
-                                  </IconButton>
-                                  {image3 !== null ? (
-                                    <p>
-                                      {imageName3} <CloudDoneRoundedIcon />
-                                    </p>
-                                  ) : (
-                                    ''
-                                  )}
-                                </label>
+                                {service.doc_visado_consular === '' ||
+                                service.doc_visado_consular === undefined ? (
+                                  <>
+                                    <input
+                                      id="icon-button-file3"
+                                      type="file"
+                                      accept="image/*"
+                                      style={{ display: 'none' }}
+                                      onChange={handleImgObg3}
+                                    />
+                                    <label htmlFor="icon-button-file3">
+                                      <IconButton component="span">
+                                        <AddPhotoAlternateRoundedIcon fontSize="large" />
+                                        <h5>{t('VisadoConsular')}</h5>
+                                      </IconButton>
+                                      {image3 !== null ? (
+                                        <p>
+                                          {imageName3} <CloudDoneRoundedIcon />
+                                        </p>
+                                      ) : (
+                                        ''
+                                      )}
+                                    </label>
+                                  </>
+                                ) : (
+                                  <>
+                                    <p className="docLabelUploaded">This document has been already uploaded, click here if you want to replace it</p>
+                                    <>
+                                      <input
+                                        id="icon-button-file3"
+                                        type="file"
+                                        accept="image/*"
+                                        style={{ display: 'none' }}
+                                        onChange={handleImgObg3}
+                                      />
+                                      <label htmlFor="icon-button-file3">
+                                        <IconButton component="span">
+                                          <AddPhotoAlternateRoundedIcon fontSize="large" />
+                                          <h5>{t('VisadoConsular')}</h5>
+                                        </IconButton>
+                                        {image3 !== null ? (
+                                          <p>
+                                            {imageName3} <CloudDoneRoundedIcon />
+                                          </p>
+                                        ) : (
+                                          ''
+                                        )}
+                                      </label>
+                                    </>
+                                  </>
+                                )}
                                 <hr />
-                                <input
-                                  id="icon-button-file4"
-                                  type="file"
-                                  accept="image/*"
-                                  style={{ display: 'none' }}
-                                  onChange={handleImgObg4}
-                                />
-                                <label htmlFor="icon-button-file4">
-                                  <IconButton component="span">
-                                    <AddPhotoAlternateRoundedIcon fontSize="large" />
-                                    <h5>{t('FinishedDocument')}</h5>
-                                  </IconButton>
-                                  {image4 !== null ? (
-                                    <p>
-                                      {imageName4} <CloudDoneRoundedIcon />
-                                    </p>
-                                  ) : (
-                                    ''
-                                  )}
-                                </label>
+                                {service.doc_finalizado === '' ||
+                                service.doc_finalizado === undefined ? (
+                                  <>
+                                    <input
+                                      id="icon-button-file4"
+                                      type="file"
+                                      accept="image/*"
+                                      style={{ display: 'none' }}
+                                      onChange={handleImgObg4}
+                                    />
+                                    <label htmlFor="icon-button-file4">
+                                      <IconButton component="span">
+                                        <AddPhotoAlternateRoundedIcon fontSize="large" />
+                                        <h5>{t('FinishedDocument')}</h5>
+                                      </IconButton>
+                                      {image4 !== null ? (
+                                        <p>
+                                          {imageName4} <CloudDoneRoundedIcon />
+                                        </p>
+                                      ) : (
+                                        ''
+                                      )}
+                                    </label>
+                                  </>
+                                ) : (
+                                  <>
+                                    <p className="docLabelUploaded">This document has been already uploaded, click here if you want to replace it</p>
+                                    <>
+                                      <input
+                                        id="icon-button-file4"
+                                        type="file"
+                                        accept="image/*"
+                                        style={{ display: 'none' }}
+                                        onChange={handleImgObg4}
+                                      />
+                                      <label htmlFor="icon-button-file4">
+                                        <IconButton component="span">
+                                          <AddPhotoAlternateRoundedIcon fontSize="large" />
+                                          <h5>{t('FinishedDocument')}</h5>
+                                        </IconButton>
+                                        {image4 !== null ? (
+                                          <p>
+                                            {imageName4} <CloudDoneRoundedIcon />
+                                          </p>
+                                        ) : (
+                                          ''
+                                        )}
+                                      </label>
+                                    </>
+                                  </>
+                                )}
                               </div>
 
                               <Button
