@@ -15,7 +15,7 @@ import {
   Typography,
   ListItem,
   ListItemText,
-  ListSubheader,
+  Button,
   Box,
 } from '@mui/material';
 import { grey, indigo } from '@mui/material/colors';
@@ -195,12 +195,12 @@ function SidebarMenu() {
                   />
                 </ListItem>
 
-                <ListItem button>
+                <ListItem button component={Button} href="tel:528341027851">
                   <PhoneInTalkRoundedIcon style={{ color: '#fff' }} />
                   <ListItemText
                     style={{ margin: '1rem 0 1rem 1rem' }}
                     primary={t('LlamarACoordinador')}
-                    className="listStyle"
+                    className="listStyle callBtn"
                   />
                 </ListItem>
               </>
