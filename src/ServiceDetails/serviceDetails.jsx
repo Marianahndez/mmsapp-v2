@@ -244,7 +244,7 @@ function ServiceDetails() {
       case 't-tramites':
         return setServiceForNotif('Con trámites y preparación');
       case 't-translado':
-        return setServiceForNotif('Solo translado');
+        return setServiceForNotif('Solo traslado');
       default:
         break;
     }

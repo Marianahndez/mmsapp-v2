@@ -43,7 +43,7 @@ i18n
           BtnEnviarCotizacion: 'Enviar cotización',
           SolicitarTransporte: 'Solicitar transporte',
           BLSolicitarTransporte:
-            'Favor de llenar los últimos datos para su translado.',
+            'Favor de llenar los últimos datos para su traslado.',
           SitioRecoleccion: 'Sitio de recolección',
           SucursalFuneraria: 'En sucursal funeraria',
           AnotherAddress: 'Otro sitio de recolección',
@@ -67,7 +67,7 @@ i18n
           DatoSensible: 'Dato sensible',
           Notas: 'Notas',
           Documents: 'Documentos',
-          DocumentacionTranslado: 'Documentación para translado',
+          DocumentacionTranslado: 'Documentación para traslado',
           EntregaPapeleriaChofer: 'Entregar papelería al chofer',
           SubirPapeleria: 'Subir papelería',
           LBLSubirPapeleria:
