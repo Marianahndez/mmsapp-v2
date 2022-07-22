@@ -351,7 +351,7 @@ function ServiceDetails() {
     //   - NIP: ${service.nip_rastreo}\n
     //   Ir a la App ahora`);
     emailjs.send('service_g39knwe', 'template_xizuaxd', {
-      direcion_entrega: `${direccionEntrega}`,
+      direcion_entrega: direccionEntrega,
       origen: service.origen,
       destino: service.destino,
       servicio: serviceForNotif,
