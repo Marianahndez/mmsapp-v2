@@ -112,6 +112,10 @@ function UserHome() {
   }, [userIDLocal]);
 
   useEffect(() => {
+    localStorage.setItem('servList', JSON.stringify(servicesArr));
+  }, [servicesArr]);
+
+  useEffect(() => {
     getTodaysServices(servicesArr);
   }, [servicesRegistered]);
 
@@ -185,12 +189,12 @@ function UserHome() {
     if (optionShow === 'todos') {
       setTimeout(() => {
         if (servicesArr !== []) {
-          setServicesRegistered(servicesArr);
-          localStorage.setItem('servList', JSON.stringify(servicesArr));
+          const filterApply = servicesArr.filter((i) => i.status !== 'entregado');
+          setServicesRegistered(filterApply);
         }
       }, 100);
     }
-  }, [getAllServicesAdmin, servicesArr]);
+  }, [servicesArr]);
 
   // useEffect(() => {
     // const d1 = Date.now();
@@ -216,7 +220,8 @@ function UserHome() {
   useEffect(() => {
     switch (optionShow) {
       case 'todos':
-        return (setServicesRegistered(servicesArr), setOptionShowCases('ServiciosRecientes'));
+        const filterApply = servicesArr.filter((i) => i.status !== 'entregado');
+        return (setServicesRegistered(filterApply), setOptionShowCases('ServiciosRecientes'));
       case 'pendiente_cotizar':
         const filterApply1 = servicesArr.filter(
           (i) => i.status === 'pendiente_cotizar',
@@ -266,12 +271,12 @@ function UserHome() {
         const label72 = userIDLocal.role !== 'Admin' ? 'LBLStatusEnTransitoMX' : 'LBLStatusEnTransitoMX';
         return (setServicesRegistered(filterApply72), setOptionShowCases(label72));
 
-      case 'entregado':
-        const filterApply8 = servicesArr.filter(
-          (i) => i.status === 'entregado',
-        );
-        const label8 = userIDLocal.role !== 'Admin' ? 'StatusOpt5' : 'StatusOpt5';
-        return (setServicesRegistered(filterApply8), setOptionShowCases(label8));
+      // case 'entregado':
+      //   const filterApply8 = servicesArr.filter(
+      //     (i) => i.status === 'entregado',
+      //   );
+      //   const label8 = userIDLocal.role !== 'Admin' ? 'StatusOpt5' : 'StatusOpt5';
+      //   return (setServicesRegistered(filterApply8), setOptionShowCases(label8));
 
       default:
         break;
@@ -362,12 +367,6 @@ function UserHome() {
         return (
           <p className="labelNotification n-green">
             {t('LBLStatusEnTransito')} MX
-          </p>
-        );
-      case 'entregado':
-        return (
-          <p className="labelNotification n-purple">
-            {t('LBLStatusEntregado')}
           </p>
         );
 
@@ -504,7 +503,7 @@ function UserHome() {
               <MenuItem value="transito_mx">
                 {t('LBLStatusEnTransitoMX')}
               </MenuItem>
-              <MenuItem value="entregado">{t('StatusOpt5')}</MenuItem>
+              {/* <MenuItem value="entregado">{t('StatusOpt5')}</MenuItem> */}
             </Select>
           </FormControl>
         ) : (
@@ -541,7 +540,7 @@ function UserHome() {
               <MenuItem value="transito_mx">
                 {t('LBLStatusEnTransitoMX')}
               </MenuItem>
-              <MenuItem value="entregado">{t('StatusOpt5')}</MenuItem>
+              {/* <MenuItem value="entregado">{t('StatusOpt5')}</MenuItem> */}
             </Select>
           </FormControl>
         )}
@@ -566,8 +565,7 @@ function UserHome() {
                         item.status === 'confirmado' ||
                         item.status === 'recoger_hoy' ||
                         item.status === 'transito_usa' ||
-                        item.status === 'transito_mx' ||
-                        item.status === 'entregado' ? (
+                        item.status === 'transito_mx' ? (
                           <CardContent
                             className="container"
                             component={Link}

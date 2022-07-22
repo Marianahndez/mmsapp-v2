@@ -491,25 +491,21 @@ function ServiceDetails() {
         // - Fecha de recolección: ${obj3.fecha}\n
         // - NIP de rastreo: ${obj3.nip_rastreo}\n
         // Para más detalles visita la App www.funeralnip.com, ingresando tu numero ó correo verificado y el NIP de rastreo`);
-        if (service.auth_list_email !== []) {
-          service.auth_list_email.map((item) => {
-            console.log('emails: ', item);
-            emailjs.send('service_g39knwe', 'template_rllol2a', {
-              nip_rastreo: service.nip_rastreo,
-              fecha: moment().format('LLL'),
-              servicio: serviceForNotif,
-              origen: service.origen,
-              direcion_entrega: direccionEntrega,
-              destino: service.destino,
-              remitente: item.email,
-             }, 'PBj_zOlr2lgy2b9sE')
-              .then((result) => {
-              console.log(result.text);
-              }, (error) => {
-              console.log(error.text);
-              });
+
+        emailjs.send('service_g39knwe', 'template_rllol2a', {
+          nip_rastreo: service.nip_rastreo,
+          fecha: moment().format('LLL'),
+          servicio: serviceForNotif,
+          origen: service.origen,
+          direcion_entrega: direccionEntrega,
+          destino: service.destino,
+          remitente: familiesPhones,
+         }, 'PBj_zOlr2lgy2b9sE')
+          .then((result) => {
+          console.log(result.text);
+          }, (error) => {
+          console.log(error.text);
           });
-        }
         const notificationObj4 = {
           title: 'En tránsito USA',
           body: `NIP de servicio ${obj3.nip_rastreo}`,
@@ -578,25 +574,20 @@ function ServiceDetails() {
           dateCreated: moment().format('L'),
           timestamp: new Date().setMilliseconds(100),
         };
-        if (service.auth_list_email !== []) {
-          service.auth_list_email.map((item) => {
-            console.log('emails: ', item);
-            emailjs.send('service_g39knwe', 'template_45z3gdp', {
-              nip_rastreo: service.nip_rastreo,
-              fecha: moment().format('LLL'),
-              servicio: serviceForNotif,
-              direcion_entrega: direccionEntrega,
-              origen: service.origen,
-              destino: service.destino,
-              remitente: item.email,
-             }, 'PBj_zOlr2lgy2b9sE')
-              .then((result) => {
-              console.log(result.text);
-              }, (error) => {
-              console.log(error.text);
-              });
+        emailjs.send('service_g39knwe', 'template_45z3gdp', {
+          nip_rastreo: service.nip_rastreo,
+          fecha: moment().format('LLL'),
+          servicio: serviceForNotif,
+          direcion_entrega: direccionEntrega,
+          origen: service.origen,
+          destino: service.destino,
+          remitente: familiesPhones,
+         }, 'PBj_zOlr2lgy2b9sE')
+          .then((result) => {
+          console.log(result.text);
+          }, (error) => {
+          console.log(error.text);
           });
-        }
         // Emails for users
         emailjs.send('service_g39knwe', 'template_r2k7chr', {
           direcion_entrega: direccionEntrega,
@@ -655,25 +646,20 @@ function ServiceDetails() {
           dateCreated: moment().format('L'),
           timestamp: new Date().setMilliseconds(100),
         };
-        if (service.auth_list_email !== []) {
-          service.auth_list_email.map((item) => {
-            console.log('emails: ', item);
-            emailjs.send('service_g39knwe', 'template_bu44qnq', {
-              nip_rastreo: service.nip_rastreo,
-              fecha: moment().format('LLL'),
-              direcion_entrega: direccionEntrega,
-              servicio: serviceForNotif,
-              origen: service.origen,
-              destino: service.destino,
-              remitente: item.email,
-             }, 'PBj_zOlr2lgy2b9sE')
-              .then((result) => {
-              console.log(result.text);
-              }, (error) => {
-              console.log(error.text);
-              });
+        emailjs.send('service_g39knwe', 'template_bu44qnq', {
+          nip_rastreo: service.nip_rastreo,
+          fecha: moment().format('LLL'),
+          direcion_entrega: direccionEntrega,
+          servicio: serviceForNotif,
+          origen: service.origen,
+          destino: service.destino,
+          remitente: familiesPhones,
+         }, 'PBj_zOlr2lgy2b9sE')
+          .then((result) => {
+          console.log(result.text);
+          }, (error) => {
+          console.log(error.text);
           });
-        }
         // Emails for users
         emailjs.send('service_g39knwe', 'template_egqe8zg', {
           direcion_entrega: direccionEntrega,
@@ -732,25 +718,20 @@ function ServiceDetails() {
           dateCreated: moment().format('L'),
           timestamp: new Date().setMilliseconds(100),
         };
-        if (service.auth_list_email !== []) {
-          service.auth_list_email.map((item) => {
-            console.log('emails: ', item);
-            emailjs.send('service_g39knwe', 'template_inah5kj', {
-              nip_rastreo: service.nip_rastreo,
-              direcion_entrega: direccionEntrega,
-              fecha: moment().format('LLL'),
-              servicio: serviceForNotif,
-              origen: service.origen,
-              destino: service.destino,
-              remitente: item.email,
-             }, 'PBj_zOlr2lgy2b9sE')
-              .then((result) => {
-              console.log(result.text);
-              }, (error) => {
-              console.log(error.text);
-              });
+        emailjs.send('service_g39knwe', 'template_inah5kj', {
+          nip_rastreo: service.nip_rastreo,
+          direcion_entrega: direccionEntrega,
+          fecha: moment().format('LLL'),
+          servicio: serviceForNotif,
+          origen: service.origen,
+          destino: service.destino,
+          remitente: familiesPhones,
+         }, 'PBj_zOlr2lgy2b9sE')
+          .then((result) => {
+          console.log(result.text);
+          }, (error) => {
+          console.log(error.text);
           });
-        }
         // Emails for users
         emailjs.send('service_g39knwe', 'template_54xdauo', {
           direcion_entrega: direccionEntrega,
@@ -984,8 +965,7 @@ function ServiceDetails() {
                     ''
                   )}
 
-                  {service.cotizacion !== '' ||
-                  service.cotizacion_ruta !== '' ? (
+                  {service.cotizacion !== '' ? (
                     <p style={{ margin: '0.5rem 0 2rem 0' }}>
                       {service.cotizacion === ''
                         ? ''
@@ -1281,7 +1261,7 @@ function ServiceDetails() {
                       </form>
                     </LocalizationProvider>
                   )}
-                  {service.cotizacion === '' ? (
+                  {service.cotizacion === '' && service.service !== 'e-ruta' ? (
                     <form
                       onSubmit={handleSubmit(handleEdit)}
                       id="hook-form"

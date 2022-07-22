@@ -532,12 +532,12 @@ function UserDetails() {
 
     // Ir a la App ahora`);
     const newObj1 = {
-      ...service,
       doc_acta_defuncion: imgUrl,
       doc_permiso_transito: imgUrl1,
       doc_constncia_cpreparado: imgUrl2,
       doc_visado_consular: imgUrl3,
       doc_finalizado: imgUrl4,
+      ...service,
       sucursal: {},
     };
 
